@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Emisión de Facturas</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-4">
+
+  <div class="flex">
+    <!-- Menú lateral -->
+    <aside class="w-1/5 bg-white p-4 shadow rounded-md">
+      <h1 class="text-xl font-bold mb-4">🧾 Sistema de Facturación</h1>
+      <nav class="flex flex-col space-y-2">
+        <button class="text-left px-2 py-1 rounded hover:bg-gray-200">Panel Principal</button>
+        <button class="text-left px-2 py-1 rounded hover:bg-gray-200">Facturación</button>
+        <button class="text-left px-2 py-1 rounded hover:bg-gray-200">Inventario</button>
+      </nav>
+    </aside>
+
+    <!-- Contenido principal -->
+    <main class="flex-1 ml-6 bg-white p-6 shadow rounded-md">
+      <h2 class="text-2xl font-bold mb-2">Emisión de Facturas</h2>
+      <p class="text-sm text-gray-500 mb-6">Crear una nueva factura con control de inventario en tiempo real</p>
+
+      <!-- Sección de información -->
+      <div class="grid grid-cols-2 gap-6 mb-6">
+        <!-- Información del Cliente -->
+        <div>
+          <h3 class="font-semibold mb-2">Información del Cliente</h3>
+          <div class="grid grid-cols-2 gap-2">
+            <input type="text" placeholder="Nombre" class="border p-2 rounded w-full">
+            <input type="text" placeholder="Cédula" id="cedula" class="border p-2 rounded w-full">
+            <input type="text" placeholder="Teléfono" class="border p-2 rounded w-full">
+            <input type="text" placeholder="Dirección" class="border p-2 rounded w-full">
+            <input type="date" class="border p-2 rounded w-full">
+            <input type="text" placeholder="No Factura" class="border p-2 rounded w-full">
+          </div>
+          <p id="error-cedula" class="text-red-600 text-sm mt-1 hidden">❌ Cédula inválida (solo números, 8-10 dígitos).</p>
+        </div>
+
+
+        <div>
+          <h3 class="font-semibold mb-2">Detalles de Factura</h3>
+          <select class="border p-2 rounded w-full mb-2">
+            <option>Efectivo</option>
+            <option>Tarjeta</option>
+            <option>Transferencia</option>
+          </select>
+          <textarea placeholder="Observaciones" class="border p-2 rounded w-full h-24"></textarea>
+        </div>
+      </div>
+
+      <!-- Buscador de productos -->
+      <div class="flex items-center mb-4">
+        <input type="text" placeholder="Buscar producto" class="border p-2 rounded w-full mr-2">
+        <button class="bg-black text-white px-4 py-2 rounded">+ Agregar</button>
+      </div>
+
+      <!-- Tabla de productos -->
+      <table class="w-full table-auto border mb-4 text-sm" id="tabla-items">
+  <thead class="bg-gray-100">
+    <tr>
+      <th class="border px-2 py-1">Código</th>
+      <th class="border px-2 py-1">Producto</th>
+      <th class="border px-2 py-1">Stock</th>
+      <th class="border px-2 py-1">Cantidad</th>
+      <th class="border px-2 py-1">Precio Unit</th>
+      <th class="border px-2 py-1">Descuento</th>
+      <th class="border px-2 py-1">Subtotal</th>
+      <th class="border px-2 py-1">Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="text-center">
+      <td class="border px-2 py-1">Prod001</td>
+      <td class="border px-2 py-1">Mouse</td>
+      <td class="border px-2 py-1">25unid</td>
+      <td class="border px-2 py-1">2</td>
+      <td class="border px-2 py-1">$8.00</td>
+      <td class="border px-2 py-1">0</td>
+      <td class="border px-2 py-1">$16.00</td>
+      <td class="border px-2 py-1">
+        <button onclick="eliminarFila(this)" class="text-red-600 hover:text-red-800">
+          🗑️
+        </button>
+      </td>
+    </tr>
+    <tr class="text-center">
+      <td class="border px-2 py-1">Prod002</td>
+      <td class="border px-2 py-1">Laptop</td>
+      <td class="border px-2 py-1">25unid</td>
+      <td class="border px-2 py-1">2</td>
+      <td class="border px-2 py-1">$8.00</td>
+      <td class="border px-2 py-1">0</td>
+      <td class="border px-2 py-1">$16.00</td>
+      <td class="border px-2 py-1">
+        <button onclick="eliminarFila(this)" class="text-red-600 hover:text-red-800">
+          🗑️
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+      <!-- Alerta de stock -->
+      <div class="bg-gray-200 p-2 rounded flex items-center text-sm mb-4">
+        ⚠️ <span class="ml-2">Mouse inalámbrico: Stock bajo (5 unidades)</span>
+      </div>
+
+      <!-- Totales -->
+      <div class="bg-gray-100 p-4 rounded w-1/3 ml-auto">
+        <div class="flex justify-between">
+          <span>Subtotal:</span><span>$1828.25</span>
+        </div>
+        <div class="flex justify-between">
+          <span>Descuento:</span><span>-$6.75</span>
+        </div>
+        <div class="flex justify-between">
+          <span>IVA (19%):</span><span>$346.09</span>
+        </div>
+        <div class="flex justify-between font-bold text-lg mt-2 border-t pt-2">
+          <span>Total:</span><span>$2,167.57</span>
+        </div>
+      </div>
+    </main>
+  </div>
+
+    <script>
+        function eliminarFila(boton) {
+            const fila = boton.closest("tr");
+        fila.remove();
+    }
+    </script>
+    
+    <script>
+      const cedulaInput = document.getElementById("cedula");
+      const errorCedula = document.getElementById("error-cedula");
+
+      // Validar al salir del input (blur)
+      cedulaInput.addEventListener("blur", () => {
+        const cedula = cedulaInput.value.trim();
+
+        if (!/^\d{8,10}$/.test(cedula)) {
+          errorCedula.classList.remove("hidden");
+          cedulaInput.classList.add("border-red-500");
+        } else {
+          errorCedula.classList.add("hidden");
+          cedulaInput.classList.remove("border-red-500");
+        }
+      });
+    </script>
+
+
+</body>
+</html>
