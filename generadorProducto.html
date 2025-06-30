@@ -1,58 +1,231 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Agregar Producto</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+    
+    /* Estilos para modo oscuro */
+    .dark body {
+      background-color: #111827;
+      color: #e5e7eb;
+    }
+    
+    .dark .bg-white {
+      background-color: #1f2937 !important;
+    }
+    
+    .dark .bg-gray-100 {
+      background-color: #1f2937;
+    }
+    
+    .dark nav {
+      background-color: #1f2937;
+      border-right: 1px solid #374151;
+    }
+    
+    .dark input,
+    .dark select,
+    .dark textarea {
+      background-color: #374151;
+      border-color: #4b5563;
+      color: #f3f4f6;
+    }
+    
+    .dark input::placeholder {
+      color: #9ca3af;
+    }
+    
+    .dark table {
+      border-color: #4b5563;
+    }
+    
+    .dark th,
+    .dark td {
+      border-color: #4b5563;
+      background-color: #1f2937;
+    }
+    
+    .dark thead {
+      background-color: #111827 !important;
+    }
+    
+    .dark footer {
+      background-color: #1f2937;
+      border-top: 1px solid #374151;
+    }
+    
+    .dark .hover\:bg-gray-200:hover {
+      background-color: #374151 !important;
+    }
+    
+    .dark .text-gray-500 {
+      color: #9ca3af !important;
+    }
+    
+    .dark .text-gray-600 {
+      color: #d1d5db !important;
+    }
+    
+    .dark .form-control {
+      background-color: #374151;
+      border-color: #4b5563;
+      color: #f3f4f6;
+    }
+    
+    .dark .form-control::placeholder {
+      color: #9ca3af;
+    }
+    
+    .dark .btn-dark {
+      background-color: #4b5563;
+      border-color: #4b5563;
+      color: #f3f4f6;
+    }
+    
+    .dark .btn-dark:hover {
+      background-color: #374151;
+      border-color: #374151;
+    }
+    
+    .dark .card {
+      background-color: #1f2937;
+      border-color: #4b5563;
+    }
+    
+    .dark .bg-gray-100 {
+      background-color: #111827 !important;
+    }
+    
+    /* Botón de tema */
+    .theme-switch {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .dark .theme-switch {
+      background: rgba(31, 41, 55, 0.5);
+    }
+    
+    .theme-icon {
+      font-size: 1.2rem;
+      color: #333;
+      transition: all 0.3s ease;
+    }
+    
+    .dark .theme-icon {
+      color: #fbbf24;
+    }
+    
+    .theme-switch:hover {
+      transform: scale(1.1);
+      background: rgba(255, 255, 255, 0.3);
+    }
+    
+    .dark .theme-switch:hover {
+      background: rgba(31, 41, 55, 0.7);
+    }
+    
+    .animate-pulse {
+      animation: pulse 0.3s ease;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+  </style>
 </head>
-<body class="bg-gray-100">
-  <div class="d-flex">
+
+<body class="bg-gray-100 flex flex-col min-h-screen">
+
+  <!-- Botón de cambio de tema -->
+  <div class="theme-switch" id="themeToggle">
+    <i class="bi bi-moon theme-icon" id="themeIcon"></i>
+  </div>
+
+  <div class="flex flex-1">
     <!-- Sidebar -->
-    <nav class="bg-white shadow-md w-60 h-screen p-4">
-      <h2 class="text-xl font-semibold mb-6">Inventario Facturación</h2>
-      <ul class="space-y-4">
-        <li><a href="dashboard.html" class="text-gray-700 hover:text-blue-600">Panel Principal</a></li>
-        <li><a href="facturacion.html" class="text-gray-700 hover:text-blue-600">Facturación</a></li>
-        <li><a href="inventario.html" class="text-gray-700 hover:text-blue-600">Inventario</a></li>
-        <li><a href="agregar_producto.html" class="text-gray-700 hover:text-blue-600">Agregar Producto</a></li>
-      </ul>
+    <nav class="bg-white shadow-md w-60 p-4 min-h-screen">
+      <div>
+        <h1 class="text-xl font-bold mb-4">Inventario Facturación</h1>
+        <nav class="flex flex-col space-y-2" aria-label="Menú principal">
+          <a href="index.html" class="text-left px-2 py-1 rounded hover:bg-gray-200">Panel Principal</a>
+          <a href="busquedaFactura.html" class="text-left px-2 py-1 rounded hover:bg-gray-200">Facturación</a>
+          <a href="busquedaInventario.html" class="text-left px-2 py-1 rounded bg-gray-100 font-semibold ">Inventario</a>
+        </nav>
+      </div>
     </nav>
 
-    <!-- Formulario -->
-    <div class="flex-1 p-6">
+    <!-- Main content -->
+    <main class="flex-1 p-6 overflow-auto">
       <h3 class="text-2xl font-bold mb-2">Agregar Producto</h3>
       <p class="text-gray-600 mb-6">Creación de un nuevo producto</p>
-      <form class="bg-white p-6 rounded-lg shadow-md space-y-4">
+
+      <form class="bg-white p-6 rounded-lg shadow-md mb-6" autocomplete="off">
         <div class="row g-4">
           <div class="col-md-6">
-            <label class="form-label">Nombre del producto</label>
-            <input type="text" class="form-control" placeholder="Nombre">
+            <label for="productoNombre" class="form-label">Nombre del producto</label>
+            <input type="text" id="productoNombre" class="form-control" placeholder="Nombre" required />
           </div>
           <div class="col-md-6">
-            <label class="form-label">Precio</label>
-            <input type="number" class="form-control" placeholder="Precio">
+            <label for="productoPrecio" class="form-label">Precio</label>
+            <input type="number" id="productoPrecio" class="form-control" placeholder="Precio" min="0" step="0.01" required />
           </div>
           <div class="col-md-4">
-            <label class="form-label">Stock</label>
-            <input type="number" class="form-control" placeholder="Stock">
+            <label for="productoStock" class="form-label">Stock</label>
+            <input type="number" id="productoStock" class="form-control" placeholder="Stock" min="0" required />
           </div>
           <div class="col-md-4">
-            <label class="form-label">Categoría</label>
-            <input type="text" class="form-control" placeholder="Categoría">
+            <label for="productoCategoria" class="form-label">Categoría</label>
+            <select id="productoCategoria" class="form-control">
+              <option value="">Seleccionar categoría</option>
+              <option>Electrónicos</option>
+              <option>Ropa</option>
+              <option>Hogar</option>
+              <option>Deportes</option>
+              <option>Alimentos</option>
+            </select>
           </div>
           <div class="col-md-4">
-            <label class="form-label">Código</label>
-            <input type="text" class="form-control" placeholder="Código">
+            <label for="productoCodigo" class="form-label">Código</label>
+            <input type="text" id="productoCodigo" class="form-control" placeholder="Código" required />
+          </div>
+          <div class="col-12">
+            <label for="productoDescripcion" class="form-label">Descripción</label>
+            <textarea id="productoDescripcion" class="form-control" placeholder="Descripción del producto" rows="3"></textarea>
           </div>
         </div>
-        <button type="submit" class="mt-4 btn btn-dark">+ Agregar</button>
+        <div class="flex justify-end mt-4">
+          <button type="reset" class="btn btn-outline-secondary me-2">Limpiar</button>
+          <button type="submit" class="btn btn-dark">+ Agregar Producto</button>
+        </div>
       </form>
 
-      <!-- Tabla previa -->
-      <div class="card bg-white shadow mt-6">
+      <div class="card bg-white shadow rounded">
         <div class="table-responsive">
           <table class="table mb-0">
             <thead class="bg-gray-100">
@@ -61,32 +234,147 @@
                 <th>Producto</th>
                 <th>Categoría</th>
                 <th>Stock</th>
-                <th>Costo</th>
+                <th>Precio</th>
+                <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td>PRD001</td>
-                <td>Laptop</td>
+                <td>Laptop HP EliteBook</td>
                 <td>Electrónicos</td>
                 <td>45</td>
-                <td>850</td>
+                <td>$850.00</td>
+                <td>
+                  <button class="btn btn-sm btn-outline-primary me-1">Editar</button>
+                  <button class="btn btn-sm btn-outline-danger">Eliminar</button>
+                </td>
+              </tr>
+              <tr>
+                <td>PRD002</td>
+                <td>Mouse Inalámbrico</td>
+                <td>Electrónicos</td>
+                <td>120</td>
+                <td>$19.99</td>
+                <td>
+                  <button class="btn btn-sm btn-outline-primary me-1">Editar</button>
+                  <button class="btn btn-sm btn-outline-danger">Eliminar</button>
+                </td>
+              </tr>
+              <tr>
+                <td>PRD003</td>
+                <td>Teclado Mecánico</td>
+                <td>Electrónicos</td>
+                <td>32</td>
+                <td>$59.99</td>
+                <td>
+                  <button class="btn btn-sm btn-outline-primary me-1">Editar</button>
+                  <button class="btn btn-sm btn-outline-danger">Eliminar</button>
+                </td>
+              </tr>
+              <tr>
+                <td>PRD004</td>
+                <td>Monitor 24" Full HD</td>
+                <td>Electrónicos</td>
+                <td>18</td>
+                <td>$189.99</td>
+                <td>
+                  <button class="btn btn-sm btn-outline-primary me-1">Editar</button>
+                  <button class="btn btn-sm btn-outline-danger">Eliminar</button>
+                </td>
+              </tr>
+              <tr>
+                <td>PRD005</td>
+                <td>Impresora Multifuncional</td>
+                <td>Electrónicos</td>
+                <td>7</td>
+                <td>$249.99</td>
+                <td>
+                  <button class="btn btn-sm btn-outline-primary me-1">Editar</button>
+                  <button class="btn btn-sm btn-outline-danger">Eliminar</button>
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
-    </div>
+    </main>
   </div>
 
-  <footer class="bg-white text-center py-3 text-sm text-gray-500 mt-auto">
-    2025 Sistema de Inventario. Todos los derechos reservados.
+  <footer class="bg-white text-center py-3 text-sm text-gray-500 mt-auto shadow-t">
+    2025 Sistema de Inventario y Facturación. Todos los derechos reservados.
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-<script>
-    console.log("hola");
+  
+  <script>
+    // Control de tema oscuro/claro
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const htmlElement = document.documentElement;
     
-</script>
+    // Comprobar si hay preferencia guardada
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      enableDarkMode();
+    }
+    
+    // Manejar el clic en el botón de tema
+    themeToggle.addEventListener('click', () => {
+      if (htmlElement.classList.contains('dark')) {
+        disableDarkMode();
+      } else {
+        enableDarkMode();
+      }
+    });
+    
+    function enableDarkMode() {
+      htmlElement.classList.add('dark');
+      themeIcon.classList.remove('bi-moon');
+      themeIcon.classList.add('bi-sun');
+      localStorage.setItem('theme', 'dark');
+    }
+    
+    function disableDarkMode() {
+      htmlElement.classList.remove('dark');
+      themeIcon.classList.remove('bi-sun');
+      themeIcon.classList.add('bi-moon');
+      localStorage.setItem('theme', 'light');
+    }
+    
+    // Animación al cambiar el tema
+    themeToggle.addEventListener('click', function() {
+      this.classList.add('animate-pulse');
+      setTimeout(() => {
+        this.classList.remove('animate-pulse');
+      }, 300);
+    });
+    
+    // Manejar el envío del formulario
+    const form = document.querySelector('form');
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Obtener valores del formulario
+      const nombre = document.getElementById('productoNombre').value;
+      const precio = document.getElementById('productoPrecio').value;
+      const stock = document.getElementById('productoStock').value;
+      const categoria = document.getElementById('productoCategoria').value;
+      const codigo = document.getElementById('productoCodigo').value;
+      
+      // Validar que todos los campos estén completos
+      if (!nombre || !precio || !stock || !codigo) {
+        alert('Por favor complete todos los campos obligatorios');
+        return;
+      }
+      
+      // Mostrar mensaje de éxito
+      alert(`Producto "${nombre}" agregado correctamente`);
+      
+      // Limpiar el formulario
+      form.reset();
+    });
+  </script>
+
+</body>
 </html>

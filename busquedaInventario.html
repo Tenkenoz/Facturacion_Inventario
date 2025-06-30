@@ -1,119 +1,483 @@
-
-<!-- Página de Inventario: inventario.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Inventario</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+  <style>
+    /* Estilos para modo oscuro */
+    .dark body {
+      background-color: #111827;
+      color: #e5e7eb;
+    }
+    
+    .dark .bg-white {
+      background-color: #1f2937 !important;
+    }
+    
+    .dark .bg-gray-100 {
+      background-color: #1f2937;
+    }
+    
+    .dark aside {
+      background-color: #1f2937;
+      border-right: 1px solid #374151;
+    }
+    
+    .dark input,
+    .dark select,
+    .dark textarea {
+      background-color: #374151;
+      border-color: #4b5563;
+      color: #f3f4f6;
+    }
+    
+    .dark input::placeholder {
+      color: #9ca3af;
+    }
+    
+    .dark table {
+      border-color: #4b5563;
+    }
+    
+    .dark th,
+    .dark td {
+      border-color: #4b5563;
+      background-color: #1f2937;
+    }
+    
+    .dark thead {
+      background-color: #111827 !important;
+    }
+    
+    .dark footer {
+      background-color: #1f2937;
+      border-top: 1px solid #374151;
+    }
+    
+    .dark .hover\:bg-gray-200:hover {
+      background-color: #374151 !important;
+    }
+    
+    .dark .text-gray-500 {
+      color: #9ca3af !important;
+    }
+    
+    .dark .bg-gray-100 {
+      background-color: #111827 !important;
+    }
+    
+    .dark .text-gray-600 {
+      color: #d1d5db !important;
+    }
+    
+    /* Botón de tema */
+    .theme-switch {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .dark .theme-switch {
+      background: rgba(31, 41, 55, 0.5);
+    }
+    
+    .theme-icon {
+      font-size: 1.2rem;
+      color: #333;
+      transition: all 0.3s ease;
+    }
+    
+    .dark .theme-icon {
+      color: #fbbf24;
+    }
+    
+    .theme-switch:hover {
+      transform: scale(1.1);
+      background: rgba(255, 255, 255, 0.3);
+    }
+    
+    .dark .theme-switch:hover {
+      background: rgba(31, 41, 55, 0.7);
+    }
+    
+    .animate-pulse {
+      animation: pulse 0.3s ease;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    
+    .stock-low {
+      background-color: #fef3c7;
+      animation: pulse-stock 2s infinite;
+    }
+    
+    .dark .stock-low {
+      background-color: #451a03;
+    }
+    
+    .stock-out {
+      background-color: #fee2e2;
+    }
+    
+    .dark .stock-out {
+      background-color: #450a0a;
+    }
+    
+    @keyframes pulse-stock {
+      0% { opacity: 1; }
+      50% { opacity: 0.8; }
+      100% { opacity: 1; }
+    }
+    
+  
+  </style>
 </head>
-<body class="bg-gray-100">
-  <!-- Header simple -->
-  <header class="bg-white shadow p-4 flex justify-between items-center">
-    <h1 class="text-xl font-semibold">Inventario</h1>
-    <a href="#" class="btn btn-dark">Agregar Producto</a>
-  </header>
+<body class="bg-gray-100 min-h-screen flex flex-col">
 
-  <main class="p-6">
-    <!-- Filtros de búsqueda -->
-    <div class="card bg-white shadow mb-6 p-4">
-      <h5 class="font-semibold mb-4">Filtros de Búsqueda</h5>
-      <div class="row g-3 align-items-end">
-        <div class="col-md-4">
-          <label class="form-label">Búsqueda por nombre o código</label>
-          <div class="relative">
-            <input type="text" class="form-control" placeholder="Search">
-            <i class="bi bi-search absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-400"></i>
+  <!-- Botón de cambio de tema -->
+  <div class="theme-switch" id="themeToggle">
+    <i class="bi bi-moon theme-icon" id="themeIcon"></i>
+  </div>
+
+  <div class="flex flex-1 min-h-screen">
+    <!-- Menú lateral -->
+    <aside class="w-1/5 bg-white p-4 shadow rounded-r-md flex flex-col justify-between">
+      <div>
+        <h1 class="text-xl font-bold mb-4">Inventario Facturación</h1>
+        <nav class="flex flex-col space-y-2" aria-label="Menú principal">
+          <a href="index.html" class="text-left px-2 py-1 rounded hover:bg-gray-200">Panel Principal</a>
+          <a href="busquedaFactura.html" class="text-left px-2 py-1 rounded hover:bg-gray-200">Facturación</a>
+          <a href="busquedaInventario.html" class="text-left px-2 py-1 rounded bg-gray-100 font-semibold ">Inventario</a>
+        </nav>
+      </div>
+    </aside>
+
+    <!-- Contenido principal -->
+    <main class="flex-1 ml-6 p-6 space-y-6 overflow-auto">
+      <!-- Encabezado -->
+      <header class="bg-white p-4 shadow rounded-md flex justify-between items-center">
+        <div>
+          <h2 class="text-2xl font-bold">Inventario</h2>
+          <p class="text-sm text-gray-500 mt-1">Gestión de productos y stock</p>
+        </div>
+        <div class="flex gap-3">
+          <a href="generadorProducto.html" class="bg-black text-white px-4 py-2 rounded text-sm hover:bg-gray-800 transition">+ Agregar Producto</a>
+          <button class="bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700 transition">Exportar CSV</button>
+        </div>
+      </header>
+
+      <!-- Filtros -->
+      <section class="bg-white p-4 shadow rounded-md" aria-label="Filtros de búsqueda">
+        <h3 class="font-semibold mb-3">Filtros de Búsqueda</h3>
+        <div class="grid grid-cols-4 gap-4">
+          <input type="text" placeholder="Nombre o Código" class="border p-2 rounded w-full" aria-label="Nombre o Código" id="searchInput">
+          <select class="border p-2 rounded w-full" aria-label="Categoría" id="categorySelect">
+            <option value="">Todas las categorías</option>
+            <option>Electrónicos</option>
+            <option>Ropa</option>
+            <option>Hogar</option>
+            <option>Deportes</option>
+            <option>Alimentos</option>
+          </select>
+          <select class="border p-2 rounded w-full" aria-label="Estado de Stock" id="stockFilter">
+            <option value="">Todos los estados</option>
+            <option value="low">Stock bajo</option>
+            <option value="out">Sin stock</option>
+            <option value="normal">Stock normal</option>
+          </select>
+          <button class="bg-black text-white px-4 py-2 rounded w-full hover:bg-gray-800 transition" id="applyFilters">Aplicar Filtros</button>
+        </div>
+      </section>
+
+      <!-- Estadísticas -->
+      <section class="grid grid-cols-4 gap-4" aria-label="Estadísticas de inventario">
+        <div class="bg-white p-4 shadow rounded-md text-center">
+          <p class="text-gray-500 text-sm">Total Productos</p>
+          <p class="text-xl font-bold">49</p>
+        </div>
+        <div class="bg-white p-4 shadow rounded-md text-center">
+          <p class="text-gray-500 text-sm">Valor Total</p>
+          <p class="text-xl font-bold">$45,500.00</p>
+        </div>
+        <div class="bg-white p-4 shadow rounded-md text-center">
+          <p class="text-gray-500 text-sm">Stock Bajo</p>
+          <p class="text-xl font-bold text-yellow-600">20</p>
+        </div>
+        <div class="bg-white p-4 shadow rounded-md text-center">
+          <p class="text-gray-500 text-sm">Sin Stock</p>
+          <p class="text-xl font-bold text-red-600">3</p>
+        </div>
+      </section>
+
+      <!-- Lista de Productos -->
+      <section class="bg-white p-4 shadow rounded-md" aria-label="Lista de productos">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="font-semibold">Lista de Productos</h3>
+          <div class="text-gray-500 text-sm">
+            Mostrando 8 de 49 productos
           </div>
         </div>
-        <div class="col-md-3">
-          <label class="form-label">Categoría</label>
-          <input type="text" class="form-control">
+        
+        <div class="overflow-auto max-h-[400px]">
+          <table class="w-full table-auto text-sm border-collapse">
+            <thead class="bg-gray-100 sticky top-0">
+              <tr>
+                <th class="border px-4 py-2 text-left">Código</th>
+                <th class="border px-4 py-2 text-left">Producto</th>
+                <th class="border px-4 py-2 text-left">Categoría</th>
+                <th class="border px-4 py-2 text-center">Stock</th>
+                <th class="border px-4 py-2 text-right">Costo</th>
+                <th class="border px-4 py-2 text-center">Última Compra</th>
+                <th class="border px-4 py-2 text-center">Última Venta</th>
+                <th class="border px-4 py-2 text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="inventoryTable">
+              <tr class="text-center stock-low">
+                <td class="border px-4 py-2 text-left">PRD001</td>
+                <td class="border px-4 py-2 text-left">Laptop HP EliteBook</td>
+                <td class="border px-4 py-2 text-left">Electrónicos</td>
+                <td class="border px-4 py-2 font-bold">5</td>
+                <td class="border px-4 py-2 text-right">$850.00</td>
+                <td class="border px-4 py-2">15/10/2021</td>
+                <td class="border px-4 py-2">15/10/2025</td>
+                <td class="border px-4 py-2 space-x-2">
+                  <button class="text-blue-600 hover:text-blue-800" aria-label="Editar producto">✏️</button>
+                  <button class="text-red-600 hover:text-red-800" aria-label="Eliminar producto">🗑️</button>
+                </td>
+              </tr>
+              <tr class="text-center">
+                <td class="border px-4 py-2 text-left">PRD002</td>
+                <td class="border px-4 py-2 text-left">Mouse Inalámbrico</td>
+                <td class="border px-4 py-2 text-left">Electrónicos</td>
+                <td class="border px-4 py-2 font-bold">45</td>
+                <td class="border px-4 py-2 text-right">$19.99</td>
+                <td class="border px-4 py-2">18/09/2025</td>
+                <td class="border px-4 py-2">02/07/2025</td>
+                <td class="border px-4 py-2 space-x-2">
+                  <button class="text-blue-600 hover:text-blue-800" aria-label="Editar producto">✏️</button>
+                  <button class="text-red-600 hover:text-red-800" aria-label="Eliminar producto">🗑️</button>
+                </td>
+              </tr>
+              <tr class="text-center stock-out">
+                <td class="border px-4 py-2 text-left">PRD003</td>
+                <td class="border px-4 py-2 text-left">Teclado Mecánico RGB</td>
+                <td class="border px-4 py-2 text-left">Electrónicos</td>
+                <td class="border px-4 py-2 font-bold text-red-600">0</td>
+                <td class="border px-4 py-2 text-right">$59.99</td>
+                <td class="border px-4 py-2">10/05/2025</td>
+                <td class="border px-4 py-2">28/06/2025</td>
+                <td class="border px-4 py-2 space-x-2">
+                  <button class="text-blue-600 hover:text-blue-800" aria-label="Editar producto">✏️</button>
+                  <button class="text-red-600 hover:text-red-800" aria-label="Eliminar producto">🗑️</button>
+                </td>
+              </tr>
+              <tr class="text-center">
+                <td class="border px-4 py-2 text-left">PRD004</td>
+                <td class="border px-4 py-2 text-left">Monitor 24" Full HD</td>
+                <td class="border px-4 py-2 text-left">Electrónicos</td>
+                <td class="border px-4 py-2 font-bold">18</td>
+                <td class="border px-4 py-2 text-right">$189.99</td>
+                <td class="border px-4 py-2">22/06/2025</td>
+                <td class="border px-4 py-2">30/06/2025</td>
+                <td class="border px-4 py-2 space-x-2">
+                  <button class="text-blue-600 hover:text-blue-800" aria-label="Editar producto">✏️</button>
+                  <button class="text-red-600 hover:text-red-800" aria-label="Eliminar producto">🗑️</button>
+                </td>
+              </tr>
+              <tr class="text-center stock-low">
+                <td class="border px-4 py-2 text-left">PRD005</td>
+                <td class="border px-4 py-2 text-left">Impresora Multifuncional</td>
+                <td class="border px-4 py-2 text-left">Electrónicos</td>
+                <td class="border px-4 py-2 font-bold">3</td>
+                <td class="border px-4 py-2 text-right">$249.99</td>
+                <td class="border px-4 py-2">15/05/2025</td>
+                <td class="border px-4 py-2">25/06/2025</td>
+                <td class="border px-4 py-2 space-x-2">
+                  <button class="text-blue-600 hover:text-blue-800" aria-label="Editar producto">✏️</button>
+                  <button class="text-red-600 hover:text-red-800" aria-label="Eliminar producto">🗑️</button>
+                </td>
+              </tr>
+              <tr class="text-center">
+                <td class="border px-4 py-2 text-left">PRD006</td>
+                <td class="border px-4 py-2 text-left">Auriculares Bluetooth</td>
+                <td class="border px-4 py-2 text-left">Electrónicos</td>
+                <td class="border px-4 py-2 font-bold">32</td>
+                <td class="border px-4 py-2 text-right">$89.99</td>
+                <td class="border px-4 py-2">10/06/2025</td>
+                <td class="border px-4 py-2">29/06/2025</td>
+                <td class="border px-4 py-2 space-x-2">
+                  <button class="text-blue-600 hover:text-blue-800" aria-label="Editar producto">✏️</button>
+                  <button class="text-red-600 hover:text-red-800" aria-label="Eliminar producto">🗑️</button>
+                </td>
+              </tr>
+              <tr class="text-center">
+                <td class="border px-4 py-2 text-left">PRD007</td>
+                <td class="border px-4 py-2 text-left">Disco Duro Externo 1TB</td>
+                <td class="border px-4 py-2 text-left">Electrónicos</td>
+                <td class="border px-4 py-2 font-bold">25</td>
+                <td class="border px-4 py-2 text-right">$69.99</td>
+                <td class="border px-4 py-2">05/06/2025</td>
+                <td class="border px-4 py-2">20/06/2025</td>
+                <td class="border px-4 py-2 space-x-2">
+                  <button class="text-blue-600 hover:text-blue-800" aria-label="Editar producto">✏️</button>
+                  <button class="text-red-600 hover:text-red-800" aria-label="Eliminar producto">🗑️</button>
+                </td>
+              </tr>
+              <tr class="text-center stock-out">
+                <td class="border px-4 py-2 text-left">PRD008</td>
+                <td class="border px-4 py-2 text-left">Tablet Android 10"</td>
+                <td class="border px-4 py-2 text-left">Electrónicos</td>
+                <td class="border px-4 py-2 font-bold text-red-600">0</td>
+                <td class="border px-4 py-2 text-right">$299.99</td>
+                <td class="border px-4 py-2">12/05/2025</td>
+                <td class="border px-4 py-2">01/07/2025</td>
+                <td class="border px-4 py-2 space-x-2">
+                  <button class="text-blue-600 hover:text-blue-800" aria-label="Editar producto">✏️</button>
+                  <button class="text-red-600 hover:text-red-800" aria-label="Eliminar producto">🗑️</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <div class="col-md-3">
-          <label class="form-label">Stock</label>
-          <input type="number" class="form-control">
+        
+        <!-- Paginación -->
+        <div class="flex justify-between items-center mt-4">
+          <div class="text-gray-500 text-sm">
+            Mostrando 8 de 49 productos
+          </div>
+          <div class="flex gap-2">
+            <button class="bg-gray-200 px-3 py-1 rounded hover:bg-gray-300">&laquo;</button>
+            <button class="bg-gray-200 px-3 py-1 rounded hover:bg-gray-300">1</button>
+            <button class="bg-gray-200 px-3 py-1 rounded hover:bg-gray-300">2</button>
+            <button class="bg-gray-200 px-3 py-1 rounded hover:bg-gray-300">3</button>
+            <button class="bg-gray-200 px-3 py-1 rounded hover:bg-gray-300">&raquo;</button>
+          </div>
         </div>
-        <div class="col-md-2">
-          <button class="btn btn-dark w-full">Aplicar Filtros</button>
-        </div>
-      </div>
-    </div>
+      </section>
+    </main>
+  </div>
 
-    <!-- Stats -->
-    <div class="row g-3 mb-6">
-      <div class="col-md-3">
-        <div class="card p-4 shadow-sm">
-          <p class="text-gray-500 mb-1">Total Productos</p>
-          <h4 class="text-2xl font-semibold">49</h4>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="card p-4 shadow-sm">
-          <p class="text-gray-500 mb-1">Valor Total</p>
-          <h4 class="text-2xl font-semibold">$45.5</h4>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="card p-4 shadow-sm">
-          <p class="text-gray-500 mb-1">Stock Bajo</p>
-          <h4 class="text-2xl font-semibold">20</h4>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="card p-4 shadow-sm">
-          <p class="text-gray-500 mb-1">Sin Stock</p>
-          <h4 class="text-2xl font-semibold">3</h4>
-        </div>
-      </div>
-    </div>
-
-    <!-- Lista de Productos -->
-    <div class="card bg-white shadow p-4">
-      <h5 class="font-semibold mb-3">Lista de Productos</h5>
-      <div class="table-responsive">
-        <table class="table">
-          <thead class="bg-gray-100">
-            <tr>
-              <th>Código</th>
-              <th>Producto</th>
-              <th>Categoría</th>
-              <th>Stock</th>
-              <th>Costo</th>
-              <th>Última Compra</th>
-              <th>Última Venta</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Ejemplo fila -->
-            <tr>
-              <td>PRD001</td>
-              <td>Laptop</td>
-              <td>Electrónicos</td>
-              <td>45</td>
-              <td>850</td>
-              <td>15/10/2021</td>
-              <td>15/10/2025</td>
-              <td class="space-x-2">
-                <button class="bi bi-pencil hover:text-blue-600"></button>
-                <button class="bi bi-trash hover:text-red-600"></button>
-              </td>
-            </tr>
-            <!-- Repetir según datos -->
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </main>
-
-  <footer class="bg-white text-center py-3 text-sm text-gray-500">
-    2025 Sistema de Inventario. Todos los derechos reservados.
+  <!-- Footer -->
+  <footer class="bg-white text-center py-3 text-sm text-gray-500 mt-auto">
+    2025 Sistema de Inventario y Facturación. Todos los derechos reservados.
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Control de tema oscuro/claro
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const htmlElement = document.documentElement;
+    
+    // Comprobar si hay preferencia guardada
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      enableDarkMode();
+    }
+    
+    // Manejar el clic en el botón de tema
+    themeToggle.addEventListener('click', () => {
+      if (htmlElement.classList.contains('dark')) {
+        disableDarkMode();
+      } else {
+        enableDarkMode();
+      }
+    });
+    
+    function enableDarkMode() {
+      htmlElement.classList.add('dark');
+      themeIcon.classList.remove('bi-moon');
+      themeIcon.classList.add('bi-sun');
+      localStorage.setItem('theme', 'dark');
+    }
+    
+    function disableDarkMode() {
+      htmlElement.classList.remove('dark');
+      themeIcon.classList.remove('bi-sun');
+      themeIcon.classList.add('bi-moon');
+      localStorage.setItem('theme', 'light');
+    }
+    
+    // Animación al cambiar el tema
+    themeToggle.addEventListener('click', function() {
+      this.classList.add('animate-pulse');
+      setTimeout(() => {
+        this.classList.remove('animate-pulse');
+      }, 300);
+    });
+    
+    // Funcionalidad de búsqueda y filtrado
+    const searchInput = document.getElementById('searchInput');
+    const categorySelect = document.getElementById('categorySelect');
+    const stockFilter = document.getElementById('stockFilter');
+    const applyFilters = document.getElementById('applyFilters');
+    const inventoryTable = document.getElementById('inventoryTable');
+    const rows = inventoryTable.getElementsByTagName('tr');
+    
+    applyFilters.addEventListener('click', filterProducts);
+    
+    function filterProducts() {
+      const searchTerm = searchInput.value.toLowerCase();
+      const category = categorySelect.value;
+      const stockStatus = stockFilter.value;
+      
+      for (let i = 0; i < rows.length; i++) {
+        const row = rows[i];
+        const productName = row.cells[1].textContent.toLowerCase();
+        const productCategory = row.cells[2].textContent;
+        const productStock = parseInt(row.cells[3].textContent);
+        
+        // Verificar si la fila coincide con los filtros
+        const matchesSearch = productName.includes(searchTerm) || row.cells[0].textContent.includes(searchTerm);
+        const matchesCategory = category === '' || productCategory === category;
+        let matchesStock = true;
+        
+        if (stockStatus === 'low') {
+          matchesStock = productStock > 0 && productStock <= 5;
+        } else if (stockStatus === 'out') {
+          matchesStock = productStock === 0;
+        } else if (stockStatus === 'normal') {
+          matchesStock = productStock > 5;
+        }
+        
+        if (matchesSearch && matchesCategory && matchesStock) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      }
+    }
+    
+    // Funcionalidad para eliminar producto
+    const deleteButtons = document.querySelectorAll('button[aria-label="Eliminar producto"]');
+    deleteButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const productRow = this.closest('tr');
+        const productName = productRow.cells[1].textContent;
+        
+        if (confirm(`¿Estás seguro de que deseas eliminar el producto "${productName}"?`)) {
+          productRow.remove();
+        }
+      });
+    });
+  </script>
 </body>
 </html>

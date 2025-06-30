@@ -5,42 +5,171 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Emisión de Facturas</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+  <style>
+    /* Estilos para modo oscuro */
+    .dark body {
+      background-color: #111827;
+      color: #e5e7eb;
+    }
+    
+    .dark .bg-white {
+      background-color: #1f2937 !important;
+    }
+    
+    .dark .bg-gray-100 {
+      background-color: #1f2937;
+    }
+    
+    .dark aside {
+      background-color: #1f2937;
+      border-right: 1px solid #374151;
+    }
+    
+    .dark input,
+    .dark select,
+    .dark textarea {
+      background-color: #374151;
+      border-color: #4b5563;
+      color: #f3f4f6;
+    }
+    
+    .dark input::placeholder,
+    .dark textarea::placeholder {
+      color: #9ca3af;
+    }
+    
+    .dark table {
+      border-color: #4b5563;
+    }
+    
+    .dark th,
+    .dark td {
+      border-color: #4b5563;
+      background-color: #1f2937;
+    }
+    
+    .dark thead {
+      background-color: #111827 !important;
+    }
+    
+    .dark .bg-yellow-100 {
+      background-color: #453411;
+      color: #fbbf24;
+    }
+    
+    .dark .bg-gray-100 {
+      background-color: #111827 !important;
+      border-color: #374151;
+    }
+    
+    .dark footer {
+      background-color: #1f2937;
+      border-top: 1px solid #374151;
+    }
+    
+    .dark .hover\:bg-gray-200:hover {
+      background-color: #374151 !important;
+    }
+    
+    .dark .text-gray-500 {
+      color: #9ca3af !important;
+    }
+    
+    /* Botón de tema */
+    .theme-switch {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .dark .theme-switch {
+      background: rgba(31, 41, 55, 0.5);
+    }
+    
+    .theme-icon {
+      font-size: 1.2rem;
+      color: #333;
+      transition: all 0.3s ease;
+    }
+    
+    .dark .theme-icon {
+      color: #fbbf24;
+    }
+    
+    .theme-switch:hover {
+      transform: scale(1.1);
+      background: rgba(255, 255, 255, 0.3);
+    }
+    
+    .dark .theme-switch:hover {
+      background: rgba(31, 41, 55, 0.7);
+    }
+    
+    .animate-pulse {
+      animation: pulse 0.3s ease;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+  </style>
 </head>
-<body class="bg-gray-100 p-4">
+<body class="bg-gray-100 min-h-screen flex flex-col">
 
-  <div class="flex">
-    <!-- Menú lateral -->
-    <aside class="w-1/5 bg-white p-4 shadow rounded-md">
-      <h1 class="text-xl font-bold mb-4">🧾 Sistema de Facturación</h1>
-      <nav class="flex flex-col space-y-2">
-        <button class="text-left px-2 py-1 rounded hover:bg-gray-200">Panel Principal</button>
-        <button class="text-left px-2 py-1 rounded hover:bg-gray-200">Facturación</button>
-        <button class="text-left px-2 py-1 rounded hover:bg-gray-200">Inventario</button>
-      </nav>
+  <!-- Botón de cambio de tema -->
+  <div class="theme-switch" id="themeToggle">
+    <i class="bi bi-moon theme-icon" id="themeIcon"></i>
+  </div>
+
+  <div class="flex flex-1 min-h-screen">
+    <!-- Menú lateral (altura completa) -->
+    <aside class="w-1/5 bg-white p-4 shadow rounded-r-md flex flex-col justify-between">
+      <div>
+        <h1 class="text-xl font-bold mb-4">Inventario Facturación</h1>
+        <nav class="flex flex-col space-y-2">
+          <a href="index.html" class="text-left px-2 py-1 rounded hover:bg-gray-200">Panel Principal</a>
+          <a href="busquedaFactura.html" class="text-left px-2 py-1 rounded bg-gray-100 font-semibold">Facturación</a>
+          <a href="busquedaInventario.html" class="text-left px-2 py-1 rounded hover:bg-gray-200 ">Inventario</a>
+        </nav>
+      </div>
     </aside>
 
     <!-- Contenido principal -->
-    <main class="flex-1 ml-6 bg-white p-6 shadow rounded-md">
+    <main class="flex-1 ml-6 bg-white p-6 shadow rounded-md overflow-auto">
       <h2 class="text-2xl font-bold mb-2">Emisión de Facturas</h2>
       <p class="text-sm text-gray-500 mb-6">Crear una nueva factura con control de inventario en tiempo real</p>
 
       <!-- Sección de información -->
       <div class="grid grid-cols-2 gap-6 mb-6">
-        <!-- Información del Cliente -->
+        <!-- Cliente -->
         <div>
           <h3 class="font-semibold mb-2">Información del Cliente</h3>
           <div class="grid grid-cols-2 gap-2">
-            <input type="text" placeholder="Nombre" class="border p-2 rounded w-full">
-            <input type="text" placeholder="Cédula" id="cedula" class="border p-2 rounded w-full">
-            <input type="text" placeholder="Teléfono" class="border p-2 rounded w-full">
-            <input type="text" placeholder="Dirección" class="border p-2 rounded w-full">
-            <input type="date" class="border p-2 rounded w-full">
-            <input type="text" placeholder="No Factura" class="border p-2 rounded w-full">
+            <input type="text" placeholder="Nombre" class="border p-2 rounded w-full" />
+            <input type="text" placeholder="Cédula" id="cedula" class="border p-2 rounded w-full" />
+            <input type="text" placeholder="Teléfono" class="border p-2 rounded w-full" />
+            <input type="text" placeholder="Dirección" class="border p-2 rounded w-full" />
+            <input type="date" class="border p-2 rounded w-full" />
+            <input type="text" placeholder="No Factura" class="border p-2 rounded w-full" />
           </div>
           <p id="error-cedula" class="text-red-600 text-sm mt-1 hidden">❌ Cédula inválida (solo números, 8-10 dígitos).</p>
         </div>
 
-
+        <!-- Detalles -->
         <div>
           <h3 class="font-semibold mb-2">Detalles de Factura</h3>
           <select class="border p-2 rounded w-full mb-2">
@@ -54,59 +183,80 @@
 
       <!-- Buscador de productos -->
       <div class="flex items-center mb-4">
-        <input type="text" placeholder="Buscar producto" class="border p-2 rounded w-full mr-2">
-        <button class="bg-black text-white px-4 py-2 rounded">+ Agregar</button>
+        <input type="text" placeholder="Buscar producto" class="border p-2 rounded w-full mr-2" />
+        <button class="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition">+ Agregar</button>
       </div>
 
       <!-- Tabla de productos -->
       <table class="w-full table-auto border mb-4 text-sm" id="tabla-items">
-  <thead class="bg-gray-100">
-    <tr>
-      <th class="border px-2 py-1">Código</th>
-      <th class="border px-2 py-1">Producto</th>
-      <th class="border px-2 py-1">Stock</th>
-      <th class="border px-2 py-1">Cantidad</th>
-      <th class="border px-2 py-1">Precio Unit</th>
-      <th class="border px-2 py-1">Descuento</th>
-      <th class="border px-2 py-1">Subtotal</th>
-      <th class="border px-2 py-1">Acciones</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr class="text-center">
-      <td class="border px-2 py-1">Prod001</td>
-      <td class="border px-2 py-1">Mouse</td>
-      <td class="border px-2 py-1">25unid</td>
-      <td class="border px-2 py-1">2</td>
-      <td class="border px-2 py-1">$8.00</td>
-      <td class="border px-2 py-1">0</td>
-      <td class="border px-2 py-1">$16.00</td>
-      <td class="border px-2 py-1">
-        <button onclick="eliminarFila(this)" class="text-red-600 hover:text-red-800">
-          🗑️
-        </button>
-      </td>
-    </tr>
-    <tr class="text-center">
-      <td class="border px-2 py-1">Prod002</td>
-      <td class="border px-2 py-1">Laptop</td>
-      <td class="border px-2 py-1">25unid</td>
-      <td class="border px-2 py-1">2</td>
-      <td class="border px-2 py-1">$8.00</td>
-      <td class="border px-2 py-1">0</td>
-      <td class="border px-2 py-1">$16.00</td>
-      <td class="border px-2 py-1">
-        <button onclick="eliminarFila(this)" class="text-red-600 hover:text-red-800">
-          🗑️
-        </button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+        <thead class="bg-gray-100">
+          <tr>
+            <th class="border px-2 py-1">Código</th>
+            <th class="border px-2 py-1">Producto</th>
+            <th class="border px-2 py-1">Stock</th>
+            <th class="border px-2 py-1">Cantidad</th>
+            <th class="border px-2 py-1">Precio Unit</th>
+            <th class="border px-2 py-1">Descuento</th>
+            <th class="border px-2 py-1">Subtotal</th>
+            <th class="border px-2 py-1">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="text-center">
+            <td class="border px-2 py-1">Prod001</td>
+            <td class="border px-2 py-1">Mouse</td>
+            <td class="border px-2 py-1">25 unid</td>
+            <td class="border px-2 py-1">2</td>
+            <td class="border px-2 py-1">$8.00</td>
+            <td class="border px-2 py-1">0</td>
+            <td class="border px-2 py-1">$16.00</td>
+            <td class="border px-2 py-1">
+              <button onclick="eliminarFila(this)" class="text-red-600 hover:text-red-800">🗑️</button>
+            </td>
+          </tr>
+          <tr class="text-center">
+            <td class="border px-2 py-1">Prod002</td>
+            <td class="border px-2 py-1">Laptop</td>
+            <td class="border px-2 py-1">25 unid</td>
+            <td class="border px-2 py-1">2</td>
+            <td class="border px-2 py-1">$8.00</td>
+            <td class="border px-2 py-1">0</td>
+            <td class="border px-2 py-1">$16.00</td>
+            <td class="border px-2 py-1">
+              <button onclick="eliminarFila(this)" class="text-red-600 hover:text-red-800">🗑️</button>
+            </td>
+          </tr>
+          <tr class="text-center">
+            <td class="border px-2 py-1">Prod003</td>
+            <td class="border px-2 py-1">Teclado</td>
+            <td class="border px-2 py-1">18 unid</td>
+            <td class="border px-2 py-1">3</td>
+            <td class="border px-2 py-1">$12.50</td>
+            <td class="border px-2 py-1">0</td>
+            <td class="border px-2 py-1">$37.50</td>
+            <td class="border px-2 py-1">
+              <button onclick="eliminarFila(this)" class="text-red-600 hover:text-red-800">🗑️</button>
+            </td>
+          </tr>
+          <tr class="text-center">
+            <td class="border px-2 py-1">Prod004</td>
+            <td class="border px-2 py-1">Monitor</td>
+            <td class="border px-2 py-1">12 unid</td>
+            <td class="border px-2 py-1">1</td>
+            <td class="border px-2 py-1">$189.99</td>
+            <td class="border px-2 py-1">5%</td>
+            <td class="border px-2 py-1">$180.49</td>
+            <td class="border px-2 py-1">
+              <button onclick="eliminarFila(this)" class="text-red-600 hover:text-red-800">🗑️</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
       <!-- Alerta de stock -->
-      <div class="bg-gray-200 p-2 rounded flex items-center text-sm mb-4">
-        ⚠️ <span class="ml-2">Mouse inalámbrico: Stock bajo (5 unidades)</span>
+      <div class="bg-yellow-100 text-yellow-700 p-2 rounded flex items-center text-sm mb-4">
+        ⚠️
+        <span class="ml-2">Mouse inalámbrico: Stock bajo (5 unidades)</span>
       </div>
 
       <!-- Totales -->
@@ -124,34 +274,83 @@
           <span>Total:</span><span>$2,167.57</span>
         </div>
       </div>
+
+      <!-- Botones de acción -->
+      <div class="flex justify-end mt-6 space-x-3">
+        <button class="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded transition">Cancelar</button>
+        <button class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded transition">Guardar Borrador</button>
+        <button class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded transition">Emitir Factura</button>
+      </div>
     </main>
   </div>
 
-    <script>
-        function eliminarFila(boton) {
-            const fila = boton.closest("tr");
-        fila.remove();
-    }
-    </script>
+  <!-- Footer fuera del flex para anclarse abajo -->
+  <footer class="bg-white text-center py-3 text-sm text-gray-500 mt-auto shadow-t">
+      2025 Sistema de Inventario y Facturación. Todos los derechos reservados.
+  </footer>
+
+  <script>
+    // Control de tema oscuro/claro
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const htmlElement = document.documentElement;
     
-    <script>
-      const cedulaInput = document.getElementById("cedula");
-      const errorCedula = document.getElementById("error-cedula");
+    // Comprobar si hay preferencia guardada
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      enableDarkMode();
+    }
+    
+    // Manejar el clic en el botón de tema
+    themeToggle.addEventListener('click', () => {
+      if (htmlElement.classList.contains('dark')) {
+        disableDarkMode();
+      } else {
+        enableDarkMode();
+      }
+    });
+    
+    function enableDarkMode() {
+      htmlElement.classList.add('dark');
+      themeIcon.classList.remove('bi-moon');
+      themeIcon.classList.add('bi-sun');
+      localStorage.setItem('theme', 'dark');
+    }
+    
+    function disableDarkMode() {
+      htmlElement.classList.remove('dark');
+      themeIcon.classList.remove('bi-sun');
+      themeIcon.classList.add('bi-moon');
+      localStorage.setItem('theme', 'light');
+    }
+    
+    // Animación al cambiar el tema
+    themeToggle.addEventListener('click', function() {
+      this.classList.add('animate-pulse');
+      setTimeout(() => {
+        this.classList.remove('animate-pulse');
+      }, 300);
+    });
+    
+    // Funcionalidad existente para validar cédula
+    function eliminarFila(boton) {
+      const fila = boton.closest("tr");
+      fila.remove();
+    }
 
-      // Validar al salir del input (blur)
-      cedulaInput.addEventListener("blur", () => {
-        const cedula = cedulaInput.value.trim();
+    const cedulaInput = document.getElementById("cedula");
+    const errorCedula = document.getElementById("error-cedula");
 
-        if (!/^\d{8,10}$/.test(cedula)) {
-          errorCedula.classList.remove("hidden");
-          cedulaInput.classList.add("border-red-500");
-        } else {
-          errorCedula.classList.add("hidden");
-          cedulaInput.classList.remove("border-red-500");
-        }
-      });
-    </script>
-
-
+    cedulaInput.addEventListener("blur", () => {
+      const cedula = cedulaInput.value.trim();
+      if (!/^\d{8,10}$/.test(cedula)) {
+        errorCedula.classList.remove("hidden");
+        cedulaInput.classList.add("border-red-500");
+      } else {
+        errorCedula.classList.add("hidden");
+        cedulaInput.classList.remove("border-red-500");
+      }
+    });
+  </script>
 </body>
 </html>
