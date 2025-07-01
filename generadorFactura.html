@@ -6,6 +6,7 @@
   <title>Emisión de Facturas Electrónicas</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -93,9 +94,9 @@
     
     /* Botón de tema */
     .theme-switch {
-      position: absolute;
-      top: 20px;
-      right: 20px;
+      position: fixed;
+      top: 15px;
+      right: 15px;
       z-index: 100;
       background: rgba(255, 255, 255, 0.2);
       border-radius: 50%;
@@ -206,6 +207,84 @@
       max-height: 80vh;
       overflow-y: auto;
     }
+    
+    /* Estilos móviles */
+    .mobile-header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      padding: 0.75rem;
+    }
+    
+    .dark .mobile-header {
+      background: #1f2937;
+    }
+    
+    .scrollable-table {
+      overflow-x: auto;
+      width: 100%;
+    }
+    
+    .scrollable-table table {
+      min-width: 600px;
+    }
+    
+    .quantity-input {
+      width: 60px;
+      padding: 5px;
+    }
+    
+    .discount-input {
+      width: 50px;
+      padding: 5px;
+    }
+    
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 10px;
+    }
+    
+    .action-buttons {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      padding: 10px;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      gap: 10px;
+    }
+    
+    .dark .action-buttons {
+      background: #1f2937;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
+    }
+    
+    .action-buttons button {
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+    
+    .mobile-menu-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.8);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    .dark .mobile-menu-btn {
+      background: rgba(31, 41, 55, 0.8);
+    }
   </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col dark:bg-gray-900">
@@ -215,35 +294,71 @@
     <i class="bi bi-moon theme-icon" id="themeIcon"></i>
   </div>
 
+  <!-- Barra superior para móviles -->
+  <div class="mobile-menu d-md-none bg-white shadow-sm p-3 flex justify-between items-center dark:bg-dark-secondary">
+    <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu">
+      <i class="bi bi-list"></i>
+    </button>
+    <h1 class="text-lg font-bold mb-0">Facturación</h1>
+    <div class="d-flex align-items-center">
+      <div class="user-avatar me-2">MA</div>
+      <button class="btn btn-sm btn-outline-danger" id="logoutButtonMobile">
+        <i class="bi bi-box-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Menú móvil desplegable -->
+  <div class="offcanvas offcanvas-start dark:bg-dark-secondary" tabindex="-1" id="mobileMenu">
+    <div class="offcanvas-header dark:bg-dark-primary">
+      <h5 class="offcanvas-title dark:text-dark-text">Menú Principal</h5>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body dark:bg-dark-secondary">
+      <nav class="flex flex-col space-y-2" aria-label="Menú móvil">
+        <a href="index.html" class="text-left px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-dark-accent">Panel Principal</a>
+        <a href="busquedaFactura.html" class="text-left px-2 py-1 rounded bg-gray-100 font-semibold dark:bg-dark-accent">Facturación</a>
+        <a href="busquedaInventario.html" class="text-left px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-dark-accent">Inventario</a>
+      </nav>
+      <div class="mt-4 p-3 bg-blue-50 rounded dark:bg-blue-900 dark:bg-opacity-20">
+        <h6 class="font-semibold dark:text-dark-text">Rol: <span class="badge bg-primary role-badge">Facturación</span></h6>
+        <p class="text-sm text-gray-600 mb-0 dark:text-gray-400">Último acceso: Hoy, 09:45 AM</p>
+      </div>
+    </div>
+  </div>
 
   <div class="flex flex-1 min-h-screen">
     <!-- Menú lateral -->
-    <aside class="sidebar w-1/5 bg-white p-4 shadow rounded-r-md flex flex-col justify-between dark:bg-dark-primary dark:text-dark-text d-none d-md-block">
+    <aside class="sidebar w-64 bg-white p-4 shadow flex flex-col justify-between hidden md:flex dark:bg-dark-primary">
       <div>
-        <div class="d-flex justify-content-between align-items-center mb-4">
-          <h1 class="text-xl font-bold mb-0">Inventario Facturación</h1>
-          <div class="d-flex align-items-center">
-            <div class="user-avatar me-2">MA</div>
-            <button class="btn btn-sm btn-outline-danger" id="logoutButton">
+        <div class="flex justify-between items-center mb-4">
+          <h1 class="text-xl font-bold dark:text-dark-text">Inventario Facturación</h1>
+          <div class="flex items-center">
+            <div class="user-avatar mr-2">MA</div>
+            <button class="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-red-600" id="logoutButton">
               <a href="inicioSesion.html"><i class="bi bi-box-arrow-right"></i></a>
             </button>
           </div>
         </div>
-        <nav class="flex flex-col space-y-2">
+        <nav class="flex flex-col space-y-2" aria-label="Menú principal">
           <a href="index.html" class="text-left px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-dark-accent">Panel Principal</a>
           <a href="busquedaFactura.html" class="text-left px-2 py-1 rounded bg-gray-100 font-semibold dark:bg-dark-accent">Facturación</a>
           <a href="busquedaInventario.html" class="text-left px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-dark-accent">Inventario</a>
         </nav>
-
+      </div>
+      <div class="mt-4 p-3 bg-blue-50 rounded dark:bg-blue-900 dark:bg-opacity-20">
+        <h6 class="font-semibold dark:text-dark-text">Rol: <span class="badge bg-primary role-badge">Facturación</span></h6>
+        <p class="text-sm text-gray-600 mb-0 dark:text-gray-400">Último acceso: Hoy, 09:45 AM</p>
       </div>
     </aside>
 
     <!-- Contenido principal -->
-    <main class="main-content flex-1 ml-6 bg-white p-6 shadow rounded-md overflow-auto dark:bg-dark-primary">
-      <div class="d-flex justify-content-between align-items-center mb-4">
+    <main class="main-content flex-1 p-4 md:p-6 space-y-6 overflow-auto dark:bg-gray-900">
+      <!-- Encabezado -->
+      <header class="bg-white p-4 shadow rounded-md flex flex-col md:flex-row justify-between items-start md:items-center gap-4 dark:bg-dark-primary">
         <div>
-          <h2 class="text-2xl font-bold mb-1 dark:text-dark-text">Emisión de Facturas Electrónicas</h2>
-          <p class="text-sm text-gray-500 dark:text-gray-400">Crear una nueva factura con control de inventario en tiempo real</p>
+          <h2 class="text-2xl font-bold dark:text-dark-text">Emisión de Facturas Electrónicas</h2>
+          <p class="text-sm text-gray-500 mt-1 dark:text-gray-400">Crear una nueva factura con control de inventario en tiempo real</p>
         </div>
         <div class="flex items-center space-x-2">
           <span id="currentDateTime" class="text-sm text-gray-500 dark:text-gray-400"></span>
@@ -251,7 +366,7 @@
             <i class="bi bi-save me-1"></i> Guardar
           </button>
         </div>
-      </div>
+      </header>
 
       <!-- Sección de información -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -321,7 +436,7 @@
         </div>
         
         <!-- Productos sugeridos -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="product-grid">
           <div class="product-card bg-white dark:bg-dark-secondary p-3 rounded shadow cursor-pointer" data-id="1" data-name="Laptop HP EliteBook" data-price="899.99" data-stock="12">
             <div class="font-semibold dark:text-dark-text">Laptop HP EliteBook</div>
             <div class="text-sm text-gray-500 dark:text-gray-400">SKU: LT-HP-001</div>
@@ -352,7 +467,7 @@
       <!-- Tabla de productos -->
       <div class="mb-6">
         <h3 class="font-semibold mb-2 dark:text-dark-text">Productos en Factura</h3>
-        <div class="responsive-table">
+        <div class="scrollable-table">
           <table class="w-full table-auto border mb-4 text-sm dark:border-gray-700" id="tabla-items">
             <thead class="bg-gray-100 dark:bg-dark-secondary">
               <tr>
@@ -454,7 +569,6 @@
     <a href="#" class="text-blue-500 dark:text-blue-400">Términos de Uso</a> | 
     <a href="#" class="text-blue-500 dark:text-blue-400">Ayuda</a>
   </footer>
-
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -638,21 +752,6 @@
       input.addEventListener('change', calcularTotales);
     });
     
-    // Vista previa
-    document.getElementById('previewBtn').addEventListener('click', function() {
-      document.getElementById('previewInvoiceNumber').textContent = document.getElementById('invoiceNumber').value;
-      const previewModal = new bootstrap.Modal(document.getElementById('previewModal'));
-      previewModal.show();
-    });
-    
-    // Generar PDF
-    document.getElementById('generatePdfBtn').addEventListener('click', function() {
-      alert('Generando factura en formato PDF...');
-      // Aquí iría la lógica real para generar el PDF
-      const previewModal = bootstrap.Modal.getInstance(document.getElementById('previewModal'));
-      previewModal.hide();
-    });
-    
     // Emitir factura
     document.getElementById('issueBtn').addEventListener('click', function() {
       alert('Factura emitida con éxito y enviada al cliente. Inventario actualizado.');
@@ -664,19 +763,13 @@
       alert('Factura guardada como borrador.');
     });
     
-    // Menú móvil
-    document.getElementById('mobileMenuToggle').addEventListener('click', function() {
-      const mobileMenu = new bootstrap.Offcanvas(document.getElementById('mobileMenu'));
-      mobileMenu.show();
-    });
-    
     // Logout
     document.getElementById('logoutButton').addEventListener('click', function() {
- window.location.href = 'inicioSesion.html';
+      window.location.href = 'inicioSesion.html';
     });
     
     document.getElementById('logoutButtonMobile').addEventListener('click', function() {
-       window.location.href = 'inicioSesion.html';
+      window.location.href = 'inicioSesion.html';
     });
     
     // Inicialización
