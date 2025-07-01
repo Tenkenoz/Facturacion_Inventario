@@ -104,6 +104,10 @@
       color: #fbbf24 !important;
     }
     
+    .dark .text-red-500 {
+      color: #f87171 !important;
+    }
+    
     .dark footer {
       background-color: #1e293b;
       border-top: 1px solid #334155;
@@ -112,135 +116,391 @@
     .dark .theme-switch:hover {
       background: rgba(30, 41, 59, 0.8);
     }
+    
+    /* Mejoras de accesibilidad */
+    :focus-visible {
+      outline: 2px solid #3b82f6;
+      outline-offset: 2px;
+    }
+    
+    .card-hover {
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .card-hover:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .urgent-alert {
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.7; }
+      100% { opacity: 1; }
+    }
+    
+    .role-badge {
+      font-size: 0.65rem;
+      padding: 0.15rem 0.4rem;
+      border-radius: 0.75rem;
+    }
+    
+    .mobile-menu {
+      display: none;
+    }
+    
+    @media (max-width: 768px) {
+      .sidebar {
+        display: none;
+      }
+      
+      .mobile-menu {
+        display: block;
+      }
+      
+      .main-content {
+        padding: 1rem;
+      }
+    }
+    
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #3b82f6;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body class="bg-gray-100 min-vh-100 d-flex flex-column">
 
   <!-- Botón de cambio de tema -->
-  <div class="theme-switch" id="themeToggle">
+  <div class="theme-switch" id="themeToggle" aria-label="Cambiar tema">
     <i class="bi bi-moon theme-icon" id="themeIcon"></i>
+  </div>
+
+  <!-- Barra superior para móviles -->
+  <div class="mobile-menu d-md-none bg-white shadow-sm p-3 d-flex justify-content-between align-items-center">
+    <button class="btn btn-sm btn-outline-secondary" id="mobileMenuToggle">
+      <i class="bi bi-list"></i>
+    </button>
+    <h1 class="text-lg font-bold mb-0">Dashboard</h1>
+    <div class="d-flex align-items-center">
+      <div class="user-avatar me-2">MA</div>
+      <button class="btn btn-sm btn-outline-danger" id="logoutButtonMobile">
+       <a href="inicioSesion.html"> <i class="bi bi-box-arrow-right"></i></a>
+      </button>
+    </div>
+  </div>
+
+  <!-- Menú móvil desplegable -->
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileMenu">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title">Menú Principal</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+      <nav class="flex flex-col space-y-2" aria-label="Menú móvil">
+        <a href="index.html" class="text-left px-2 py-1 rounded bg-gray-100 font-semibold">Panel Principal</a>
+        <a href="busquedaFactura.html" class="text-left px-2 py-1 rounded hover:bg-gray-200">Facturación</a>
+        <a href="busquedaInventario.html" class="text-left px-2 py-1 rounded hover:bg-gray-200">Inventario</a>
+      </nav>
+    </div>
   </div>
 
   <div class="d-flex flex-grow-1">
     <!-- Sidebar -->
-    <nav class="bg-white shadow-md w-60 p-4">
-        <h1 class="text-xl font-bold mb-4">Inventario Facturación</h1>
+    <nav class="sidebar bg-white shadow-md w-60 p-4 d-none d-md-block">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h1 class="text-xl font-bold mb-0">Inventario Facturación</h1>
+          <div class="d-flex align-items-center">
+            <div class="user-avatar me-2">MA</div>
+            <button class="btn btn-sm btn-outline-danger" id="logoutButton">
+              <a href="inicioSesion.html"><i class="bi bi-box-arrow-right"></i></a>
+            </button>
+          </div>
+        </div>
         <nav class="flex flex-col space-y-2" aria-label="Menú principal">
           <a href="index.html" class="text-left px-2 py-1 rounded bg-gray-100 font-semibold">Panel Principal</a>
           <a href="busquedaFactura.html" class="text-left px-2 py-1 rounded hover:bg-gray-200">Facturación</a>
-          <a href="busquedaInventario.html" class="text-left px-2 py-1 rounded hover:bg-gray-200 ">Inventario</a>
+          <a href="busquedaInventario.html" class="text-left px-2 py-1 rounded hover:bg-gray-200">Inventario</a>
+
         </nav>
     </nav>
 
     <!-- Main Content -->
-    <main class="flex-grow-1 p-6">
-      <h3 class="text-2xl font-bold mb-4">Dashboard General</h3>
+    <main class="flex-grow-1 p-4 main-content">
+      <h1 class="text-2xl font-bold mb-4">Dashboard General</h1>
 
       <!-- Cards Top -->
-      <div class="row g-3 mb-6">
-        <div class="col-md-4">
-          <div class="card p-4 shadow-sm">
-            <p class="text-gray-500 mb-2">Valor Total</p>
-            <div class="flex items-center">
-              <h4 class="text-3xl font-semibold mr-2">$45.5</h4>
+      <div class="row g-3 mb-4">
+        <div class="col-md-3 col-sm-6">
+          <div class="card p-4 shadow-sm card-hover">
+            <p class="text-gray-500 mb-2">Valor Total Inventario</p>
+            <div class="d-flex align-items-center">
+              <h4 class="text-2xl font-semibold mr-2">$12,845.50</h4>
+              <span class="badge bg-success">+2.3%</span>
             </div>
+            <p class="text-sm text-gray-500 mt-1">Costo promedio: $45.5</p>
           </div>
         </div>
-        <div class="col-md-4">
-          <div class="card p-4 shadow-sm">
+        <div class="col-md-3 col-sm-6">
+          <div class="card p-4 shadow-sm card-hover">
             <p class="text-gray-500 mb-2">Total Productos</p>
-            <h4 class="text-3xl font-semibold">49</h4>
+            <h4 class="text-2xl font-semibold">49</h4>
+            <p class="text-sm text-gray-500 mt-1">12 categorías</p>
           </div>
         </div>
-        <div class="col-md-4">
-          <div class="card p-4 shadow-sm">
-            <p class="text-gray-500 mb-2">Productos con Stock Bajo</p>
-            <h4 class="text-3xl font-semibold">10</h4>
+        <div class="col-md-3 col-sm-6">
+          <div class="card p-4 shadow-sm card-hover">
+            <p class="text-gray-500 mb-2">Stock Bajo</p>
+            <h4 class="text-2xl font-semibold">10</h4>
+            <p class="text-sm text-gray-500 mt-1">3 críticos</p>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="card p-4 shadow-sm card-hover">
+            <p class="text-gray-500 mb-2">Facturación Mensual</p>
+            <h4 class="text-2xl font-semibold">$24,560</h4>
+            <p class="text-sm text-gray-500 mt-1">+15% vs mes anterior</p>
           </div>
         </div>
       </div>
 
-      <!-- Alerts -->
-      <div class="card bg-white shadow-sm mb-6 p-4">
-        <h5 class="font-semibold mb-3">Alertas Importantes</h5>
-        <ul class="space-y-3 list-unstyled">
-          <li class="d-flex align-items-start gap-3">
-            <span class="bi bi-exclamation-circle-fill text-yellow-500 fs-4"></span>
-            <div>
-              <p class="font-semibold mb-1">Stock Bajo</p>
-              <p class="text-gray-500 small">3 productos requieren reposición inmediata</p>
-            </div>
-          </li>
-          <li class="d-flex align-items-start gap-3">
-            <span class="bi bi-exclamation-circle-fill text-yellow-500 fs-4"></span>
-            <div>
-              <p class="font-semibold mb-1">Productos por vencer</p>
-              <p class="text-gray-500 small">3 productos están próximos a vencer</p>
-            </div>
-          </li>
-        </ul>
+      <!-- Alerts and Activity -->
+      <div class="row g-4 mb-4">
+        <div class="col-lg-6">
+          <div class="card bg-white shadow-sm p-4">
+            <h5 class="font-semibold mb-3 d-flex justify-content-between">
+              <span>Alertas Importantes</span>
+              <span class="badge bg-danger">2 Urgentes</span>
+            </h5>
+            <ul class="space-y-3 list-unstyled">
+              <li class="d-flex align-items-start gap-3 urgent-alert">
+                <span class="bi bi-exclamation-triangle-fill text-red-500 fs-4"></span>
+                <div>
+                  <p class="font-semibold mb-1">Stock Crítico</p>
+                  <p class="text-gray-500 small">3 productos requieren reposición inmediata</p>
+                  <div class="mt-1">
+                    <span class="badge bg-danger me-1">Producto X: 2 unidades</span>
+                    <span class="badge bg-danger me-1">Producto Y: 1 unidad</span>
+                  </div>
+                </div>
+              </li>
+              <li class="d-flex align-items-start gap-3">
+                <span class="bi bi-exclamation-circle-fill text-yellow-500 fs-4"></span>
+                <div>
+                  <p class="font-semibold mb-1">Productos por vencer</p>
+                  <p class="text-gray-500 small">3 productos están próximos a vencer</p>
+                  <div class="mt-1">
+                    <span class="badge bg-warning text-dark me-1">Producto A: 5 días</span>
+                    <span class="badge bg-warning text-dark me-1">Producto B: 7 días</span>
+                  </div>
+                </div>
+              </li>
+              <li class="d-flex align-items-start gap-3">
+                <span class="bi bi-info-circle-fill text-blue-500 fs-4"></span>
+                <div>
+                  <p class="font-semibold mb-1">Facturas pendientes</p>
+                  <p class="text-gray-500 small">2 facturas pendientes de envío</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="col-lg-6">
+          <div class="card bg-white shadow-sm p-4">
+            <h5 class="font-semibold mb-3 d-flex justify-content-between">
+              <span>Actividad Reciente</span>
+              <a href="#" class="text-sm">Ver todo</a>
+            </h5>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2 border-0">
+                <div>
+                  <span class="bi bi-file-earmark-plus text-success me-2"></span>
+                  <span>Factura #F-001-000123 creada</span>
+                </div>
+                <span class="small text-gray-500">Hoy, 10:30</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2 border-0">
+                <div>
+                  <span class="bi bi-box-seam text-primary me-2"></span>
+                  <span>Stock actualizado: Producto XYZ</span>
+                </div>
+                <span class="small text-gray-500">Hoy, 09:45</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2 border-0">
+                <div>
+                  <span class="bi bi-truck text-info me-2"></span>
+                  <span>Compra registrada a Proveedor ABC</span>
+                </div>
+                <span class="small text-gray-500">Ayer, 16:20</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2 border-0">
+                <div>
+                  <span class="bi bi-file-earmark-pdf text-danger me-2"></span>
+                  <span>Factura #F-001-000122 enviada</span>
+                </div>
+                <span class="small text-gray-500">Ayer, 14:15</span>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
 
       <!-- Actions -->
-      <div class="row g-3 mb-6">
+      <div class="row g-3 mb-4">
         <div class="col-sm-6 col-md-3">
-          <button class="w-100 card p-4 text-center hover:bg-gray-50 border-0 shadow-sm rounded">
-            <span class="text-2xl d-block mb-2">+</span>
+          <button class="w-100 card p-4 text-center hover:bg-gray-50 border-0 shadow-sm rounded card-hover" id="newInvoiceBtn">
+            <span class="bi bi-receipt-cutoff text-2xl d-block mb-2 text-primary"></span>
             <p class="font-semibold mb-0">Nueva Factura</p>
             <small class="text-gray-500">Crear Factura</small>
           </button>
         </div>
         <div class="col-sm-6 col-md-3">
-          <button class="w-100 card p-4 text-center hover:bg-gray-50 border-0 shadow-sm rounded">
-            <span class="bi bi-search text-2xl d-block mb-2"></span>
+          <button class="w-100 card p-4 text-center hover:bg-gray-50 border-0 shadow-sm rounded card-hover" id="searchStockBtn">
+            <span class="bi bi-search text-2xl d-block mb-2 text-success"></span>
             <p class="font-semibold mb-0">Consultar Stock</p>
             <small class="text-gray-500">Ver Inventario</small>
           </button>
         </div>
         <div class="col-sm-6 col-md-3">
-          <button class="w-100 card p-4 text-center hover:bg-gray-50 border-0 shadow-sm rounded">
-            <span class="bi bi-graph-up text-2xl d-block mb-2"></span>
+          <button class="w-100 card p-4 text-center hover:bg-gray-50 border-0 shadow-sm rounded card-hover" id="viewReportsBtn">
+            <span class="bi bi-graph-up text-2xl d-block mb-2 text-info"></span>
             <p class="font-semibold mb-0">Ver Reporte</p>
             <small class="text-gray-500">Análisis Ventas</small>
           </button>
         </div>
         <div class="col-sm-6 col-md-3">
-          <button class="w-100 card p-4 text-center hover:bg-gray-50 border-0 shadow-sm rounded">
-            <span class="text-2xl d-block mb-2">+</span>
+          <button class="w-100 card p-4 text-center hover:bg-gray-50 border-0 shadow-sm rounded card-hover" id="addProductBtn">
+            <span class="bi bi-plus-circle text-2xl d-block mb-2 text-warning"></span>
             <p class="font-semibold mb-0">Agregar Producto</p>
             <small class="text-gray-500">Nuevo Producto</small>
           </button>
         </div>
       </div>
 
-      <!-- Top Products -->
-      <div class="card bg-white shadow-sm p-4">
-        <h5 class="font-semibold mb-3">Productos más vendidos</h5>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-0">
-            <span>Producto A</span>
-            <span class="font-semibold">125 unidades</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-0">
-            <span>Producto B</span>
-            <span class="font-semibold">110 unidades</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-0">
-            <span>Producto C</span>
-            <span class="font-semibold">95 unidades</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-0">
-            <span>Producto D</span>
-            <span class="font-semibold">80 unidades</span>
-          </li>
-        </ul>
+      <!-- Data Sections -->
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <div class="card bg-white shadow-sm p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h5 class="font-semibold mb-0">Productos más vendidos</h5>
+              <a href="#" class="small">Ver reporte completo</a>
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-0">
+                <div>
+                  <span>Producto A</span>
+                  <span class="badge bg-primary ms-2">SKU: PRD-001</span>
+                </div>
+                <div>
+                  <span class="font-semibold">125 unidades</span>
+                  <span class="badge bg-success ms-2">+12%</span>
+                </div>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-0">
+                <div>
+                  <span>Producto B</span>
+                  <span class="badge bg-primary ms-2">SKU: PRD-045</span>
+                </div>
+                <div>
+                  <span class="font-semibold">110 unidades</span>
+                  <span class="badge bg-success ms-2">+8%</span>
+                </div>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-0">
+                <div>
+                  <span>Producto C</span>
+                  <span class="badge bg-primary ms-2">SKU: PRD-023</span>
+                </div>
+                <div>
+                  <span class="font-semibold">95 unidades</span>
+                  <span class="badge bg-danger ms-2">-3%</span>
+                </div>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-0">
+                <div>
+                  <span>Producto D</span>
+                  <span class="badge bg-primary ms-2">SKU: PRD-087</span>
+                </div>
+                <div>
+                  <span class="font-semibold">80 unidades</span>
+                  <span class="badge bg-success ms-2">+15%</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="col-lg-6">
+          <div class="card bg-white shadow-sm p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h5 class="font-semibold mb-0">Stock más bajo</h5>
+              <a href="#" class="small">Ver todo</a>
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-0">
+                <div>
+                  <span class="bi bi-exclamation-triangle-fill text-red-500 me-2"></span>
+                  <span>Producto X</span>
+                </div>
+                <div>
+                  <span class="font-semibold text-danger">2 unidades</span>
+                  <span class="ms-2 small text-gray-500">Mín: 10</span>
+                </div>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-0">
+                <div>
+                  <span class="bi bi-exclamation-triangle-fill text-red-500 me-2"></span>
+                  <span>Producto Y</span>
+                </div>
+                <div>
+                  <span class="font-semibold text-danger">1 unidad</span>
+                  <span class="ms-2 small text-gray-500">Mín: 5</span>
+                </div>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-0">
+                <div>
+                  <span class="bi bi-exclamation-circle-fill text-yellow-500 me-2"></span>
+                  <span>Producto Z</span>
+                </div>
+                <div>
+                  <span class="font-semibold text-warning">8 unidades</span>
+                  <span class="ms-2 small text-gray-500">Mín: 15</span>
+                </div>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-0">
+                <div>
+                  <span class="bi bi-exclamation-circle-fill text-yellow-500 me-2"></span>
+                  <span>Producto W</span>
+                </div>
+                <div>
+                  <span class="font-semibold text-warning">12 unidades</span>
+                  <span class="ms-2 small text-gray-500">Mín: 20</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </main>
   </div>
 
   <!-- Footer fijo abajo -->
   <footer class="bg-white text-center py-3 text-sm text-gray-500 mt-auto shadow-t">
-    © 2025 Sistema de Inventario y Facturación. Todos los derechos reservados.
+    © 2025 Sistema de Inventario y Facturación. Cumple con normativas tributarias Ecuador. 
+    <a href="#" class="text-blue-500">Política de Privacidad</a> | 
+    <a href="#" class="text-blue-500">Términos de Uso</a> | 
+    <a href="#" class="text-blue-500">Ayuda</a>
   </footer>
 
   <!-- Bootstrap JS -->
@@ -288,6 +548,62 @@
         this.classList.remove('animate-pulse');
       }, 300);
     });
+    
+    // Botones de acción
+    document.getElementById('newInvoiceBtn').addEventListener('click', function() {
+      alert('Redirigiendo a creación de nueva factura...');
+      // window.location.href = 'nueva-factura.html';
+    });
+    
+    document.getElementById('searchStockBtn').addEventListener('click', function() {
+      alert('Redirigiendo a búsqueda de inventario...');
+      // window.location.href = 'busquedaInventario.html';
+    });
+    
+    document.getElementById('viewReportsBtn').addEventListener('click', function() {
+      alert('Redirigiendo a reportes...');
+      // window.location.href = 'reportes.html';
+    });
+    
+    document.getElementById('addProductBtn').addEventListener('click', function() {
+      alert('Redirigiendo a agregar producto...');
+      // window.location.href = 'agregar-producto.html';
+    });
+    
+    // Botones de logout
+    document.getElementById('logoutButton').addEventListener('click', function() {
+      alert('Sesión cerrada. Redirigiendo a login...');
+      window.location.href = 'inicioSesion.html';
+    });
+    
+    document.getElementById('logoutButtonMobile').addEventListener('click', function() {
+      alert('Sesión cerrada. Redirigiendo a login...');
+      window.location.href = 'inicioSesion.html';
+    });
+    
+    // Menú móvil
+    document.getElementById('mobileMenuToggle').addEventListener('click', function() {
+      const mobileMenu = new bootstrap.Offcanvas(document.getElementById('mobileMenu'));
+      mobileMenu.show();
+    });
+    
+    // Simular datos dinámicos
+    function updateClock() {
+      const now = new Date();
+      const options = { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      };
+      document.getElementById('currentDateTime').textContent = now.toLocaleDateString('es-ES', options);
+    }
+    
+    setInterval(updateClock, 1000);
+    updateClock();
   </script>
 </body>
 </html>

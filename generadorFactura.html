@@ -3,10 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Emisión de Facturas</title>
+  <title>Emisión de Facturas Electrónicas</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            'dark-primary': '#1e293b',
+            'dark-secondary': '#334155',
+            'dark-accent': '#475569',
+            'dark-text': '#e2e8f0'
+          }
+        }
+      }
+    }
+  </script>
   <style>
     /* Estilos para modo oscuro */
     .dark body {
@@ -126,168 +140,324 @@
       50% { transform: scale(1.1); }
       100% { transform: scale(1); }
     }
+    
+    .product-card {
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    
+    .product-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    
+    .urgent-alert {
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.7; }
+      100% { opacity: 1; }
+    }
+    
+    .mobile-menu {
+      display: none;
+    }
+    
+    @media (max-width: 768px) {
+      .sidebar {
+        display: none;
+      }
+      
+      .mobile-menu {
+        display: flex;
+      }
+      
+      .main-content {
+        padding: 1rem;
+        margin-left: 0;
+      }
+      
+      .responsive-table {
+        overflow-x: auto;
+      }
+    }
+    
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #3b82f6;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+    
+    .role-badge {
+      font-size: 0.65rem;
+      padding: 0.15rem 0.4rem;
+      border-radius: 0.75rem;
+    }
+    
+    .invoice-preview {
+      max-height: 80vh;
+      overflow-y: auto;
+    }
   </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex flex-col">
+<body class="bg-gray-100 min-h-screen flex flex-col dark:bg-gray-900">
 
   <!-- Botón de cambio de tema -->
-  <div class="theme-switch" id="themeToggle">
+  <div class="theme-switch" id="themeToggle" aria-label="Cambiar tema">
     <i class="bi bi-moon theme-icon" id="themeIcon"></i>
   </div>
 
+
   <div class="flex flex-1 min-h-screen">
-    <!-- Menú lateral (altura completa) -->
-    <aside class="w-1/5 bg-white p-4 shadow rounded-r-md flex flex-col justify-between">
+    <!-- Menú lateral -->
+    <aside class="sidebar w-1/5 bg-white p-4 shadow rounded-r-md flex flex-col justify-between dark:bg-dark-primary dark:text-dark-text d-none d-md-block">
       <div>
-        <h1 class="text-xl font-bold mb-4">Inventario Facturación</h1>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h1 class="text-xl font-bold mb-0">Inventario Facturación</h1>
+          <div class="d-flex align-items-center">
+            <div class="user-avatar me-2">MA</div>
+            <button class="btn btn-sm btn-outline-danger" id="logoutButton">
+              <a href="inicioSesion.html"><i class="bi bi-box-arrow-right"></i></a>
+            </button>
+          </div>
+        </div>
         <nav class="flex flex-col space-y-2">
-          <a href="index.html" class="text-left px-2 py-1 rounded hover:bg-gray-200">Panel Principal</a>
-          <a href="busquedaFactura.html" class="text-left px-2 py-1 rounded bg-gray-100 font-semibold">Facturación</a>
-          <a href="busquedaInventario.html" class="text-left px-2 py-1 rounded hover:bg-gray-200 ">Inventario</a>
+          <a href="index.html" class="text-left px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-dark-accent">Panel Principal</a>
+          <a href="busquedaFactura.html" class="text-left px-2 py-1 rounded bg-gray-100 font-semibold dark:bg-dark-accent">Facturación</a>
+          <a href="busquedaInventario.html" class="text-left px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-dark-accent">Inventario</a>
         </nav>
+
       </div>
     </aside>
 
     <!-- Contenido principal -->
-    <main class="flex-1 ml-6 bg-white p-6 shadow rounded-md overflow-auto">
-      <h2 class="text-2xl font-bold mb-2">Emisión de Facturas</h2>
-      <p class="text-sm text-gray-500 mb-6">Crear una nueva factura con control de inventario en tiempo real</p>
+    <main class="main-content flex-1 ml-6 bg-white p-6 shadow rounded-md overflow-auto dark:bg-dark-primary">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h2 class="text-2xl font-bold mb-1 dark:text-dark-text">Emisión de Facturas Electrónicas</h2>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Crear una nueva factura con control de inventario en tiempo real</p>
+        </div>
+        <div class="flex items-center space-x-2">
+          <span id="currentDateTime" class="text-sm text-gray-500 dark:text-gray-400"></span>
+          <button class="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded transition text-sm" id="saveDraftBtn">
+            <i class="bi bi-save me-1"></i> Guardar
+          </button>
+        </div>
+      </div>
 
       <!-- Sección de información -->
-      <div class="grid grid-cols-2 gap-6 mb-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         <!-- Cliente -->
         <div>
-          <h3 class="font-semibold mb-2">Información del Cliente</h3>
-          <div class="grid grid-cols-2 gap-2">
-            <input type="text" placeholder="Nombre" class="border p-2 rounded w-full" />
-            <input type="text" placeholder="Cédula" id="cedula" class="border p-2 rounded w-full" />
-            <input type="text" placeholder="Teléfono" class="border p-2 rounded w-full" />
-            <input type="text" placeholder="Dirección" class="border p-2 rounded w-full" />
-            <input type="date" class="border p-2 rounded w-full" />
-            <input type="text" placeholder="No Factura" class="border p-2 rounded w-full" />
+          <h3 class="font-semibold mb-2 dark:text-dark-text">Información del Cliente</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div>
+              <label class="block text-sm mb-1 dark:text-gray-400">Nombre/Razón Social</label>
+              <input type="text" placeholder="Nombre completo" class="border p-2 rounded w-full dark:bg-dark-secondary" />
+            </div>
+            <div>
+              <label class="block text-sm mb-1 dark:text-gray-400">Identificación</label>
+              <input type="text" placeholder="Cédula/RUC" id="cedula" class="border p-2 rounded w-full dark:bg-dark-secondary" />
+              <p id="error-cedula" class="text-red-600 text-sm mt-1 hidden">❌ Cédula inválida (solo números, 8-10 dígitos).</p>
+            </div>
+            <div>
+              <label class="block text-sm mb-1 dark:text-gray-400">Teléfono</label>
+              <input type="text" placeholder="Teléfono" class="border p-2 rounded w-full dark:bg-dark-secondary" />
+            </div>
+            <div>
+              <label class="block text-sm mb-1 dark:text-gray-400">Email</label>
+              <input type="email" placeholder="correo@ejemplo.com" class="border p-2 rounded w-full dark:bg-dark-secondary" />
+            </div>
+            <div>
+              <label class="block text-sm mb-1 dark:text-gray-400">Fecha Emisión</label>
+              <input type="date" class="border p-2 rounded w-full dark:bg-dark-secondary" id="emissionDate" />
+            </div>
+            <div>
+              <label class="block text-sm mb-1 dark:text-gray-400">No. Factura</label>
+              <input type="text" placeholder="Generando..." class="border p-2 rounded w-full dark:bg-dark-secondary bg-gray-100" id="invoiceNumber" readonly />
+            </div>
           </div>
-          <p id="error-cedula" class="text-red-600 text-sm mt-1 hidden">❌ Cédula inválida (solo números, 8-10 dígitos).</p>
         </div>
 
         <!-- Detalles -->
         <div>
-          <h3 class="font-semibold mb-2">Detalles de Factura</h3>
-          <select class="border p-2 rounded w-full mb-2">
-            <option>Efectivo</option>
-            <option>Tarjeta</option>
-            <option>Transferencia</option>
-          </select>
-          <textarea placeholder="Observaciones" class="border p-2 rounded w-full h-24"></textarea>
+          <h3 class="font-semibold mb-2 dark:text-dark-text">Detalles de Factura</h3>
+          <div class="mb-3">
+            <label class="block text-sm mb-1 dark:text-gray-400">Forma de Pago</label>
+            <select class="border p-2 rounded w-full dark:bg-dark-secondary">
+              <option>Efectivo</option>
+              <option>Tarjeta Crédito</option>
+              <option>Tarjeta Débito</option>
+              <option>Transferencia</option>
+              <option>Cheque</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm mb-1 dark:text-gray-400">Observaciones</label>
+            <textarea placeholder="Detalles adicionales..." class="border p-2 rounded w-full h-24 dark:bg-dark-secondary"></textarea>
+          </div>
         </div>
       </div>
 
       <!-- Buscador de productos -->
-      <div class="flex items-center mb-4">
-        <input type="text" placeholder="Buscar producto" class="border p-2 rounded w-full mr-2" />
-        <button class="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition">+ Agregar</button>
+      <div class="mb-6">
+        <h3 class="font-semibold mb-2 dark:text-dark-text">Agregar Productos</h3>
+        <div class="flex items-center mb-4">
+          <div class="relative flex-grow">
+            <input type="text" placeholder="Buscar producto por nombre, código o categoría..." class="border p-2 rounded w-full mr-2 dark:bg-dark-secondary" id="productSearch" />
+            <div id="searchResults" class="absolute z-10 w-full mt-1 bg-white dark:bg-dark-secondary shadow-lg rounded-md hidden"></div>
+          </div>
+          <button class="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition flex items-center" id="addProductBtn">
+            <i class="bi bi-plus-circle me-1"></i> Agregar
+          </button>
+        </div>
+        
+        <!-- Productos sugeridos -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div class="product-card bg-white dark:bg-dark-secondary p-3 rounded shadow cursor-pointer" data-id="1" data-name="Laptop HP EliteBook" data-price="899.99" data-stock="12">
+            <div class="font-semibold dark:text-dark-text">Laptop HP EliteBook</div>
+            <div class="text-sm text-gray-500 dark:text-gray-400">SKU: LT-HP-001</div>
+            <div class="text-sm mt-1">Stock: <span class="font-semibold">12</span></div>
+            <div class="font-semibold text-blue-600 mt-1">$899.99</div>
+          </div>
+          <div class="product-card bg-white dark:bg-dark-secondary p-3 rounded shadow cursor-pointer" data-id="2" data-name="Teclado Mecánico" data-price="59.99" data-stock="24">
+            <div class="font-semibold dark:text-dark-text">Teclado Mecánico</div>
+            <div class="text-sm text-gray-500 dark:text-gray-400">SKU: TC-MEC-002</div>
+            <div class="text-sm mt-1">Stock: <span class="font-semibold">24</span></div>
+            <div class="font-semibold text-blue-600 mt-1">$59.99</div>
+          </div>
+          <div class="product-card bg-white dark:bg-dark-secondary p-3 rounded shadow cursor-pointer" data-id="3" data-name="Monitor 24\" Samsung" data-price="189.99" data-stock="8">
+            <div class="font-semibold dark:text-dark-text">Monitor 24" Samsung</div>
+            <div class="text-sm text-gray-500 dark:text-gray-400">SKU: MON-SAM-003</div>
+            <div class="text-sm mt-1">Stock: <span class="font-semibold">8</span></div>
+            <div class="font-semibold text-blue-600 mt-1">$189.99</div>
+          </div>
+          <div class="product-card bg-white dark:bg-dark-secondary p-3 rounded shadow cursor-pointer" data-id="4" data-name="Mouse Inalámbrico" data-price="24.99" data-stock="35">
+            <div class="font-semibold dark:text-dark-text">Mouse Inalámbrico</div>
+            <div class="text-sm text-gray-500 dark:text-gray-400">SKU: MS-INAL-004</div>
+            <div class="text-sm mt-1">Stock: <span class="font-semibold">35</span></div>
+            <div class="font-semibold text-blue-600 mt-1">$24.99</div>
+          </div>
+        </div>
       </div>
 
       <!-- Tabla de productos -->
-      <table class="w-full table-auto border mb-4 text-sm" id="tabla-items">
-        <thead class="bg-gray-100">
-          <tr>
-            <th class="border px-2 py-1">Código</th>
-            <th class="border px-2 py-1">Producto</th>
-            <th class="border px-2 py-1">Stock</th>
-            <th class="border px-2 py-1">Cantidad</th>
-            <th class="border px-2 py-1">Precio Unit</th>
-            <th class="border px-2 py-1">Descuento</th>
-            <th class="border px-2 py-1">Subtotal</th>
-            <th class="border px-2 py-1">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="text-center">
-            <td class="border px-2 py-1">Prod001</td>
-            <td class="border px-2 py-1">Mouse</td>
-            <td class="border px-2 py-1">25 unid</td>
-            <td class="border px-2 py-1">2</td>
-            <td class="border px-2 py-1">$8.00</td>
-            <td class="border px-2 py-1">0</td>
-            <td class="border px-2 py-1">$16.00</td>
-            <td class="border px-2 py-1">
-              <button onclick="eliminarFila(this)" class="text-red-600 hover:text-red-800">🗑️</button>
-            </td>
-          </tr>
-          <tr class="text-center">
-            <td class="border px-2 py-1">Prod002</td>
-            <td class="border px-2 py-1">Laptop</td>
-            <td class="border px-2 py-1">25 unid</td>
-            <td class="border px-2 py-1">2</td>
-            <td class="border px-2 py-1">$8.00</td>
-            <td class="border px-2 py-1">0</td>
-            <td class="border px-2 py-1">$16.00</td>
-            <td class="border px-2 py-1">
-              <button onclick="eliminarFila(this)" class="text-red-600 hover:text-red-800">🗑️</button>
-            </td>
-          </tr>
-          <tr class="text-center">
-            <td class="border px-2 py-1">Prod003</td>
-            <td class="border px-2 py-1">Teclado</td>
-            <td class="border px-2 py-1">18 unid</td>
-            <td class="border px-2 py-1">3</td>
-            <td class="border px-2 py-1">$12.50</td>
-            <td class="border px-2 py-1">0</td>
-            <td class="border px-2 py-1">$37.50</td>
-            <td class="border px-2 py-1">
-              <button onclick="eliminarFila(this)" class="text-red-600 hover:text-red-800">🗑️</button>
-            </td>
-          </tr>
-          <tr class="text-center">
-            <td class="border px-2 py-1">Prod004</td>
-            <td class="border px-2 py-1">Monitor</td>
-            <td class="border px-2 py-1">12 unid</td>
-            <td class="border px-2 py-1">1</td>
-            <td class="border px-2 py-1">$189.99</td>
-            <td class="border px-2 py-1">5%</td>
-            <td class="border px-2 py-1">$180.49</td>
-            <td class="border px-2 py-1">
-              <button onclick="eliminarFila(this)" class="text-red-600 hover:text-red-800">🗑️</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="mb-6">
+        <h3 class="font-semibold mb-2 dark:text-dark-text">Productos en Factura</h3>
+        <div class="responsive-table">
+          <table class="w-full table-auto border mb-4 text-sm dark:border-gray-700" id="tabla-items">
+            <thead class="bg-gray-100 dark:bg-dark-secondary">
+              <tr>
+                <th class="border px-2 py-1 dark:border-gray-700">Código</th>
+                <th class="border px-2 py-1 dark:border-gray-700">Producto</th>
+                <th class="border px-2 py-1 dark:border-gray-700">Stock</th>
+                <th class="border px-2 py-1 dark:border-gray-700">Cantidad</th>
+                <th class="border px-2 py-1 dark:border-gray-700">Precio Unit</th>
+                <th class="border px-2 py-1 dark:border-gray-700">Descuento</th>
+                <th class="border px-2 py-1 dark:border-gray-700">Subtotal</th>
+                <th class="border px-2 py-1 dark:border-gray-700">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="text-center">
+                <td class="border px-2 py-1 dark:border-gray-700">Prod001</td>
+                <td class="border px-2 py-1 dark:border-gray-700 text-left">Mouse óptico</td>
+                <td class="border px-2 py-1 dark:border-gray-700">25 unid</td>
+                <td class="border px-2 py-1 dark:border-gray-700">
+                  <input type="number" min="1" max="25" value="2" class="w-16 text-center border rounded py-1 quantity-input" data-stock="25">
+                </td>
+                <td class="border px-2 py-1 dark:border-gray-700">$8.00</td>
+                <td class="border px-2 py-1 dark:border-gray-700">
+                  <input type="number" min="0" max="100" value="0" class="w-16 text-center border rounded py-1 discount-input">
+                </td>
+                <td class="border px-2 py-1 dark:border-gray-700">$16.00</td>
+                <td class="border px-2 py-1 dark:border-gray-700">
+                  <button onclick="eliminarFila(this)" class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </td>
+              </tr>
+              <tr class="text-center">
+                <td class="border px-2 py-1 dark:border-gray-700">Prod003</td>
+                <td class="border px-2 py-1 dark:border-gray-700 text-left">Teclado mecánico</td>
+                <td class="border px-2 py-1 dark:border-gray-700">18 unid</td>
+                <td class="border px-2 py-1 dark:border-gray-700">
+                  <input type="number" min="1" max="18" value="1" class="w-16 text-center border rounded py-1 quantity-input" data-stock="18">
+                </td>
+                <td class="border px-2 py-1 dark:border-gray-700">$59.99</td>
+                <td class="border px-2 py-1 dark:border-gray-700">
+                  <input type="number" min="0" max="100" value="0" class="w-16 text-center border rounded py-1 discount-input">
+                </td>
+                <td class="border px-2 py-1 dark:border-gray-700">$59.99</td>
+                <td class="border px-2 py-1 dark:border-gray-700">
+                  <button onclick="eliminarFila(this)" class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
 
       <!-- Alerta de stock -->
-      <div class="bg-yellow-100 text-yellow-700 p-2 rounded flex items-center text-sm mb-4">
-        ⚠️
-        <span class="ml-2">Mouse inalámbrico: Stock bajo (5 unidades)</span>
+      <div class="bg-yellow-100 dark:bg-yellow-900 dark:bg-opacity-30 text-yellow-700 dark:text-yellow-300 p-3 rounded flex items-center text-sm mb-4">
+        <i class="bi bi-exclamation-triangle me-2"></i>
+        <span>Mouse inalámbrico: Stock bajo (5 unidades)</span>
       </div>
 
       <!-- Totales -->
-      <div class="bg-gray-100 p-4 rounded w-1/3 ml-auto">
-        <div class="flex justify-between">
-          <span>Subtotal:</span><span>$1828.25</span>
+      <div class="bg-gray-100 dark:bg-dark-secondary p-4 rounded w-full md:w-1/2 lg:w-1/3 ml-auto">
+        <div class="flex justify-between mb-1">
+          <span class="dark:text-gray-300">Subtotal:</span>
+          <span class="font-medium">$75.99</span>
         </div>
-        <div class="flex justify-between">
-          <span>Descuento:</span><span>-$6.75</span>
+        <div class="flex justify-between mb-1">
+          <span class="dark:text-gray-300">Descuento:</span>
+          <span class="text-red-600">-$0.00</span>
         </div>
-        <div class="flex justify-between">
-          <span>IVA (19%):</span><span>$346.09</span>
+        <div class="flex justify-between mb-1">
+          <span class="dark:text-gray-300">IVA (12%):</span>
+          <span class="font-medium">$9.12</span>
         </div>
-        <div class="flex justify-between font-bold text-lg mt-2 border-t pt-2">
-          <span>Total:</span><span>$2,167.57</span>
+        <div class="flex justify-between font-bold text-lg mt-3 pt-3 border-t dark:border-gray-700">
+          <span class="dark:text-gray-300">Total:</span>
+          <span class="text-blue-600">$85.11</span>
         </div>
       </div>
 
       <!-- Botones de acción -->
       <div class="flex justify-end mt-6 space-x-3">
-        <button class="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded transition">Cancelar</button>
-        <button class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded transition">Guardar Borrador</button>
-        <button class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded transition">Emitir Factura</button>
+        <button class="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded transition dark:bg-gray-600 dark:hover:bg-gray-700 dark:text-white">
+          <i class="bi bi-x-circle me-1"></i> Cancelar
+        </button>
+
+        <button class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded transition" id="issueBtn">
+          <i class="bi bi-receipt me-1"></i> Emitir Factura
+        </button>
       </div>
     </main>
   </div>
 
-  <!-- Footer fuera del flex para anclarse abajo -->
-  <footer class="bg-white text-center py-3 text-sm text-gray-500 mt-auto shadow-t">
-      2025 Sistema de Inventario y Facturación. Todos los derechos reservados.
+  <!-- Footer -->
+  <footer class="bg-white text-center py-3 text-sm text-gray-500 mt-auto shadow-t dark:bg-dark-primary dark:text-gray-400">
+    © 2025 Sistema de Inventario y Facturación. Cumple con normativas tributarias Ecuador. 
+    <a href="#" class="text-blue-500 dark:text-blue-400">Política de Privacidad</a> | 
+    <a href="#" class="text-blue-500 dark:text-blue-400">Términos de Uso</a> | 
+    <a href="#" class="text-blue-500 dark:text-blue-400">Ayuda</a>
   </footer>
+
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
     // Control de tema oscuro/claro
@@ -332,15 +502,17 @@
       }, 300);
     });
     
-    // Funcionalidad existente para validar cédula
+    // Funcionalidad para eliminar filas
     function eliminarFila(boton) {
       const fila = boton.closest("tr");
       fila.remove();
+      calcularTotales();
     }
-
+    
+    // Validación de cédula
     const cedulaInput = document.getElementById("cedula");
     const errorCedula = document.getElementById("error-cedula");
-
+    
     cedulaInput.addEventListener("blur", () => {
       const cedula = cedulaInput.value.trim();
       if (!/^\d{8,10}$/.test(cedula)) {
@@ -350,6 +522,175 @@
         errorCedula.classList.add("hidden");
         cedulaInput.classList.remove("border-red-500");
       }
+    });
+    
+    // Generar número de factura y fecha
+    function generarNumeroFactura() {
+      const numero = Math.floor(100000 + Math.random() * 900000);
+      return `F-001-${numero}`;
+    }
+    
+    function establecerFechaActual() {
+      const hoy = new Date();
+      const fechaFormateada = hoy.toISOString().split('T')[0];
+      document.getElementById('emissionDate').value = fechaFormateada;
+      document.getElementById('previewDate').textContent = hoy.toLocaleDateString('es-EC');
+    }
+    
+    // Actualizar reloj
+    function updateClock() {
+      const now = new Date();
+      const options = { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      };
+      document.getElementById('currentDateTime').textContent = now.toLocaleDateString('es-EC', options);
+    }
+    
+    // Calcular totales
+    function calcularTotales() {
+      let subtotal = 0;
+      
+      // Recorrer todas las filas de la tabla
+      const filas = document.querySelectorAll('#tabla-items tbody tr');
+      filas.forEach(fila => {
+        const cantidad = parseFloat(fila.querySelector('.quantity-input').value);
+        const precio = parseFloat(fila.querySelector('td:nth-child(5)').textContent.replace('$', ''));
+        const descuento = parseFloat(fila.querySelector('.discount-input').value);
+        
+        let subtotalFila = cantidad * precio;
+        subtotalFila -= subtotalFila * (descuento / 100);
+        
+        fila.querySelector('td:nth-child(7)').textContent = '$' + subtotalFila.toFixed(2);
+        subtotal += subtotalFila;
+      });
+      
+      const iva = subtotal * 0.12;
+      const total = subtotal + iva;
+      
+      // Actualizar resumen
+      document.querySelector('.bg-gray-100 .flex:nth-child(1) span:last-child').textContent = '$' + subtotal.toFixed(2);
+      document.querySelector('.bg-gray-100 .flex:nth-child(3) span:last-child').textContent = '$' + iva.toFixed(2);
+      document.querySelector('.bg-gray-100 .flex:last-child span:last-child').textContent = '$' + total.toFixed(2);
+    }
+    
+    // Agregar producto desde tarjetas
+    document.querySelectorAll('.product-card').forEach(card => {
+      card.addEventListener('click', function() {
+        const id = this.getAttribute('data-id');
+        const nombre = this.getAttribute('data-name');
+        const precio = this.getAttribute('data-price');
+        const stock = this.getAttribute('data-stock');
+        
+        // Verificar si el producto ya está en la factura
+        let existe = false;
+        document.querySelectorAll('#tabla-items tbody tr').forEach(row => {
+          if (row.querySelector('td:nth-child(2)').textContent === nombre) {
+            existe = true;
+            // Incrementar cantidad
+            const input = row.querySelector('.quantity-input');
+            input.value = parseInt(input.value) + 1;
+            calcularTotales();
+          }
+        });
+        
+        if (!existe) {
+          // Agregar nueva fila
+          const newRow = document.createElement('tr');
+          newRow.className = 'text-center';
+          newRow.innerHTML = `
+            <td class="border px-2 py-1 dark:border-gray-700">Prod${id}</td>
+            <td class="border px-2 py-1 dark:border-gray-700 text-left">${nombre}</td>
+            <td class="border px-2 py-1 dark:border-gray-700">${stock} unid</td>
+            <td class="border px-2 py-1 dark:border-gray-700">
+              <input type="number" min="1" max="${stock}" value="1" class="w-16 text-center border rounded py-1 quantity-input" data-stock="${stock}">
+            </td>
+            <td class="border px-2 py-1 dark:border-gray-700">$${precio}</td>
+            <td class="border px-2 py-1 dark:border-gray-700">
+              <input type="number" min="0" max="100" value="0" class="w-16 text-center border rounded py-1 discount-input">
+            </td>
+            <td class="border px-2 py-1 dark:border-gray-700">$${precio}</td>
+            <td class="border px-2 py-1 dark:border-gray-700">
+              <button onclick="eliminarFila(this)" class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
+                <i class="bi bi-trash"></i>
+              </button>
+            </td>
+          `;
+          
+          document.querySelector('#tabla-items tbody').appendChild(newRow);
+          
+          // Agregar eventos a los nuevos inputs
+          newRow.querySelector('.quantity-input').addEventListener('change', calcularTotales);
+          newRow.querySelector('.discount-input').addEventListener('change', calcularTotales);
+          
+          calcularTotales();
+        }
+      });
+    });
+    
+    // Eventos para inputs de cantidad y descuento
+    document.querySelectorAll('.quantity-input, .discount-input').forEach(input => {
+      input.addEventListener('change', calcularTotales);
+    });
+    
+    // Vista previa
+    document.getElementById('previewBtn').addEventListener('click', function() {
+      document.getElementById('previewInvoiceNumber').textContent = document.getElementById('invoiceNumber').value;
+      const previewModal = new bootstrap.Modal(document.getElementById('previewModal'));
+      previewModal.show();
+    });
+    
+    // Generar PDF
+    document.getElementById('generatePdfBtn').addEventListener('click', function() {
+      alert('Generando factura en formato PDF...');
+      // Aquí iría la lógica real para generar el PDF
+      const previewModal = bootstrap.Modal.getInstance(document.getElementById('previewModal'));
+      previewModal.hide();
+    });
+    
+    // Emitir factura
+    document.getElementById('issueBtn').addEventListener('click', function() {
+      alert('Factura emitida con éxito y enviada al cliente. Inventario actualizado.');
+      // Aquí iría la lógica para actualizar inventario y enviar factura
+    });
+    
+    // Guardar borrador
+    document.getElementById('saveDraftBtn').addEventListener('click', function() {
+      alert('Factura guardada como borrador.');
+    });
+    
+    // Menú móvil
+    document.getElementById('mobileMenuToggle').addEventListener('click', function() {
+      const mobileMenu = new bootstrap.Offcanvas(document.getElementById('mobileMenu'));
+      mobileMenu.show();
+    });
+    
+    // Logout
+    document.getElementById('logoutButton').addEventListener('click', function() {
+ window.location.href = 'inicioSesion.html';
+    });
+    
+    document.getElementById('logoutButtonMobile').addEventListener('click', function() {
+       window.location.href = 'inicioSesion.html';
+    });
+    
+    // Inicialización
+    document.addEventListener('DOMContentLoaded', function() {
+      // Establecer número de factura y fecha
+      document.getElementById('invoiceNumber').value = generarNumeroFactura();
+      establecerFechaActual();
+      
+      // Actualizar reloj
+      setInterval(updateClock, 1000);
+      updateClock();
+      
+      // Calcular totales iniciales
+      calcularTotales();
     });
   </script>
 </body>

@@ -3,13 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Agregar Producto</title>
+  <title>Gestión de Inventario</title>
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            'dark-primary': '#1e293b',
+            'dark-secondary': '#334155',
+            'dark-accent': '#475569',
+            'dark-text': '#e2e8f0'
+          }
+        }
+      }
+    }
+  </script>
   <style>
     html, body {
       height: 100%;
@@ -157,152 +172,428 @@
       50% { transform: scale(1.1); }
       100% { transform: scale(1); }
     }
+    
+    .role-badge {
+      font-size: 0.65rem;
+      padding: 0.15rem 0.4rem;
+      border-radius: 0.75rem;
+    }
+    
+    .mobile-menu {
+      display: none;
+    }
+    
+    @media (max-width: 768px) {
+      .sidebar {
+        display: none;
+      }
+      
+      .mobile-menu {
+        display: flex;
+      }
+      
+      .main-content {
+        padding: 1rem;
+        margin-left: 0;
+      }
+      
+      .responsive-table {
+        overflow-x: auto;
+      }
+    }
+    
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #3b82f6;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+    
+    .stock-low {
+      background-color: #fef3c7;
+      color: #92400e;
+    }
+    
+    .dark .stock-low {
+      background-color: #451a03;
+      color: #fbbf24;
+    }
+    
+    .stock-critical {
+      background-color: #fee2e2;
+      color: #b91c1c;
+    }
+    
+    .dark .stock-critical {
+      background-color: #7f1d1d;
+      color: #f87171;
+    }
+    
+    .stock-ok {
+      background-color: #dcfce7;
+      color: #166534;
+    }
+    
+    .dark .stock-ok {
+      background-color: #14532d;
+      color: #4ade80;
+    }
+    
+    .urgent-alert {
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.7; }
+      100% { opacity: 1; }
+    }
+    
+    .action-log {
+      max-height: 200px;
+      overflow-y: auto;
+    }
   </style>
 </head>
 
-<body class="bg-gray-100 flex flex-col min-h-screen">
+<body class="bg-gray-100 flex flex-col min-h-screen dark:bg-gray-900">
 
   <!-- Botón de cambio de tema -->
-  <div class="theme-switch" id="themeToggle">
+  <div class="theme-switch" id="themeToggle" aria-label="Cambiar tema">
     <i class="bi bi-moon theme-icon" id="themeIcon"></i>
+  </div>
+
+  <!-- Barra superior para móviles -->
+  <div class="mobile-menu d-md-none bg-white shadow-sm p-3 d-flex justify-content-between align-items-center dark:bg-dark-secondary">
+    <button class="btn btn-sm btn-outline-secondary" id="mobileMenuToggle">
+      <i class="bi bi-list"></i>
+    </button>
+    <h1 class="text-lg font-bold mb-0">Inventario</h1>
+    <div class="d-flex align-items-center">
+      <div class="user-avatar me-2">MA</div>
+      <button class="btn btn-sm btn-outline-danger" id="logoutButtonMobile">
+       <a href="inicioSesion.html"> <i class="bi bi-box-arrow-right"></i></a>
+      </button>
+    </div>
+  </div>
+
+  <!-- Menú móvil desplegable -->
+  <div class="offcanvas offcanvas-start dark:bg-dark-secondary" tabindex="-1" id="mobileMenu">
+    <div class="offcanvas-header dark:bg-dark-primary">
+      <h5 class="offcanvas-title dark:text-dark-text">Menú Principal</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body dark:bg-dark-secondary">
+      <nav class="flex flex-col space-y-2" aria-label="Menú móvil">
+        <a href="index.html" class="text-left px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-dark-accent">Panel Principal</a>
+        <a href="busquedaFactura.html" class="text-left px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-dark-accent">Facturación</a>
+        <a href="busquedaInventario.html" class="text-left px-2 py-1 rounded bg-gray-100 font-semibold dark:bg-dark-accent">Inventario</a>
+
+      </nav>
+    </div>
   </div>
 
   <div class="flex flex-1">
     <!-- Sidebar -->
-    <nav class="bg-white shadow-md w-60 p-4 min-h-screen">
-      <div>
-        <h1 class="text-xl font-bold mb-4">Inventario Facturación</h1>
-        <nav class="flex flex-col space-y-2" aria-label="Menú principal">
-          <a href="index.html" class="text-left px-2 py-1 rounded hover:bg-gray-200">Panel Principal</a>
-          <a href="busquedaFactura.html" class="text-left px-2 py-1 rounded hover:bg-gray-200">Facturación</a>
-          <a href="busquedaInventario.html" class="text-left px-2 py-1 rounded bg-gray-100 font-semibold ">Inventario</a>
-        </nav>
+    <nav class="sidebar bg-white shadow-md w-60 p-4 min-h-screen d-none d-md-block dark:bg-dark-primary">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="text-xl font-bold mb-0 dark:text-dark-text">Inventario Facturación</h1>
+        <div class="d-flex align-items-center">
+          <div class="user-avatar me-2">MA</div>
+          <button class="btn btn-sm btn-outline-danger" id="logoutButton">
+            <a href="inicioSesion.html"><i class="bi bi-box-arrow-right"></i></a>
+          </button>
+        </div>
       </div>
+      <nav class="flex flex-col space-y-2" aria-label="Menú principal">
+        <a href="index.html" class="text-left px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-dark-accent">Panel Principal</a>
+        <a href="busquedaFactura.html" class="text-left px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-dark-accent">Facturación</a>
+        <a href="busquedaInventario.html" class="text-left px-2 py-1 rounded bg-gray-100 font-semibold dark:bg-dark-accent">Inventario</a>
+      </nav>
     </nav>
 
     <!-- Main content -->
-    <main class="flex-1 p-6 overflow-auto">
-      <h3 class="text-2xl font-bold mb-2">Agregar Producto</h3>
-      <p class="text-gray-600 mb-6">Creación de un nuevo producto</p>
+    <main class="flex-1 p-6 overflow-auto main-content dark:bg-gray-900">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h3 class="text-2xl font-bold mb-1 dark:text-dark-text">Gestión de Inventario</h3>
+          <p class="text-gray-600 mb-0 dark:text-gray-400">Administración completa de productos y stock</p>
+        </div>
+        <button class="btn btn-dark" id="generateReportBtn">
+          <i class="bi bi-file-earmark-bar-graph me-1"></i> Generar Reporte
+        </button>
+      </div>
 
-      <form class="bg-white p-6 rounded-lg shadow-md mb-6" autocomplete="off">
-        <div class="row g-4">
-          <div class="col-md-6">
-            <label for="productoNombre" class="form-label">Nombre del producto</label>
-            <input type="text" id="productoNombre" class="form-control" placeholder="Nombre" required />
+      <!-- Alertas -->
+      <div class="card bg-white shadow rounded mb-4 dark:bg-dark-primary">
+        <div class="card-body p-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0 dark:text-dark-text">Alertas Importantes</h5>
+            <span class="badge bg-danger">3 Urgentes</span>
           </div>
-          <div class="col-md-6">
-            <label for="productoPrecio" class="form-label">Precio</label>
-            <input type="number" id="productoPrecio" class="form-control" placeholder="Precio" min="0" step="0.01" required />
-          </div>
-          <div class="col-md-4">
-            <label for="productoStock" class="form-label">Stock</label>
-            <input type="number" id="productoStock" class="form-control" placeholder="Stock" min="0" required />
-          </div>
-          <div class="col-md-4">
-            <label for="productoCategoria" class="form-label">Categoría</label>
-            <select id="productoCategoria" class="form-control">
-              <option value="">Seleccionar categoría</option>
-              <option>Electrónicos</option>
-              <option>Ropa</option>
-              <option>Hogar</option>
-              <option>Deportes</option>
-              <option>Alimentos</option>
-            </select>
-          </div>
-          <div class="col-md-4">
-            <label for="productoCodigo" class="form-label">Código</label>
-            <input type="text" id="productoCodigo" class="form-control" placeholder="Código" required />
-          </div>
-          <div class="col-12">
-            <label for="productoDescripcion" class="form-label">Descripción</label>
-            <textarea id="productoDescripcion" class="form-control" placeholder="Descripción del producto" rows="3"></textarea>
+          <div class="mt-3">
+            <div class="d-flex align-items-center mb-2 urgent-alert">
+              <i class="bi bi-exclamation-triangle-fill text-danger me-2"></i>
+              <span class="dark:text-gray-300">Impresora Multifuncional: Stock crítico (2 unidades)</span>
+            </div>
+            <div class="d-flex align-items-center mb-2">
+              <i class="bi bi-exclamation-circle-fill text-warning me-2"></i>
+              <span class="dark:text-gray-300">Monitor 24": Stock bajo (5 unidades)</span>
+            </div>
+            <div class="d-flex align-items-center">
+              <i class="bi bi-clock-fill text-info me-2"></i>
+              <span class="dark:text-gray-300">Teclado Mecánico: Próximo a vencer (15 días)</span>
+            </div>
           </div>
         </div>
-        <div class="flex justify-end mt-4">
-          <button type="reset" class="btn btn-outline-secondary me-2">Limpiar</button>
-          <button type="submit" class="btn btn-dark">+ Agregar Producto</button>
-        </div>
-      </form>
+      </div>
 
-      <div class="card bg-white shadow rounded">
-        <div class="table-responsive">
-          <table class="table mb-0">
-            <thead class="bg-gray-100">
-              <tr>
-                <th>Código</th>
-                <th>Producto</th>
-                <th>Categoría</th>
-                <th>Stock</th>
-                <th>Precio</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>PRD001</td>
-                <td>Laptop HP EliteBook</td>
-                <td>Electrónicos</td>
-                <td>45</td>
-                <td>$850.00</td>
-                <td>
-                  <button class="btn btn-sm btn-outline-primary me-1">Editar</button>
-                  <button class="btn btn-sm btn-outline-danger">Eliminar</button>
-                </td>
-              </tr>
-              <tr>
-                <td>PRD002</td>
-                <td>Mouse Inalámbrico</td>
-                <td>Electrónicos</td>
-                <td>120</td>
-                <td>$19.99</td>
-                <td>
-                  <button class="btn btn-sm btn-outline-primary me-1">Editar</button>
-                  <button class="btn btn-sm btn-outline-danger">Eliminar</button>
-                </td>
-              </tr>
-              <tr>
-                <td>PRD003</td>
-                <td>Teclado Mecánico</td>
-                <td>Electrónicos</td>
-                <td>32</td>
-                <td>$59.99</td>
-                <td>
-                  <button class="btn btn-sm btn-outline-primary me-1">Editar</button>
-                  <button class="btn btn-sm btn-outline-danger">Eliminar</button>
-                </td>
-              </tr>
-              <tr>
-                <td>PRD004</td>
-                <td>Monitor 24" Full HD</td>
-                <td>Electrónicos</td>
-                <td>18</td>
-                <td>$189.99</td>
-                <td>
-                  <button class="btn btn-sm btn-outline-primary me-1">Editar</button>
-                  <button class="btn btn-sm btn-outline-danger">Eliminar</button>
-                </td>
-              </tr>
-              <tr>
-                <td>PRD005</td>
-                <td>Impresora Multifuncional</td>
-                <td>Electrónicos</td>
-                <td>7</td>
-                <td>$249.99</td>
-                <td>
-                  <button class="btn btn-sm btn-outline-primary me-1">Editar</button>
-                  <button class="btn btn-sm btn-outline-danger">Eliminar</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+      <div class="row">
+        <!-- Formulario para agregar/editar productos -->
+        <div class="col-lg-5 mb-4">
+          <div class="card bg-white shadow rounded dark:bg-dark-primary">
+            <div class="card-header dark:bg-dark-secondary">
+              <h5 class="card-title mb-0 dark:text-dark-text" id="formTitle">Agregar Nuevo Producto</h5>
+            </div>
+            <div class="card-body">
+              <form id="productForm" autocomplete="off">
+                <div class="mb-3">
+                  <label for="productoNombre" class="form-label dark:text-gray-300">Nombre del producto</label>
+                  <input type="text" id="productoNombre" class="form-control" placeholder="Nombre" required />
+                </div>
+                
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="productoPrecio" class="form-label dark:text-gray-300">Precio ($)</label>
+                    <input type="number" id="productoPrecio" class="form-control" placeholder="Precio" min="0" step="0.01" required />
+                  </div>
+                  <div class="col-md-6">
+                    <label for="productoStock" class="form-label dark:text-gray-300">Stock</label>
+                    <input type="number" id="productoStock" class="form-control" placeholder="Stock" min="0" required />
+                  </div>
+                </div>
+                
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="productoCategoria" class="form-label dark:text-gray-300">Categoría</label>
+                    <select id="productoCategoria" class="form-control">
+                      <option value="">Seleccionar categoría</option>
+                      <option>Electrónicos</option>
+                      <option>Ropa</option>
+                      <option>Hogar</option>
+                      <option>Deportes</option>
+                      <option>Alimentos</option>
+                      <option>Oficina</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="productoCodigo" class="form-label dark:text-gray-300">Código</label>
+                    <input type="text" id="productoCodigo" class="form-control" placeholder="Código" required />
+                  </div>
+                </div>
+                
+                <div class="mb-3">
+                  <label for="proveedor" class="form-label dark:text-gray-300">Proveedor</label>
+                  <select id="proveedor" class="form-control">
+                    <option value="">Seleccionar proveedor</option>
+                    <option>TecnoImport S.A.</option>
+                    <option>ElectroSuministros</option>
+                    <option>Distribuidora Tech</option>
+                    <option>Global Electronics</option>
+                  </select>
+                </div>
+                
+                <div class="mb-3">
+                  <label for="productoDescripcion" class="form-label dark:text-gray-300">Descripción</label>
+                  <textarea id="productoDescripcion" class="form-control" placeholder="Descripción del producto" rows="3"></textarea>
+                </div>
+                
+                <div class="mb-3">
+                  <label for="fechaVencimiento" class="form-label dark:text-gray-300">Fecha de vencimiento (si aplica)</label>
+                  <input type="date" id="fechaVencimiento" class="form-control" />
+                </div>
+                
+                <div class="d-flex justify-content-end mt-4">
+                  <button type="reset" class="btn btn-outline-secondary me-2" id="cancelEditBtn">Cancelar</button>
+                  <button type="submit" class="btn btn-dark" id="submitBtn">
+                    <i class="bi bi-plus-circle me-1"></i> Agregar Producto
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Tabla de productos y actividad -->
+        <div class="col-lg-7">
+          <div class="card bg-white shadow rounded mb-4 dark:bg-dark-primary">
+            <div class="card-header dark:bg-dark-secondary d-flex justify-content-between align-items-center">
+              <h5 class="card-title mb-0 dark:text-dark-text">Productos en Inventario</h5>
+              <div class="input-group" style="width: 250px;">
+                <input type="text" class="form-control" placeholder="Buscar producto..." id="searchProduct">
+                <button class="btn btn-outline-secondary" type="button">
+                  <i class="bi bi-search"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive responsive-table">
+                <table class="table table-hover mb-0">
+                  <thead class="bg-gray-100 dark:bg-dark-secondary">
+                    <tr>
+                      <th>Código</th>
+                      <th>Producto</th>
+                      <th>Categoría</th>
+                      <th>Stock</th>
+                      <th>Precio</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody id="inventoryTable">
+                    <tr>
+                      <td>PRD001</td>
+                      <td>Laptop HP EliteBook</td>
+                      <td>Electrónicos</td>
+                      <td><span class="badge stock-ok">45</span></td>
+                      <td>$850.00</td>
+                      <td>
+                        <button class="btn btn-sm btn-outline-primary me-1 edit-btn" data-id="1">
+                          <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger delete-btn" data-id="1">
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>PRD002</td>
+                      <td>Mouse Inalámbrico</td>
+                      <td>Electrónicos</td>
+                      <td><span class="badge stock-ok">120</span></td>
+                      <td>$19.99</td>
+                      <td>
+                        <button class="btn btn-sm btn-outline-primary me-1 edit-btn" data-id="2">
+                          <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger delete-btn" data-id="2">
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>PRD003</td>
+                      <td>Teclado Mecánico</td>
+                      <td>Electrónicos</td>
+                      <td><span class="badge stock-low">32</span></td>
+                      <td>$59.99</td>
+                      <td>
+                        <button class="btn btn-sm btn-outline-primary me-1 edit-btn" data-id="3">
+                          <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger delete-btn" data-id="3">
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>PRD004</td>
+                      <td>Monitor 24" Full HD</td>
+                      <td>Electrónicos</td>
+                      <td><span class="badge stock-critical">5</span></td>
+                      <td>$189.99</td>
+                      <td>
+                        <button class="btn btn-sm btn-outline-primary me-1 edit-btn" data-id="4">
+                          <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger delete-btn" data-id="4">
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>PRD005</td>
+                      <td>Impresora Multifuncional</td>
+                      <td>Electrónicos</td>
+                      <td><span class="badge stock-critical urgent-alert">2</span></td>
+                      <td>$249.99</td>
+                      <td>
+                        <button class="btn btn-sm btn-outline-primary me-1 edit-btn" data-id="5">
+                          <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger delete-btn" data-id="5">
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Registro de actividades -->
+          <div class="card bg-white shadow rounded dark:bg-dark-primary">
+            <div class="card-header dark:bg-dark-secondary">
+              <h5 class="card-title mb-0 dark:text-dark-text">Registro de Actividades</h5>
+            </div>
+            <div class="card-body action-log">
+              <div class="d-flex mb-3">
+                <div class="flex-shrink-0 me-3">
+                  <i class="bi bi-plus-circle-fill text-success"></i>
+                </div>
+                <div>
+                  <div class="fw-bold">Nuevo producto agregado</div>
+                  <div class="text-muted small">Monitor 27" 4K - Agregado por María Andrade</div>
+                  <div class="text-muted small">Hoy, 10:23 AM</div>
+                </div>
+              </div>
+              <div class="d-flex mb-3">
+                <div class="flex-shrink-0 me-3">
+                  <i class="bi bi-pencil-fill text-primary"></i>
+                </div>
+                <div>
+                  <div class="fw-bold">Producto actualizado</div>
+                  <div class="text-muted small">Teclado Mecánico - Stock actualizado de 25 a 32 unidades</div>
+                  <div class="text-muted small">Ayer, 4:45 PM</div>
+                </div>
+              </div>
+              <div class="d-flex mb-3">
+                <div class="flex-shrink-0 me-3">
+                  <i class="bi bi-trash-fill text-danger"></i>
+                </div>
+                <div>
+                  <div class="fw-bold">Producto eliminado</div>
+                  <div class="text-muted small">Cable HDMI 2.1 - Eliminado por María Andrade</div>
+                  <div class="text-muted small">Ayer, 11:30 AM</div>
+                </div>
+              </div>
+              <div class="d-flex">
+                <div class="flex-shrink-0 me-3">
+                  <i class="bi bi-box-seam text-info"></i>
+                </div>
+                <div>
+                  <div class="fw-bold">Ingreso de inventario</div>
+                  <div class="text-muted small">15 Mouse Inalámbrico agregados al inventario</div>
+                  <div class="text-muted small">2 días atrás</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </main>
   </div>
 
-  <footer class="bg-white text-center py-3 text-sm text-gray-500 mt-auto shadow-t">
-    2025 Sistema de Inventario y Facturación. Todos los derechos reservados.
+  <footer class="bg-white text-center py-3 text-sm text-gray-500 mt-auto shadow-t dark:bg-dark-primary dark:text-gray-400">
+    © 2025 Sistema de Inventario y Facturación. Cumple con normativas tributarias Ecuador. 
+    <a href="#" class="text-blue-500 dark:text-blue-400">Política de Privacidad</a> | 
+    <a href="#" class="text-blue-500 dark:text-blue-400">Términos de Uso</a> | 
+    <a href="#" class="text-blue-500 dark:text-blue-400">Ayuda</a>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -350,8 +641,11 @@
       }, 300);
     });
     
+    // Variables para el estado del formulario
+    let editingProductId = null;
+    
     // Manejar el envío del formulario
-    const form = document.querySelector('form');
+    const form = document.getElementById('productForm');
     form.addEventListener('submit', function(e) {
       e.preventDefault();
       
@@ -361,18 +655,121 @@
       const stock = document.getElementById('productoStock').value;
       const categoria = document.getElementById('productoCategoria').value;
       const codigo = document.getElementById('productoCodigo').value;
+      const proveedor = document.getElementById('proveedor').value;
+      const descripcion = document.getElementById('productoDescripcion').value;
       
       // Validar que todos los campos estén completos
-      if (!nombre || !precio || !stock || !codigo) {
+      if (!nombre || !precio || !stock || !codigo || !categoria || !proveedor) {
         alert('Por favor complete todos los campos obligatorios');
         return;
       }
       
-      // Mostrar mensaje de éxito
-      alert(`Producto "${nombre}" agregado correctamente`);
+      if (editingProductId) {
+        // Actualizar producto existente
+        alert(`Producto "${nombre}" actualizado correctamente`);
+      } else {
+        // Agregar nuevo producto
+        alert(`Producto "${nombre}" agregado correctamente`);
+      }
       
       // Limpiar el formulario
       form.reset();
+      editingProductId = null;
+      document.getElementById('formTitle').textContent = 'Agregar Nuevo Producto';
+      document.getElementById('submitBtn').innerHTML = '<i class="bi bi-plus-circle me-1"></i> Agregar Producto';
+    });
+    
+    // Botón cancelar edición
+    document.getElementById('cancelEditBtn').addEventListener('click', function() {
+      form.reset();
+      editingProductId = null;
+      document.getElementById('formTitle').textContent = 'Agregar Nuevo Producto';
+      document.getElementById('submitBtn').innerHTML = '<i class="bi bi-plus-circle me-1"></i> Agregar Producto';
+    });
+    
+    // Funcionalidad de editar
+    document.querySelectorAll('.edit-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const productId = this.getAttribute('data-id');
+        const row = this.closest('tr');
+        const cells = row.querySelectorAll('td');
+        
+        // Obtener datos del producto
+        const codigo = cells[0].textContent;
+        const nombre = cells[1].textContent;
+        const categoria = cells[2].textContent;
+        const stock = cells[3].querySelector('.badge').textContent;
+        const precio = cells[4].textContent.replace('$', '');
+        
+        // Llenar formulario
+        document.getElementById('productoNombre').value = nombre;
+        document.getElementById('productoPrecio').value = precio;
+        document.getElementById('productoStock').value = stock;
+        document.getElementById('productoCategoria').value = categoria;
+        document.getElementById('productoCodigo').value = codigo;
+        document.getElementById('proveedor').value = "TecnoImport S.A.";
+        document.getElementById('productoDescripcion').value = "Producto de alta calidad para uso profesional";
+        
+        // Actualizar estado
+        editingProductId = productId;
+        document.getElementById('formTitle').textContent = 'Editar Producto';
+        document.getElementById('submitBtn').innerHTML = '<i class="bi bi-check-circle me-1"></i> Actualizar Producto';
+        
+        // Desplazar a formulario
+        document.getElementById('productoNombre').focus();
+      });
+    });
+    
+    // Funcionalidad de eliminar
+    document.querySelectorAll('.delete-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const productId = this.getAttribute('data-id');
+        const row = this.closest('tr');
+        const productName = row.querySelector('td:nth-child(2)').textContent;
+        
+        if (confirm(`¿Está seguro que desea eliminar el producto "${productName}"?`)) {
+          row.remove();
+          alert(`Producto "${productName}" eliminado correctamente`);
+        }
+      });
+    });
+    
+    // Generar reporte
+    document.getElementById('generateReportBtn').addEventListener('click', function() {
+      alert('Generando reporte de inventario en formato PDF...');
+      // Aquí iría la lógica para generar el reporte
+    });
+    
+    // Menú móvil
+    document.getElementById('mobileMenuToggle').addEventListener('click', function() {
+      const mobileMenu = new bootstrap.Offcanvas(document.getElementById('mobileMenu'));
+      mobileMenu.show();
+    });
+    
+    // Logout
+    document.getElementById('logoutButton').addEventListener('click', function() {
+       window.location.href = 'inicioSesion.html';
+    });
+    
+    document.getElementById('logoutButtonMobile').addEventListener('click', function() {
+       window.location.href = 'inicioSesion.html';
+    });
+    
+    // Búsqueda en tiempo real
+    document.getElementById('searchProduct').addEventListener('input', function() {
+      const searchText = this.value.toLowerCase();
+      const rows = document.querySelectorAll('#inventoryTable tr');
+      
+      rows.forEach(row => {
+        const productName = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+        const productCode = row.querySelector('td:nth-child(1)').textContent.toLowerCase();
+        
+        if (productName.includes(searchText) || productCode.includes(searchText)) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
     });
   </script>
 
