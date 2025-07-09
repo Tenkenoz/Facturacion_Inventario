@@ -22,7 +22,6 @@
     }
   </script>
   <style>
-    /* Estilos para modo oscuro */
     .dark body {
       background-color: #111827;
       color: #e5e7eb;
@@ -211,9 +210,43 @@
       background-color: #3b82f6;
       color: white;
     }
+    
+    /* Loading indicator */
+    .loading-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .loading-spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #3b82f6;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col dark:bg-gray-900">
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+  </div>
 
   <!-- Botón de cambio de tema -->
   <div class="theme-switch" id="themeToggle" aria-label="Cambiar tema">
@@ -228,9 +261,9 @@
     <h1 class="text-lg font-bold">Inventario</h1>
     <div class="flex items-center">
       <div class="user-avatar mr-2">MA</div>
-      <button class="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-red-600" id="logoutButtonMobile">
-      </a href="inicioSesion.html"><i class="bi bi-box-arrow-right"></i></a>
-      </button>
+      <a href="inicioSesion.html" class="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-red-600">
+        <i class="bi bi-box-arrow-right"></i>
+      </a>
     </div>
   </div>
 
@@ -260,9 +293,9 @@
           <h1 class="text-xl font-bold dark:text-dark-text">Inventario Facturación</h1>
           <div class="flex items-center">
             <div class="user-avatar mr-2">MA</div>
-            <button class="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-red-600" id="logoutButton">
-            </a href="inicioSesion.html"><i class="bi bi-box-arrow-right"></i> </a>
-            </button>
+            <a href="inicioSesion.html" class="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-red-600">
+              <i class="bi bi-box-arrow-right"></i>
+            </a>
           </div>
         </div>
         <nav class="flex flex-col space-y-2" aria-label="Menú principal">
@@ -285,7 +318,7 @@
           <a href="generadorProducto.html" class="bg-black text-white px-4 py-2 rounded text-sm hover:bg-gray-800 transition dark:bg-dark-accent dark:hover:bg-dark-secondary">
             <i class="bi bi-plus-circle mr-1"></i> Nuevo Producto
           </a>
-          <button class="bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700 transition">
+          <button class="bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700 transition" id="generateReport">
             <i class="bi bi-file-earmark-bar-graph mr-1"></i> Reporte
           </button>
         </div>
@@ -299,51 +332,20 @@
           <div class="grid grid-cols-3 gap-4">
             <div class="bg-gray-100 p-3 rounded text-center dark:bg-dark-secondary">
               <p class="text-gray-500 text-sm dark:text-gray-400">Valor Total</p>
-              <p class="text-xl font-bold dark:text-gray-300">$45,500.00</p>
+              <p class="text-xl font-bold dark:text-gray-300" id="totalValue">$0.00</p>
             </div>
             <div class="bg-gray-100 p-3 rounded text-center dark:bg-dark-secondary">
               <p class="text-gray-500 text-sm dark:text-gray-400">Costo Promedio</p>
-              <p class="text-xl font-bold dark:text-gray-300">$928.57</p>
+              <p class="text-xl font-bold dark:text-gray-300" id="avgCost">$0.00</p>
             </div>
             <div class="bg-gray-100 p-3 rounded text-center dark:bg-dark-secondary">
-              <p class="text-gray-500 text-sm dark:text-gray-400">Rotación</p>
-              <p class="text-xl font-bold dark:text-gray-300">1.8 veces</p>
+              <p class="text-gray-500 text-sm dark:text-gray-400">Productos</p>
+              <p class="text-xl font-bold dark:text-gray-300" id="totalProducts">0</p>
             </div>
           </div>
           
-          <div class="mt-4">
-            <div class="flex justify-between mb-1">
-              <span class="dark:text-gray-300">Valor de inventario por categoría:</span>
-            </div>
-            <div class="space-y-2">
-              <div>
-                <div class="flex justify-between">
-                  <span class="dark:text-gray-400">Electrónicos</span>
-                  <span class="dark:text-gray-300">$38,420.00 (84%)</span>
-                </div>
-                <div class="w-full bg-gray-200 rounded-full h-2 mt-1">
-                  <div class="bg-blue-600 h-2 rounded-full" style="width: 84%"></div>
-                </div>
-              </div>
-              <div>
-                <div class="flex justify-between">
-                  <span class="dark:text-gray-400">Oficina</span>
-                  <span class="dark:text-gray-300">$4,560.00 (10%)</span>
-                </div>
-                <div class="w-full bg-gray-200 rounded-full h-2 mt-1">
-                  <div class="bg-green-500 h-2 rounded-full" style="width: 10%"></div>
-                </div>
-              </div>
-              <div>
-                <div class="flex justify-between">
-                  <span class="dark:text-gray-400">Accesorios</span>
-                  <span class="dark:text-gray-300">$2,520.00 (6%)</span>
-                </div>
-                <div class="w-full bg-gray-200 rounded-full h-2 mt-1">
-                  <div class="bg-yellow-500 h-2 rounded-full" style="width: 6%"></div>
-                </div>
-              </div>
-            </div>
+          <div class="mt-4" id="categoryStats">
+            <!-- Las estadísticas por categoría se cargarán aquí -->
           </div>
         </div>
         
@@ -351,35 +353,14 @@
         <div class="bg-white p-4 shadow rounded-md dark:bg-dark-primary">
           <div class="flex justify-between items-center mb-3">
             <h3 class="font-semibold dark:text-dark-text">Alertas de Inventario</h3>
-            <span class="badge bg-red-500 text-white px-2 py-1 rounded text-xs">3 Urgentes</span>
+            <span class="badge bg-red-500 text-white px-2 py-1 rounded text-xs hidden" id="urgentBadge">0 Urgentes</span>
           </div>
           
-          <div class="space-y-3">
-            <div class="p-3 rounded bg-red-100 dark:bg-red-900 dark:bg-opacity-30">
-              <div class="flex items-center">
-                <i class="bi bi-exclamation-triangle-fill text-red-600 dark:text-red-400 mr-2"></i>
-                <span class="font-medium dark:text-red-300">Stock Crítico</span>
-              </div>
-              <p class="mt-1 text-sm dark:text-red-200">Teclado Mecánico: Solo 2 unidades disponibles (mínimo 10)</p>
-              <div class="mt-2 text-right">
-                <button class="text-sm text-blue-600 dark:text-blue-400 hover:underline">Ordenar a proveedor</button>
-              </div>
-            </div>
-            
-            <div class="p-3 rounded bg-yellow-100 dark:bg-yellow-900 dark:bg-opacity-30">
-              <div class="flex items-center">
-                <i class="bi bi-exclamation-circle-fill text-yellow-600 dark:text-yellow-400 mr-2"></i>
-                <span class="font-medium dark:text-yellow-300">Stock Bajo</span>
-              </div>
-              <p class="mt-1 text-sm dark:text-yellow-200">Monitor 24": 5 unidades disponibles (mínimo 8)</p>
-            </div>
-            
-            <div class="p-3 rounded bg-blue-100 dark:bg-blue-900 dark:bg-opacity-30">
-              <div class="flex items-center">
-                <i class="bi bi-clock-fill text-blue-600 dark:text-blue-400 mr-2"></i>
-                <span class="font-medium dark:text-blue-300">Producto por Vencer</span>
-              </div>
-              <p class="mt-1 text-sm dark:text-blue-200">Impresora Multifuncional: 15 días para fecha de vencimiento</p>
+          <div class="space-y-3" id="alertsContainer">
+            <!-- Las alertas se cargarán dinámicamente -->
+            <div class="text-center py-4 text-gray-500 dark:text-gray-400">
+              <i class="bi bi-check-circle text-green-500 text-2xl"></i>
+              <p>No hay alertas en este momento</p>
             </div>
           </div>
         </div>
@@ -394,11 +375,7 @@
           <div>
             <select class="border p-2 rounded w-full dark:bg-dark-secondary" aria-label="Categoría" id="categorySelect">
               <option value="">Todas las categorías</option>
-              <option>Electrónicos</option>
-              <option>Ropa</option>
-              <option>Hogar</option>
-              <option>Deportes</option>
-              <option>Alimentos</option>
+              <!-- Las categorías se cargarán dinámicamente -->
             </select>
           </div>
           <div>
@@ -439,7 +416,7 @@
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-2">
           <h3 class="font-semibold dark:text-dark-text">Productos en Inventario</h3>
           <div class="text-gray-500 text-sm dark:text-gray-400 showing-count">
-            Mostrando 8 de 49 productos
+            Mostrando 0 de 0 productos
           </div>
         </div>
         
@@ -451,13 +428,19 @@
                 <th class="border px-4 py-2 text-left dark:border-gray-700 dark:text-dark-text">Producto</th>
                 <th class="border px-4 py-2 text-left dark:border-gray-700 dark:text-dark-text">Categoría</th>
                 <th class="border px-4 py-2 text-center dark:border-gray-700 dark:text-dark-text">Stock</th>
-                <th class="border px-4 py-2 text-right dark:border-gray-700 dark:text-dark-text">Costo</th>
+                <th class="border px-4 py-2 text-right dark:border-gray-700 dark:text-dark-text">Precio</th>
                 <th class="border px-4 py-2 text-center dark:border-gray-700 dark:text-dark-text">Proveedor</th>
                 <th class="border px-4 py-2 text-center dark:border-gray-700 dark:text-dark-text">Acciones</th>
               </tr>
             </thead>
             <tbody id="inventoryTable">
               <!-- Los productos se cargarán dinámicamente -->
+              <tr>
+                <td colspan="7" class="text-center py-4 text-gray-500 dark:text-gray-400">
+                  <i class="bi bi-box-seam text-2xl"></i>
+                  <p>No hay productos registrados</p>
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -476,52 +459,17 @@
       <!-- Registro de actividades -->
       <section class="bg-white p-4 shadow rounded-md dark:bg-dark-primary">
         <div class="flex justify-between items-center mb-4">
-          <h3 class="font-semibold dark:text-dark-text">Registro de Actividades</h3>
+          <h3 class="font-semibold dark:text-dark-text">Facturas Recientes</h3>
           <button class="text-blue-600 dark:text-blue-400" id="refreshLog">
             <i class="bi bi-arrow-clockwise mr-1"></i> Actualizar
           </button>
         </div>
         
-        <div class="action-log">
-          <div class="flex mb-3">
-            <div class="flex-shrink-0 mr-3">
-              <i class="bi bi-plus-circle-fill text-green-500"></i>
-            </div>
-            <div>
-              <div class="font-bold dark:text-gray-300">Nuevo producto agregado</div>
-              <div class="text-gray-500 text-sm dark:text-gray-400">Tablet Android 10" - Agregado por María Andrade</div>
-              <div class="text-gray-500 text-sm dark:text-gray-400">Hoy, 10:23 AM</div>
-            </div>
-          </div>
-          <div class="flex mb-3">
-            <div class="flex-shrink-0 mr-3">
-              <i class="bi bi-pencil-fill text-blue-500"></i>
-            </div>
-            <div>
-              <div class="font-bold dark:text-gray-300">Producto actualizado</div>
-              <div class="text-gray-500 text-sm dark:text-gray-400">Laptop HP EliteBook - Stock actualizado de 3 a 5 unidades</div>
-              <div class="text-gray-500 text-sm dark:text-gray-400">Hoy, 9:45 AM</div>
-            </div>
-          </div>
-          <div class="flex mb-3">
-            <div class="flex-shrink-0 mr-3">
-              <i class="bi bi-box-seam text-indigo-500"></i>
-            </div>
-            <div>
-              <div class="font-bold dark:text-gray-300">Ingreso de inventario</div>
-              <div class="text-gray-500 text-sm dark:text-gray-400">15 Mouse Inalámbrico agregados al inventario</div>
-              <div class="text-gray-500 text-sm dark:text-gray-400">Ayer, 4:45 PM</div>
-            </div>
-          </div>
-          <div class="flex">
-            <div class="flex-shrink-0 mr-3">
-              <i class="bi bi-truck text-yellow-500"></i>
-            </div>
-            <div>
-              <div class="font-bold dark:text-gray-300">Pedido a proveedor</div>
-              <div class="text-gray-500 text-sm dark:text-gray-400">20 Teclados Mecánicos ordenados a GlobalTech</div>
-              <div class="text-gray-500 text-sm dark:text-gray-400">Ayer, 11:30 AM</div>
-            </div>
+        <div class="action-log" id="activityLog">
+          <!-- Las actividades se cargarán dinámicamente -->
+          <div class="text-center py-4 text-gray-500 dark:text-gray-400">
+            <i class="bi bi-activity text-2xl"></i>
+            <p>No hay facturas recientes</p>
           </div>
         </div>
       </section>
@@ -536,217 +484,586 @@
     <a href="#" class="text-blue-500 dark:text-blue-400">Ayuda</a>
   </footer>
 
-  <script>
-    // Datos de productos (simulando base de datos)
-    const products = [
-      { id: 'PRD001', name: 'Laptop HP EliteBook', category: 'Electrónicos', stock: 5, minStock: 10, cost: 850.00, supplier: 'TecnoImport', lastUpdate: '2023-05-15' },
-      { id: 'PRD002', name: 'Mouse Inalámbrico', category: 'Electrónicos', stock: 45, minStock: 15, cost: 19.99, supplier: 'DistriTech', lastUpdate: '2023-06-10' },
-      { id: 'PRD003', name: 'Teclado Mecánico RGB', category: 'Electrónicos', stock: 0, minStock: 5, cost: 59.99, supplier: 'GlobalTech', lastUpdate: '2023-05-22' },
-      { id: 'PRD004', name: 'Monitor 24" Full HD', category: 'Electrónicos', stock: 18, minStock: 8, cost: 189.99, supplier: 'TecnoImport', lastUpdate: '2023-06-05' },
-      { id: 'PRD005', name: 'Impresora Multifuncional', category: 'Electrónicos', stock: 3, minStock: 5, cost: 249.99, supplier: 'OfficeSupplies', lastUpdate: '2023-05-30' },
-      { id: 'PRD006', name: 'Auriculares Bluetooth', category: 'Electrónicos', stock: 32, minStock: 10, cost: 89.99, supplier: 'DistriTech', lastUpdate: '2023-06-12' },
-      { id: 'PRD007', name: 'Disco Duro Externo 1TB', category: 'Electrónicos', stock: 25, minStock: 10, cost: 69.99, supplier: 'GlobalTech', lastUpdate: '2023-05-18' },
-      { id: 'PRD008', name: 'Tablet Android 10"', category: 'Electrónicos', stock: 0, minStock: 5, cost: 299.99, supplier: 'TecnoImport', lastUpdate: '2023-06-01' },
-      { id: 'PRD009', name: 'Router WiFi 6', category: 'Electrónicos', stock: 12, minStock: 5, cost: 129.99, supplier: 'NetGear', lastUpdate: '2023-05-25' },
-      { id: 'PRD010', name: 'Cámara Web HD', category: 'Electrónicos', stock: 20, minStock: 10, cost: 49.99, supplier: 'VisionTech', lastUpdate: '2023-06-08' },
-      { id: 'PRD011', name: 'Altavoz Bluetooth', category: 'Electrónicos', stock: 15, minStock: 8, cost: 79.99, supplier: 'AudioPro', lastUpdate: '2023-05-20' },
-      { id: 'PRD012', name: 'Cargador Portátil 20000mAh', category: 'Electrónicos', stock: 8, minStock: 5, cost: 39.99, supplier: 'PowerUp', lastUpdate: '2023-06-15' }
-    ];
+<script>
+  // URL base de tu API Flask
+  const API_BASE_URL = 'http://localhost:5000';
+  
+  // Variables globales
+  let allProducts = [];
+  let filteredProducts = [];
+  let currentPage = 1;
+  const productsPerPage = 8;
+  let sortField = 'name';
+  let sortDirection = 'asc';
+  let categories = [];
 
-    // Variables globales
-    let filteredProducts = [...products];
-    let currentPage = 1;
-    const productsPerPage = 8;
-    let sortField = 'name';
-    let sortDirection = 'asc';
-
-    // Control de tema oscuro/claro
-    const themeToggle = document.getElementById('themeToggle');
-    const themeIcon = document.getElementById('themeIcon');
-    const htmlElement = document.documentElement;
+  // Control de tema oscuro/claro
+  const themeToggle = document.getElementById('themeToggle');
+  const themeIcon = document.getElementById('themeIcon');
+  
+  themeToggle.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
     
-    // Comprobar si hay preferencia guardada
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-      enableDarkMode();
-    }
-    
-    // Manejar el clic en el botón de tema
-    themeToggle.addEventListener('click', () => {
-      if (htmlElement.classList.contains('dark')) {
-        disableDarkMode();
-      } else {
-        enableDarkMode();
-      }
-    });
-    
-    function enableDarkMode() {
-      htmlElement.classList.add('dark');
+    if (document.documentElement.classList.contains('dark')) {
       themeIcon.classList.remove('bi-moon');
       themeIcon.classList.add('bi-sun');
-      localStorage.setItem('theme', 'dark');
-    }
-    
-    function disableDarkMode() {
-      htmlElement.classList.remove('dark');
+    } else {
       themeIcon.classList.remove('bi-sun');
       themeIcon.classList.add('bi-moon');
-      localStorage.setItem('theme', 'light');
     }
-    
-    // Animación al cambiar el tema
-    themeToggle.addEventListener('click', function() {
-      this.classList.add('animate-pulse');
-      setTimeout(() => {
-        this.classList.remove('animate-pulse');
-      }, 300);
-    });
-    
-    // Funcionalidad de menú móvil
-    document.getElementById('mobileMenuToggle').addEventListener('click', function() {
-      document.getElementById('mobileMenu').classList.remove('-translate-x-full');
-      document.getElementById('mobileMenuOverlay').classList.remove('hidden');
-    });
-    
-    document.getElementById('closeMobileMenu').addEventListener('click', function() {
-      document.getElementById('mobileMenu').classList.add('-translate-x-full');
-      document.getElementById('mobileMenuOverlay').classList.add('hidden');
-    });
-    
-    document.getElementById('mobileMenuOverlay').addEventListener('click', function() {
-      document.getElementById('mobileMenu').classList.add('-translate-x-full');
-      this.classList.add('hidden');
-    });
-    
-    // Logout
-    document.getElementById('logoutButton').addEventListener('click', function() {
-      window.location.href = 'inicioSesion.html';
-    });
-    
-    document.getElementById('logoutButtonMobile').addEventListener('click', function() {
-      window.location.href = 'inicioSesion.html';
-    });
+  });
 
-    // Funcionalidad de ordenamiento
-    document.getElementById('sortSelect').addEventListener('change', function() {
-      const value = this.value;
+  // Verificar tema guardado
+  if (localStorage.getItem('theme') === 'dark' || 
+      (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.classList.add('dark');
+    themeIcon.classList.remove('bi-moon');
+    themeIcon.classList.add('bi-sun');
+  }
+
+  // Control del menú móvil
+  const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+  const closeMobileMenu = document.getElementById('closeMobileMenu');
+  const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+  const mobileMenu = document.getElementById('mobileMenu');
+  
+  mobileMenuToggle.addEventListener('click', () => {
+    mobileMenuOverlay.classList.remove('hidden');
+    mobileMenu.classList.remove('-translate-x-full');
+  });
+  
+  closeMobileMenu.addEventListener('click', closeMobileMenuHandler);
+  mobileMenuOverlay.addEventListener('click', closeMobileMenuHandler);
+  
+  function closeMobileMenuHandler() {
+    mobileMenuOverlay.classList.add('hidden');
+    mobileMenu.classList.add('-translate-x-full');
+  }
+
+  // Mostrar/ocultar loading
+  function showLoading(show) {
+    document.getElementById('loadingOverlay').style.display = show ? 'flex' : 'none';
+  }
+
+  // Función para cargar productos desde la API
+  async function loadProducts() {
+    try {
+      showLoading(true);
       
-      if (value === 'name') {
-        sortField = 'name';
-        sortDirection = 'asc';
-      } else if (value === 'stock-low') {
-        sortField = 'stock';
-        sortDirection = 'asc';
-      } else if (value === 'stock-high') {
-        sortField = 'stock';
-        sortDirection = 'desc';
-      } else if (value === 'price-high') {
-        sortField = 'cost';
-        sortDirection = 'desc';
-      } else if (value === 'price-low') {
-        sortField = 'cost';
-        sortDirection = 'asc';
-      } else if (value === 'date') {
-        sortField = 'lastUpdate';
-        sortDirection = 'desc';
+      // Cargar productos
+      const response = await fetch(`${API_BASE_URL}/productos`);
+      
+      if (!response.ok) {
+        throw new Error('Error al cargar productos');
       }
       
+      const data = await response.json();
+      
+      // Mapear los datos para que coincidan con tu estructura de MongoDB
+      allProducts = data.map(product => ({
+        id: product._id,
+        code: product.code,
+        name: product.name,
+        category: product.category,
+        stock: product.stock,
+        minStock: product.minStock || 5, // Valor por defecto si no existe
+        cost: product.cost || product.price, // Usar price si cost no existe
+        price: product.price,
+        supplier: product.supplier || 'N/A',
+        status: product.status || 'active',
+        lastUpdate: product.updatedAt || product.createdAt || new Date().toISOString()
+      }));
+      
+      // Extraer categorías únicas
+      categories = [...new Set(allProducts.map(p => p.category).filter(Boolean))];
+      updateCategorySelect();
+      
+      // Cargar facturas recientes
+      await loadActivities();
+      
+      // Procesar datos
+      filteredProducts = [...allProducts];
       sortProducts();
       renderProducts();
       renderPagination();
-    });
+      updateStatistics();
+      
+    } catch (error) {
+      console.error('Error:', error);
+      showError('Error al cargar productos: ' + error.message);
+    } finally {
+      showLoading(false);
+    }
+  }
 
-    // Función para ordenar productos
-    function sortProducts() {
-      filteredProducts.sort((a, b) => {
-        if (sortField === 'name') {
-          return sortDirection === 'asc' 
-            ? a.name.localeCompare(b.name) 
-            : b.name.localeCompare(a.name);
+  // Actualizar selector de categorías
+  function updateCategorySelect() {
+    const categorySelect = document.getElementById('categorySelect');
+    categorySelect.innerHTML = '<option value="">Todas las categorías</option>';
+    
+    categories.forEach(category => {
+      const option = document.createElement('option');
+      option.value = category;
+      option.textContent = category;
+      categorySelect.appendChild(option);
+    });
+  }
+
+  // Función para cargar facturas recientes
+async function loadActivities() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/facturas?limit=5`);
+        
+        if (!response.ok) {
+            // Si la respuesta no es OK, intentamos obtener más detalles del error
+            let errorDetails = '';
+            try {
+                const errorData = await response.json();
+                errorDetails = errorData.error || errorData.message || '';
+            } catch (e) {
+                errorDetails = 'No se pudo obtener detalles del error';
+            }
+            throw new Error(`Error al cargar facturas: ${response.status} ${response.statusText}. ${errorDetails}`);
+        }
+        
+        const facturas = await response.json();
+        renderActivities(facturas);
+        
+    } catch (error) {
+        console.error('Error al cargar facturas:', error);
+        // Mostramos un mensaje más amigable en la interfaz
+        document.getElementById('activityLog').innerHTML = `
+            <div class="text-center py-4 text-red-500 dark:text-red-400">
+                <i class="bi bi-exclamation-triangle text-2xl"></i>
+                <p>No se pudieron cargar las facturas recientes</p>
+                <p class="text-sm">${error.message}</p>
+            </div>
+        `;
+    }
+}
+
+  // Función para renderizar facturas recientes
+  function renderActivities(facturas) {
+    const activityLog = document.getElementById('activityLog');
+    
+    if (!facturas || facturas.length === 0) {
+      activityLog.innerHTML = `
+        <div class="text-center py-4 text-gray-500 dark:text-gray-400">
+          <i class="bi bi-activity text-2xl"></i>
+          <p>No hay facturas recientes</p>
+        </div>
+      `;
+      return;
+    }
+    
+    activityLog.innerHTML = facturas.map(factura => `
+      <div class="flex mb-3">
+        <div class="flex-shrink-0 mr-3">
+          <i class="bi bi-receipt text-blue-500"></i>
+        </div>
+        <div>
+          <div class="font-bold dark:text-gray-300">Factura ${factura.invoiceNumber}</div>
+          <div class="text-gray-500 text-sm dark:text-gray-400">Cliente: ${factura.clientDetails?.name || 'No especificado'}</div>
+          <div class="text-gray-500 text-sm dark:text-gray-400">Total: $${factura.total?.toFixed(2) || '0.00'}</div>
+          <div class="text-gray-500 text-sm dark:text-gray-400">${new Date(factura.issueDate).toLocaleDateString()}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // Función para actualizar estadísticas
+  function updateStatistics() {
+    // Calcular valor total del inventario (usando cost si existe, sino price)
+    const totalValue = allProducts.reduce((sum, product) => sum + ((product.cost || product.price) * product.stock), 0);
+    document.getElementById('totalValue').textContent = `$${totalValue.toFixed(2)}`;
+    
+    // Calcular costo promedio
+    const avgCost = allProducts.length > 0 
+      ? allProducts.reduce((sum, product) => sum + (product.cost || product.price), 0) / allProducts.length
+      : 0;
+    document.getElementById('avgCost').textContent = `$${avgCost.toFixed(2)}`;
+    
+    // Total de productos
+    document.getElementById('totalProducts').textContent = allProducts.length;
+    
+    // Actualizar estadísticas por categoría
+    updateCategoryStats();
+    
+    // Actualizar alertas de stock
+    updateAlerts();
+  }
+
+  // Función para actualizar estadísticas por categoría
+  function updateCategoryStats() {
+    const categoryStatsContainer = document.getElementById('categoryStats');
+    
+    if (categories.length === 0) {
+      categoryStatsContainer.innerHTML = '<p class="text-gray-500 dark:text-gray-400">No hay categorías registradas</p>';
+      return;
+    }
+    
+    // Calcular valor por categoría (usando cost si existe, sino price)
+    const statsByCategory = {};
+    allProducts.forEach(product => {
+      if (!product.category) return;
+      
+      if (!statsByCategory[product.category]) {
+        statsByCategory[product.category] = {
+          value: 0,
+          count: 0
+        };
+      }
+      
+      statsByCategory[product.category].value += (product.cost || product.price) * product.stock;
+      statsByCategory[product.category].count++;
+    });
+    
+    // Calcular porcentajes
+    const totalValue = allProducts.reduce((sum, product) => sum + ((product.cost || product.price) * product.stock), 0);
+    
+    // Ordenar categorías por valor descendente
+    const sortedCategories = Object.keys(statsByCategory).sort((a, b) => 
+      statsByCategory[b].value - statsByCategory[a].value
+    );
+    
+    // Mostrar solo las 3 categorías principales
+    const topCategories = sortedCategories.slice(0, 3);
+    
+    categoryStatsContainer.innerHTML = `
+      <div class="flex justify-between mb-1">
+        <span class="dark:text-gray-300">Valor de inventario por categoría:</span>
+      </div>
+      <div class="space-y-2">
+        ${topCategories.map(category => {
+          const categoryValue = statsByCategory[category].value;
+          const percentage = totalValue > 0 ? (categoryValue / totalValue * 100).toFixed(0) : 0;
+          const color = getCategoryColor(category);
+          
+          return `
+            <div>
+              <div class="flex justify-between">
+                <span class="dark:text-gray-400">${category}</span>
+                <span class="dark:text-gray-300">$${categoryValue.toFixed(2)} (${percentage}%)</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2 mt-1">
+                <div class="${color} h-2 rounded-full" style="width: ${percentage}%"></div>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+  }
+
+  // Función para obtener color de categoría
+  function getCategoryColor(category) {
+    const colors = ['bg-blue-600', 'bg-green-500', 'bg-yellow-500', 'bg-purple-500', 'bg-pink-500'];
+    const index = Math.abs(hashCode(category)) % colors.length;
+    return colors[index];
+  }
+
+  // Función hash para colores consistentes
+  function hashCode(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      const char = str.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash |= 0; // Convert to 32bit integer
+    }
+    return hash;
+  }
+
+  // Función para actualizar alertas
+  function updateAlerts() {
+    const criticalProducts = allProducts.filter(p => p.stock === 0);
+    const lowStockProducts = allProducts.filter(p => p.stock > 0 && p.stock <= p.minStock);
+    
+    const alertsContainer = document.getElementById('alertsContainer');
+    const urgentBadge = document.getElementById('urgentBadge');
+    
+    if (criticalProducts.length === 0 && lowStockProducts.length === 0) {
+      alertsContainer.innerHTML = `
+        <div class="text-center py-4 text-gray-500 dark:text-gray-400">
+          <i class="bi bi-check-circle text-green-500 text-2xl"></i>
+          <p>No hay alertas en este momento</p>
+        </div>
+      `;
+      urgentBadge.classList.add('hidden');
+      return;
+    }
+    
+    urgentBadge.textContent = `${criticalProducts.length} Urgentes`;
+    urgentBadge.classList.toggle('hidden', criticalProducts.length === 0);
+    
+    alertsContainer.innerHTML = '';
+    
+    // Alertas de stock crítico
+    criticalProducts.forEach(product => {
+      const alertDiv = document.createElement('div');
+      alertDiv.className = 'p-3 rounded bg-red-100 dark:bg-red-900 dark:bg-opacity-30';
+      alertDiv.innerHTML = `
+        <div class="flex items-center">
+          <i class="bi bi-exclamation-triangle-fill text-red-600 dark:text-red-400 mr-2"></i>
+          <span class="font-medium dark:text-red-300">Stock Crítico</span>
+        </div>
+        <p class="mt-1 text-sm dark:text-red-200">${product.name}: Sin stock disponible (mínimo ${product.minStock})</p>
+        <div class="mt-2 text-right">
+          <button class="text-sm text-blue-600 dark:text-blue-400 hover:underline order-btn" data-id="${product.id}">Ordenar a proveedor</button>
+        </div>
+      `;
+      alertsContainer.appendChild(alertDiv);
+    });
+    
+    // Alertas de stock bajo
+    lowStockProducts.forEach(product => {
+      const alertDiv = document.createElement('div');
+      alertDiv.className = 'p-3 rounded bg-yellow-100 dark:bg-yellow-900 dark:bg-opacity-30';
+      alertDiv.innerHTML = `
+        <div class="flex items-center">
+          <i class="bi bi-exclamation-circle-fill text-yellow-600 dark:text-yellow-400 mr-2"></i>
+          <span class="font-medium dark:text-yellow-300">Stock Bajo</span>
+        </div>
+        <p class="mt-1 text-sm dark:text-yellow-200">${product.name}: ${product.stock} unidades disponibles (mínimo ${product.minStock})</p>
+      `;
+      alertsContainer.appendChild(alertDiv);
+    });
+    
+    // Agregar event listeners
+    document.querySelectorAll('.order-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const productId = this.getAttribute('data-id');
+        orderFromSupplier(productId);
+      });
+    });
+  }
+
+  // Función para ordenar desde proveedor
+  async function orderFromSupplier(productId) {
+    try {
+      const product = allProducts.find(p => p.id === productId);
+      if (!product) return;
+      
+      const quantity = prompt(`¿Cuántas unidades de "${product.name}" desea ordenar al proveedor "${product.supplier}"?`, product.minStock * 2);
+      
+      if (quantity && !isNaN(quantity)) {
+        const parsedQuantity = parseInt(quantity);
+        if (parsedQuantity > 0) {
+          showLoading(true);
+          
+          // Actualizar el stock del producto en MongoDB
+          const response = await fetch(`${API_BASE_URL}/productos/${productId}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              stock: product.stock + parsedQuantity
+            })
+          });
+          
+          if (!response.ok) {
+            throw new Error('Error al actualizar producto');
+          }
+          
+          alert(`Se han ordenado ${quantity} unidades de "${product.name}" al proveedor.`);
+          loadProducts(); // Recargar los datos
         } else {
-          return sortDirection === 'asc' 
-            ? a[sortField] - b[sortField] 
-            : b[sortField] - a[sortField];
+          alert('La cantidad debe ser mayor que cero');
         }
-      });
+      } else if (quantity !== null) {
+        alert('Por favor ingrese una cantidad válida');
+      }
+      
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error al realizar el pedido: ' + error.message);
+    } finally {
+      showLoading(false);
     }
+  }
 
-    // Funcionalidad de filtrado
-    document.getElementById('applyFilters').addEventListener('click', filterProducts);
-    document.getElementById('searchInput').addEventListener('input', filterProducts);
-    document.getElementById('categorySelect').addEventListener('change', filterProducts);
-    document.getElementById('stockFilter').addEventListener('change', filterProducts);
-    document.getElementById('refreshData').addEventListener('click', function() {
-      filteredProducts = [...products];
-      sortProducts();
-      currentPage = 1;
-      renderProducts();
-      renderPagination();
-      alert('Datos actualizados correctamente');
+  // Función para generar reporte PDF
+  document.getElementById('generateReport').addEventListener('click', async function() {
+    try {
+      showLoading(true);
+      
+      // Obtener productos con stock bajo desde tu API
+      const response = await fetch(`${API_BASE_URL}/reportes/productos-stock-bajo`);
+      
+      if (!response.ok) {
+        throw new Error('Error al generar reporte');
+      }
+      
+      const productos = await response.json();
+      
+      if (productos.length === 0) {
+        alert('No hay productos con stock bajo para reportar');
+        return;
+      }
+      
+      // Crear contenido del reporte
+      let reportContent = `REPORTE DE PRODUCTOS CON STOCK BAJO\n\n`;
+      reportContent += `Fecha: ${new Date().toLocaleDateString()}\n`;
+      reportContent += `Total productos: ${productos.length}\n\n`;
+      reportContent += `----------------------------------------\n\n`;
+      
+      productos.forEach((product, index) => {
+        reportContent += `PRODUCTO ${index + 1}\n`;
+        reportContent += `Código: ${product.code || 'N/A'}\n`;
+        reportContent += `Nombre: ${product.name}\n`;
+        reportContent += `Categoría: ${product.category || 'N/A'}\n`;
+        reportContent += `Stock actual: ${product.stock}\n`;
+        reportContent += `Stock mínimo: ${product.minStock || 5}\n`;
+        reportContent += `Proveedor: ${product.supplier || 'N/A'}\n`;
+        reportContent += `Precio: $${product.price?.toFixed(2) || '0.00'}\n`;
+        reportContent += `----------------------------------------\n\n`;
+      });
+      
+      // En una implementación real, aquí generarías el PDF con una librería como jsPDF
+      // Para este ejemplo, mostramos el contenido en un alert
+      alert(reportContent);
+      
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error al generar reporte: ' + error.message);
+    } finally {
+      showLoading(false);
+    }
+  });
+
+  // Funcionalidad de ordenamiento
+  document.getElementById('sortSelect').addEventListener('change', function() {
+    const value = this.value;
+    
+    if (value === 'name') {
+      sortField = 'name';
+      sortDirection = 'asc';
+    } else if (value === 'stock-low') {
+      sortField = 'stock';
+      sortDirection = 'asc';
+    } else if (value === 'stock-high') {
+      sortField = 'stock';
+      sortDirection = 'desc';
+    } else if (value === 'price-high') {
+      sortField = 'price';
+      sortDirection = 'desc';
+    } else if (value === 'price-low') {
+      sortField = 'price';
+      sortDirection = 'asc';
+    } else if (value === 'date') {
+      sortField = 'lastUpdate';
+      sortDirection = 'desc';
+    }
+    
+    sortProducts();
+    renderProducts();
+    renderPagination();
+  });
+
+  // Función para ordenar productos
+  function sortProducts() {
+    filteredProducts.sort((a, b) => {
+      if (sortField === 'name') {
+        return sortDirection === 'asc' 
+          ? a.name.localeCompare(b.name) 
+          : b.name.localeCompare(a.name);
+      } else if (sortField === 'lastUpdate') {
+        const dateA = new Date(a.lastUpdate);
+        const dateB = new Date(b.lastUpdate);
+        return sortDirection === 'asc' 
+          ? dateA - dateB 
+          : dateB - dateA;
+      } else {
+        const fieldA = a[sortField] || 0;
+        const fieldB = b[sortField] || 0;
+        return sortDirection === 'asc' 
+          ? fieldA - fieldB 
+          : fieldB - fieldA;
+      }
     });
+  }
 
-    function filterProducts() {
-      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-      const category = document.getElementById('categorySelect').value;
-      const stockStatus = document.getElementById('stockFilter').value;
+  // Funcionalidad de filtrado
+  document.getElementById('applyFilters').addEventListener('click', filterProducts);
+  document.getElementById('searchInput').addEventListener('input', filterProducts);
+  document.getElementById('categorySelect').addEventListener('change', filterProducts);
+  document.getElementById('stockFilter').addEventListener('change', filterProducts);
+  document.getElementById('refreshData').addEventListener('click', loadProducts);
+
+  function filterProducts() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    const category = document.getElementById('categorySelect').value;
+    const stockStatus = document.getElementById('stockFilter').value;
+    
+    filteredProducts = allProducts.filter(product => {
+      // Filtrar por término de búsqueda
+      const matchesSearch = 
+        product.name.toLowerCase().includes(searchTerm) ||
+        (product.code && product.code.toLowerCase().includes(searchTerm)) ||
+        (product.supplier && product.supplier.toLowerCase().includes(searchTerm));
       
-      filteredProducts = products.filter(product => {
-        // Filtrar por término de búsqueda
-        const matchesSearch = 
-          product.name.toLowerCase().includes(searchTerm) ||
-          product.id.toLowerCase().includes(searchTerm) ||
-          product.supplier.toLowerCase().includes(searchTerm);
-        
-        // Filtrar por categoría
-        const matchesCategory = category === '' || product.category === category;
-        
-        // Filtrar por estado de stock
-        let matchesStock = true;
-        if (stockStatus === 'low') {
-          matchesStock = product.stock > 0 && product.stock <= product.minStock;
-        } else if (stockStatus === 'out') {
-          matchesStock = product.stock === 0;
-        } else if (stockStatus === 'normal') {
-          matchesStock = product.stock > product.minStock;
-        }
-        
-        return matchesSearch && matchesCategory && matchesStock;
+      // Filtrar por categoría
+      const matchesCategory = category === '' || product.category === category;
+      
+      // Filtrar por estado de stock
+      let matchesStock = true;
+      if (stockStatus === 'low') {
+        matchesStock = product.stock > 0 && product.stock <= (product.minStock || 5);
+      } else if (stockStatus === 'out') {
+        matchesStock = product.stock === 0;
+      } else if (stockStatus === 'normal') {
+        matchesStock = product.stock > (product.minStock || 5);
+      }
+      
+      return matchesSearch && matchesCategory && matchesStock;
+    });
+    
+    currentPage = 1;
+    sortProducts();
+    renderProducts();
+    renderPagination();
+  }
+
+  // Función para renderizar productos
+  function renderProducts() {
+    const tableBody = document.getElementById('inventoryTable');
+    
+    if (filteredProducts.length === 0) {
+      tableBody.innerHTML = `
+        <tr>
+          <td colspan="7" class="text-center py-4 text-gray-500 dark:text-gray-400">
+            <i class="bi bi-box-seam text-2xl"></i>
+            <p>No se encontraron productos</p>
+          </td>
+        </tr>
+      `;
+      document.querySelectorAll('.showing-count').forEach(el => {
+        el.textContent = `Mostrando 0 de 0 productos`;
       });
-      
-      currentPage = 1;
-      sortProducts();
-      renderProducts();
-      renderPagination();
+      return;
     }
-
-    // Función para renderizar productos
-    function renderProducts() {
-      const tableBody = document.getElementById('inventoryTable');
-      tableBody.innerHTML = '';
+    
+    const startIndex = (currentPage - 1) * productsPerPage;
+    const endIndex = Math.min(startIndex + productsPerPage, filteredProducts.length);
+    
+    tableBody.innerHTML = filteredProducts.slice(startIndex, endIndex).map(product => {
+      // Determinar clases de stock
+      let stockClass = '';
+      if (product.stock === 0) {
+        stockClass = 'stock-out';
+      } else if (product.stock <= (product.minStock || 5)) {
+        stockClass = 'stock-low';
+      }
       
-      const startIndex = (currentPage - 1) * productsPerPage;
-      const endIndex = Math.min(startIndex + productsPerPage, filteredProducts.length);
-      
-      for (let i = startIndex; i < endIndex; i++) {
-        const product = filteredProducts[i];
-        const row = document.createElement('tr');
-        
-        // Determinar clases de stock
-        let stockClass = '';
-        if (product.stock === 0) {
-          stockClass = 'stock-out';
-        } else if (product.stock <= product.minStock) {
-          stockClass = 'stock-low';
-        }
-        
-        row.className = `text-center ${stockClass}`;
-        row.innerHTML = `
-          <td class="border px-4 py-2 text-left dark:border-gray-700 dark:text-gray-300">${product.id}</td>
+      return `
+        <tr class="text-center ${stockClass}">
+          <td class="border px-4 py-2 text-left dark:border-gray-700 dark:text-gray-300">${product.code || 'N/A'}</td>
           <td class="border px-4 py-2 text-left dark:border-gray-700 dark:text-gray-300">${product.name}</td>
-          <td class="border px-4 py-2 text-left dark:border-gray-700 dark:text-gray-300">${product.category}</td>
+          <td class="border px-4 py-2 text-left dark:border-gray-700 dark:text-gray-300">${product.category || 'Sin categoría'}</td>
           <td class="border px-4 py-2 font-bold dark:border-gray-700">${product.stock}</td>
-          <td class="border px-4 py-2 text-right dark:border-gray-700 dark:text-gray-300">$${product.cost.toFixed(2)}</td>
-          <td class="border px-4 py-2 dark:border-gray-700 dark:text-gray-300">${product.supplier}</td>
+          <td class="border px-4 py-2 text-right dark:border-gray-700 dark:text-gray-300">$${product.price?.toFixed(2) || '0.00'}</td>
+          <td class="border px-4 py-2 dark:border-gray-700 dark:text-gray-300">${product.supplier || 'N/A'}</td>
           <td class="border px-4 py-2 space-x-2 dark:border-gray-700">
             <button class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 edit-btn" aria-label="Editar producto" data-id="${product.id}">
               <i class="bi bi-pencil"></i>
@@ -758,133 +1075,203 @@
               <i class="bi bi-clock-history"></i>
             </button>
           </td>
-        `;
-        
-        tableBody.appendChild(row);
-      }
-      
-      // Actualizar contador
-      document.querySelectorAll('.showing-count').forEach(el => {
-        el.textContent = `Mostrando ${endIndex} de ${filteredProducts.length} productos`;
+        </tr>
+      `;
+    }).join('');
+    
+    // Actualizar contador
+    document.querySelectorAll('.showing-count').forEach(el => {
+      el.textContent = `Mostrando ${startIndex + 1}-${endIndex} de ${filteredProducts.length} productos`;
+    });
+    
+    // Agregar event listeners a los nuevos botones
+    document.querySelectorAll('.delete-btn').forEach(button => {
+      button.addEventListener('click', function() {
+        const productId = this.getAttribute('data-id');
+        deleteProduct(productId);
       });
-      
-      // Agregar event listeners a los nuevos botones
-      document.querySelectorAll('.delete-btn').forEach(button => {
-        button.addEventListener('click', function() {
-          const productId = this.getAttribute('data-id');
-          deleteProduct(productId);
-        });
+    });
+    
+    document.querySelectorAll('.edit-btn').forEach(button => {
+      button.addEventListener('click', function() {
+        const productId = this.getAttribute('data-id');
+        editProduct(productId);
       });
-      
-      document.querySelectorAll('.edit-btn').forEach(button => {
-        button.addEventListener('click', function() {
-          const productId = this.getAttribute('data-id');
-          alert(`Editando producto: ${productId}`);
-        });
+    });
+    
+    document.querySelectorAll('.history-btn').forEach(button => {
+      button.addEventListener('click', function() {
+        const productId = this.getAttribute('data-id');
+        showProductHistory(productId);
       });
-      
-      document.querySelectorAll('.history-btn').forEach(button => {
-        button.addEventListener('click', function() {
-          const productId = this.getAttribute('data-id');
-          alert(`Mostrando historial de: ${productId}`);
-        });
-      });
-    }
+    });
+  }
 
-    // Función para eliminar producto
-    function deleteProduct(productId) {
-      const product = products.find(p => p.id === productId);
+  // Función para eliminar producto
+  async function deleteProduct(productId) {
+    try {
+      const product = allProducts.find(p => p.id === productId);
       if (!product) return;
       
       if (confirm(`¿Estás seguro de que deseas eliminar el producto "${product.name}"?`)) {
-        // Eliminar de la lista principal
-        const productIndex = products.findIndex(p => p.id === productId);
-        if (productIndex !== -1) {
-          products.splice(productIndex, 1);
+        showLoading(true);
+        
+        const response = await fetch(`${API_BASE_URL}/productos/${productId}`, {
+          method: 'DELETE'
+        });
+        
+        if (!response.ok) {
+          throw new Error('Error al eliminar producto');
         }
         
-        // Eliminar de la lista filtrada
-        const filteredIndex = filteredProducts.findIndex(p => p.id === productId);
-        if (filteredIndex !== -1) {
-          filteredProducts.splice(filteredIndex, 1);
+        alert(`Producto "${product.name}" eliminado correctamente`);
+        loadProducts(); // Recargar los datos
+      }
+      
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error al eliminar producto: ' + error.message);
+    } finally {
+      showLoading(false);
+    }
+  }
+
+  // Función para editar producto
+  async function editProduct(productId) {
+    try {
+      const product = allProducts.find(p => p.id === productId);
+      if (!product) return;
+      
+      // Aquí podrías abrir un modal con un formulario completo
+      // Por ahora usamos un prompt simple para actualizar el stock
+      const newStock = prompt(`Ingrese el nuevo stock para "${product.name}"`, product.stock);
+      
+      if (newStock && !isNaN(newStock)) {
+        const parsedStock = parseInt(newStock);
+        if (parsedStock >= 0) {
+          showLoading(true);
+          
+          // Actualizar en MongoDB
+          const response = await fetch(`${API_BASE_URL}/productos/${productId}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              stock: parsedStock
+            })
+          });
+          
+          if (!response.ok) {
+            throw new Error('Error al actualizar producto');
+          }
+          
+          alert(`Stock de "${product.name}" actualizado a ${newStock}`);
+          loadProducts(); // Recargar los datos
+        } else {
+          alert('El stock no puede ser negativo');
         }
-        
-        // Re-renderizar
-        if (currentPage > Math.ceil(filteredProducts.length / productsPerPage)) {
-          currentPage = Math.max(1, currentPage - 1);
-        }
-        
+      } else if (newStock !== null) {
+        alert('Por favor ingrese un número válido');
+      }
+      
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error al editar producto: ' + error.message);
+    } finally {
+      showLoading(false);
+    }
+  }
+
+  // Función para mostrar historial del producto
+  async function showProductHistory(productId) {
+    try {
+      showLoading(true);
+      
+      // En tu API Flask, podrías agregar un endpoint para el historial de productos
+      // Por ahora simulamos la función
+      const product = allProducts.find(p => p.id === productId);
+      if (!product) return;
+      
+      alert(`Historial de movimientos para: ${product.name}\n\nÚltima actualización: ${new Date(product.lastUpdate).toLocaleString()}`);
+      
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error al cargar historial: ' + error.message);
+    } finally {
+      showLoading(false);
+    }
+  }
+
+  // Función para renderizar paginación
+  function renderPagination() {
+    const paginationContainer = document.getElementById('pagination');
+    paginationContainer.innerHTML = '';
+    
+    const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+    
+    if (totalPages <= 1) return;
+    
+    // Botón Anterior
+    const prevButton = document.createElement('button');
+    prevButton.innerHTML = '&laquo;';
+    prevButton.className = `bg-gray-200 px-3 py-1 rounded hover:bg-gray-300 dark:bg-dark-secondary dark:hover:bg-dark-accent dark:text-gray-300 ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}`;
+    prevButton.disabled = currentPage === 1;
+    prevButton.addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
         renderProducts();
         renderPagination();
-        alert(`Producto "${product.name}" eliminado correctamente`);
       }
-    }
-
-    // Función para renderizar paginación
-    function renderPagination() {
-      const paginationContainer = document.getElementById('pagination');
-      paginationContainer.innerHTML = '';
-      
-      const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
-      
-      if (totalPages <= 1) return;
-      
-      // Botón Anterior
-      const prevButton = document.createElement('button');
-      prevButton.innerHTML = '&laquo;';
-      prevButton.className = `bg-gray-200 px-3 py-1 rounded hover:bg-gray-300 dark:bg-dark-secondary dark:hover:bg-dark-accent dark:text-gray-300 ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}`;
-      prevButton.disabled = currentPage === 1;
-      prevButton.addEventListener('click', () => {
-        if (currentPage > 1) {
-          currentPage--;
-          renderProducts();
-          renderPagination();
-        }
-      });
-      paginationContainer.appendChild(prevButton);
-      
-      // Números de página
-      const startPage = Math.max(1, currentPage - 2);
-      const endPage = Math.min(totalPages, currentPage + 2);
-      
-      for (let i = startPage; i <= endPage; i++) {
-        const pageButton = document.createElement('button');
-        pageButton.textContent = i;
-        pageButton.className = `bg-gray-200 px-3 py-1 rounded hover:bg-gray-300 dark:bg-dark-secondary dark:hover:bg-dark-accent dark:text-gray-300 ${currentPage === i ? 'bg-blue-500 text-white' : ''}`;
-        pageButton.addEventListener('click', () => {
-          currentPage = i;
-          renderProducts();
-          renderPagination();
-        });
-        paginationContainer.appendChild(pageButton);
-      }
-      
-      // Botón Siguiente
-      const nextButton = document.createElement('button');
-      nextButton.innerHTML = '&raquo;';
-      nextButton.className = `bg-gray-200 px-3 py-1 rounded hover:bg-gray-300 dark:bg-dark-secondary dark:hover:bg-dark-accent dark:text-gray-300 ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''}`;
-      nextButton.disabled = currentPage === totalPages;
-      nextButton.addEventListener('click', () => {
-        if (currentPage < totalPages) {
-          currentPage++;
-          renderProducts();
-          renderPagination();
-        }
-      });
-      paginationContainer.appendChild(nextButton);
-    }
-
-    // Inicializar la aplicación
-    document.addEventListener('DOMContentLoaded', () => {
-      sortProducts();
-      renderProducts();
-      renderPagination();
-      
-      // Actualizar registro de actividades
-      document.getElementById('refreshLog').addEventListener('click', function() {
-        alert('Registro de actividades actualizado');
-      });
     });
-  </script>
+    paginationContainer.appendChild(prevButton);
+    
+    // Números de página
+    const startPage = Math.max(1, currentPage - 2);
+    const endPage = Math.min(totalPages, currentPage + 2);
+    
+    for (let i = startPage; i <= endPage; i++) {
+      const pageButton = document.createElement('button');
+      pageButton.textContent = i;
+      pageButton.className = `bg-gray-200 px-3 py-1 rounded hover:bg-gray-300 dark:bg-dark-secondary dark:hover:bg-dark-accent dark:text-gray-300 ${currentPage === i ? 'bg-blue-500 text-white' : ''}`;
+      pageButton.addEventListener('click', () => {
+        currentPage = i;
+        renderProducts();
+        renderPagination();
+      });
+      paginationContainer.appendChild(pageButton);
+    }
+    
+    // Botón Siguiente
+    const nextButton = document.createElement('button');
+    nextButton.innerHTML = '&raquo;';
+    nextButton.className = `bg-gray-200 px-3 py-1 rounded hover:bg-gray-300 dark:bg-dark-secondary dark:hover:bg-dark-accent dark:text-gray-300 ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''}`;
+    nextButton.disabled = currentPage === totalPages;
+    nextButton.addEventListener('click', () => {
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderProducts();
+        renderPagination();
+      }
+    });
+    paginationContainer.appendChild(nextButton);
+  }
+
+  // Función para mostrar errores
+  function showError(message) {
+    alert(message);
+  }
+
+  // Inicializar la aplicación
+  document.addEventListener('DOMContentLoaded', () => {
+    loadProducts();
+    
+    // Actualizar registro de actividades
+    document.getElementById('refreshLog').addEventListener('click', function() {
+      loadActivities();
+    });
+  });
+</script>
+  
 </body>
 </html>

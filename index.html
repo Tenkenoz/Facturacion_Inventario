@@ -10,6 +10,8 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+  <!-- Axios para peticiones HTTP -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   
   <script>
     tailwind.config = {
@@ -132,6 +134,10 @@
       box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
     }
     
+    .dark .card-hover:hover {
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    }
+    
     .urgent-alert {
       animation: pulse 2s infinite;
     }
@@ -163,6 +169,7 @@
       
       .main-content {
         padding: 1rem;
+        margin-left: 0;
       }
     }
     
@@ -177,9 +184,36 @@
       justify-content: center;
       font-weight: bold;
     }
+    
+    .sidebar {
+      width: 250px;
+      min-height: 100vh;
+      transition: all 0.3s ease;
+    }
+    
+    .main-content {
+      margin-left: 20px;
+      transition: all 0.3s ease;
+    }
+    
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed;
+        z-index: 1000;
+        transform: translateX(-100%);
+      }
+      
+      .sidebar.show {
+        transform: translateX(0);
+      }
+      
+      .main-content {
+        margin-left: 0;
+      }
+    }
   </style>
 </head>
-<body class="bg-gray-100 min-vh-100 d-flex flex-column">
+<body class="bg-gray-100 min-vh-100 d-flex flex-column dark:bg-gray-900">
 
   <!-- Botón de cambio de tema -->
   <div class="theme-switch" id="themeToggle" aria-label="Cambiar tema">
@@ -187,89 +221,214 @@
   </div>
 
   <!-- Barra superior para móviles -->
-  <div class="mobile-menu d-md-none bg-white shadow-sm p-3 d-flex justify-content-between align-items-center">
+  <div class="mobile-menu d-md-none bg-white shadow-sm p-3 d-flex justify-content-between align-items-center dark:bg-dark-secondary">
     <button class="btn btn-sm btn-outline-secondary" id="mobileMenuToggle">
       <i class="bi bi-list"></i>
     </button>
-    <h1 class="text-lg font-bold mb-0">Dashboard</h1>
+    <h1 class="text-lg font-bold mb-0 dark:text-dark-text">Dashboard</h1>
     <div class="d-flex align-items-center">
       <div class="user-avatar me-2">MA</div>
       <button class="btn btn-sm btn-outline-danger" id="logoutButtonMobile">
-       <a href="inicioSesion.html"> <i class="bi bi-box-arrow-right"></i></a>
+        <i class="bi bi-box-arrow-right"></i>
       </button>
-    </div>
-  </div>
-
-  <!-- Menú móvil desplegable -->
-  <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileMenu">
-    <div class="offcanvas-header">
-      <h5 class="offcanvas-title">Menú Principal</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body">
-      <nav class="flex flex-col space-y-2" aria-label="Menú móvil">
-        <a href="index.html" class="text-left px-2 py-1 rounded bg-gray-100 font-semibold">Panel Principal</a>
-        <a href="busquedaFactura.html" class="text-left px-2 py-1 rounded hover:bg-gray-200">Facturación</a>
-        <a href="busquedaInventario.html" class="text-left px-2 py-1 rounded hover:bg-gray-200">Inventario</a>
-      </nav>
     </div>
   </div>
 
   <div class="d-flex flex-grow-1">
     <!-- Sidebar -->
-    <nav class="sidebar bg-white shadow-md w-60 p-4 d-none d-md-block">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-          <h1 class="text-xl font-bold mb-0">Inventario Facturación</h1>
-          <div class="d-flex align-items-center">
-            <div class="user-avatar me-2">MA</div>
-            <button class="btn btn-sm btn-outline-danger" id="logoutButton">
+     <aside class="sidebar w-64 bg-white p-4 shadow flex flex-col justify-between hidden md:flex dark:bg-dark-primary">
+      <div>
+        <div class="flex justify-between items-center mb-4">
+          <h1 class="text-xl font-bold dark:text-dark-text">Inventario Facturación</h1>
+          <div class="flex items-center">
+            <div class="user-avatar mr-2">MA</div>
+            <button class="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-red-600" id="logoutButton">
               <a href="inicioSesion.html"><i class="bi bi-box-arrow-right"></i></a>
             </button>
           </div>
         </div>
         <nav class="flex flex-col space-y-2" aria-label="Menú principal">
-          <a href="index.html" class="text-left px-2 py-1 rounded bg-gray-100 font-semibold">Panel Principal</a>
-          <a href="busquedaFactura.html" class="text-left px-2 py-1 rounded hover:bg-gray-200">Facturación</a>
-          <a href="busquedaInventario.html" class="text-left px-2 py-1 rounded hover:bg-gray-200">Inventario</a>
-
+          <a href="index.html" class="text-left px-2 py-1 rounded hover:bg-gray-200 bg-gray-100 font-semibold dark:bg-dark-accent">Panel Principal</a>
+          <a href="busquedaFactura.html" class="text-left px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-dark-accent">Facturación</a>
+          <a href="busquedaInventario.html" class="text-left px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-dark-accent">Inventario</a>
         </nav>
-    </nav>
+      </div>
+    </aside>
 
     <!-- Main Content -->
-    <main class="flex-grow-1 p-4 main-content">
-      <h1 class="text-2xl font-bold mb-4">Dashboard General</h1>
+    <main class="flex-grow-1 p-4 main-content dark:bg-gray-900">
+      <h1 class="text-2xl font-bold mb-4 dark:text-dark-text">Dashboard General</h1>
+      
+      <!-- Contenedor dinámico -->
+      <div id="dashboardContent">
+        <!-- Los datos se cargarán aquí dinámicamente -->
+      </div>
+    </main>
+  </div>
 
+  <!-- Footer -->
+  <footer class="bg-white text-center py-3 text-sm text-gray-500 mt-auto shadow-t dark:bg-dark-primary dark:text-gray-400">
+    © 2025 Sistema de Inventario y Facturación
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  // URL base de tu API
+  const API_BASE_URL = 'http://localhost:5000';
+  
+  // Control de tema oscuro/claro
+  const themeToggle = document.getElementById('themeToggle');
+  const themeIcon = document.getElementById('themeIcon');
+  const htmlElement = document.documentElement;
+  
+  // Comprobar si hay preferencia guardada
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'dark') {
+    enableDarkMode();
+  }
+  
+  // Manejar el clic en el botón de tema
+  themeToggle.addEventListener('click', () => {
+    if (htmlElement.classList.contains('dark')) {
+      disableDarkMode();
+    } else {
+      enableDarkMode();
+    }
+  });
+  
+  function enableDarkMode() {
+    htmlElement.classList.add('dark');
+    themeIcon.classList.remove('bi-moon');
+    themeIcon.classList.add('bi-sun');
+    localStorage.setItem('theme', 'dark');
+  }
+  
+  function disableDarkMode() {
+    htmlElement.classList.remove('dark');
+    themeIcon.classList.remove('bi-sun');
+    themeIcon.classList.add('bi-moon');
+    localStorage.setItem('theme', 'light');
+  }
+
+  // Función para formatear números como dinero
+  function formatMoney(amount) {
+    return new Intl.NumberFormat('es-EC', {
+      style: 'currency',
+      currency: 'USD'
+    }).format(amount);
+  }
+  
+  // Función para formatear fechas
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('es-EC', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
+
+  // Función para mostrar estado de carga
+  function showLoadingState() {
+    document.getElementById('dashboardContent').innerHTML = `
+      <div class="d-flex justify-content-center align-items-center" style="height: 300px;">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+        <span class="ms-3 dark:text-dark-text">Cargando datos del sistema...</span>
+      </div>
+    `;
+  }
+
+  // Función para mostrar errores
+  function showErrorState(error) {
+    console.error('Error:', error);
+    const errorDetails = error.response?.data?.error || error.message;
+    
+    document.getElementById('dashboardContent').innerHTML = `
+      <div class="alert alert-danger dark:bg-dark-accent" role="alert">
+        <h4 class="alert-heading dark:text-dark-text">Error al cargar los datos</h4>
+        <p class="dark:text-dark-text">${error.message || 'Error desconocido'}</p>
+        <hr class="dark:border-gray-700">
+        <p class="mb-0 dark:text-gray-400">Detalles: ${errorDetails || 'No hay detalles disponibles'}</p>
+        <button class="btn btn-primary mt-3" onclick="location.reload()">Recargar página</button>
+      </div>
+    `;
+  }
+
+  // Función principal para cargar datos
+  async function loadDashboardData() {
+    try {
+      showLoadingState();
+      
+      // Cargar datos en paralelo para mejor rendimiento
+      const [productsResponse, invoicesResponse, lowStockResponse] = await Promise.all([
+        axios.get(`${API_BASE_URL}/productos`).catch(() => ({ data: [] })),
+        axios.get(`${API_BASE_URL}/facturas?limit=5`).catch(() => ({ data: [] })),
+        axios.get(`${API_BASE_URL}/reportes/productos-stock-bajo`).catch(() => ({ data: [] }))
+      ]);
+      
+      const allProducts = productsResponse.data;
+      const recentInvoices = invoicesResponse.data;
+      const lowStockProducts = lowStockResponse.data;
+      
+      // Calcular métricas clave
+      const totalInventoryValue = allProducts.reduce((sum, p) => sum + (p.price * p.stock), 0);
+      const criticalStockCount = lowStockProducts.filter(p => p.stock < p.minStock * 0.5).length;
+      
+      // Actualizar la interfaz
+      updateDashboardUI({
+        totalInventoryValue,
+        totalProducts: allProducts.length,
+        lowStockCount: lowStockProducts.length,
+        criticalStockCount,
+        recentInvoices,
+        lowStockProducts,
+        allProducts
+      });
+      
+    } catch (error) {
+      showErrorState(error);
+    }
+  }
+
+  // Función para actualizar la UI con datos reales
+  function updateDashboardUI(data) {
+    const { totalInventoryValue, totalProducts, lowStockCount, criticalStockCount, recentInvoices, lowStockProducts, allProducts } = data;
+    
+    document.getElementById('dashboardContent').innerHTML = `
       <!-- Cards Top -->
       <div class="row g-3 mb-4">
         <div class="col-md-3 col-sm-6">
-          <div class="card p-4 shadow-sm card-hover">
-            <p class="text-gray-500 mb-2">Valor Total Inventario</p>
-            <div class="d-flex align-items-center">
-              <h4 class="text-2xl font-semibold mr-2">$12,845.50</h4>
-              <span class="badge bg-success">+2.3%</span>
-            </div>
-            <p class="text-sm text-gray-500 mt-1">Costo promedio: $45.5</p>
+          <div class="card p-4 shadow-sm card-hover dark:bg-dark-primary dark:border-dark-accent">
+            <p class="text-gray-500 mb-2 dark:text-gray-400">Valor Total Inventario</p>
+            <h4 class="text-2xl font-semibold dark:text-dark-text">${formatMoney(totalInventoryValue)}</h4>
+            <p class="text-sm text-gray-500 mt-1 dark:text-gray-400">${totalProducts} productos</p>
           </div>
         </div>
         <div class="col-md-3 col-sm-6">
-          <div class="card p-4 shadow-sm card-hover">
-            <p class="text-gray-500 mb-2">Total Productos</p>
-            <h4 class="text-2xl font-semibold">49</h4>
-            <p class="text-sm text-gray-500 mt-1">12 categorías</p>
+          <div class="card p-4 shadow-sm card-hover dark:bg-dark-primary dark:border-dark-accent">
+            <p class="text-gray-500 mb-2 dark:text-gray-400">Total Productos</p>
+            <h4 class="text-2xl font-semibold dark:text-dark-text">${totalProducts}</h4>
+            <p class="text-sm text-gray-500 mt-1 dark:text-gray-400">${new Set(allProducts.map(p => p.category)).size} categorías</p>
           </div>
         </div>
         <div class="col-md-3 col-sm-6">
-          <div class="card p-4 shadow-sm card-hover">
-            <p class="text-gray-500 mb-2">Stock Bajo</p>
-            <h4 class="text-2xl font-semibold">10</h4>
-            <p class="text-sm text-gray-500 mt-1">3 críticos</p>
+          <div class="card p-4 shadow-sm card-hover dark:bg-dark-primary dark:border-dark-accent">
+            <p class="text-gray-500 mb-2 dark:text-gray-400">Stock Bajo</p>
+            <h4 class="text-2xl font-semibold dark:text-dark-text">${lowStockCount}</h4>
+            <p class="text-sm text-gray-500 mt-1 dark:text-gray-400">${criticalStockCount} críticos</p>
           </div>
         </div>
         <div class="col-md-3 col-sm-6">
-          <div class="card p-4 shadow-sm card-hover">
-            <p class="text-gray-500 mb-2">Facturación Mensual</p>
-            <h4 class="text-2xl font-semibold">$24,560</h4>
-            <p class="text-sm text-gray-500 mt-1">+15% vs mes anterior</p>
+          <div class="card p-4 shadow-sm card-hover dark:bg-dark-primary dark:border-dark-accent">
+            <p class="text-gray-500 mb-2 dark:text-gray-400">Facturas Recientes</p>
+            <h4 class="text-2xl font-semibold dark:text-dark-text">${recentInvoices.length}</h4>
+            <p class="text-sm text-gray-500 mt-1 dark:text-gray-400">${recentInvoices.length ? formatDate(recentInvoices[0].issueDate) : 'Ninguna'}</p>
           </div>
         </div>
       </div>
@@ -277,80 +436,25 @@
       <!-- Alerts and Activity -->
       <div class="row g-4 mb-4">
         <div class="col-lg-6">
-          <div class="card bg-white shadow-sm p-4">
-            <h5 class="font-semibold mb-3 d-flex justify-content-between">
+          <div class="card bg-white shadow-sm p-4 dark:bg-dark-primary dark:border-dark-accent">
+            <h5 class="font-semibold mb-3 d-flex justify-content-between dark:text-dark-text">
               <span>Alertas Importantes</span>
-              <span class="badge bg-danger">2 Urgentes</span>
+              ${criticalStockCount ? `<span class="badge bg-danger">${criticalStockCount} Urgentes</span>` : ''}
             </h5>
-            <ul class="space-y-3 list-unstyled">
-              <li class="d-flex align-items-start gap-3 urgent-alert">
-                <span class="bi bi-exclamation-triangle-fill text-red-500 fs-4"></span>
-                <div>
-                  <p class="font-semibold mb-1">Stock Crítico</p>
-                  <p class="text-gray-500 small">3 productos requieren reposición inmediata</p>
-                  <div class="mt-1">
-                    <span class="badge bg-danger me-1">Producto X: 2 unidades</span>
-                    <span class="badge bg-danger me-1">Producto Y: 1 unidad</span>
-                  </div>
-                </div>
-              </li>
-              <li class="d-flex align-items-start gap-3">
-                <span class="bi bi-exclamation-circle-fill text-yellow-500 fs-4"></span>
-                <div>
-                  <p class="font-semibold mb-1">Productos por vencer</p>
-                  <p class="text-gray-500 small">3 productos están próximos a vencer</p>
-                  <div class="mt-1">
-                    <span class="badge bg-warning text-dark me-1">Producto A: 5 días</span>
-                    <span class="badge bg-warning text-dark me-1">Producto B: 7 días</span>
-                  </div>
-                </div>
-              </li>
-              <li class="d-flex align-items-start gap-3">
-                <span class="bi bi-info-circle-fill text-blue-500 fs-4"></span>
-                <div>
-                  <p class="font-semibold mb-1">Facturas pendientes</p>
-                  <p class="text-gray-500 small">2 facturas pendientes de envío</p>
-                </div>
-              </li>
+            <ul class="space-y-3 list-unstyled" id="alertsContainer">
+              ${renderAlerts(lowStockProducts)}
             </ul>
           </div>
         </div>
         
         <div class="col-lg-6">
-          <div class="card bg-white shadow-sm p-4">
-            <h5 class="font-semibold mb-3 d-flex justify-content-between">
+          <div class="card bg-white shadow-sm p-4 dark:bg-dark-primary dark:border-dark-accent">
+            <h5 class="font-semibold mb-3 d-flex justify-content-between dark:text-dark-text">
               <span>Actividad Reciente</span>
-              <a href="#" class="text-sm">Ver todo</a>
+              <a href="busquedaFactura.html" class="text-sm dark:text-blue-400">Ver todo</a>
             </h5>
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2 border-0">
-                <div>
-                  <span class="bi bi-file-earmark-plus text-success me-2"></span>
-                  <span>Factura #F-001-000123 creada</span>
-                </div>
-                <span class="small text-gray-500">Hoy, 10:30</span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2 border-0">
-                <div>
-                  <span class="bi bi-box-seam text-primary me-2"></span>
-                  <span>Stock actualizado: Producto XYZ</span>
-                </div>
-                <span class="small text-gray-500">Hoy, 09:45</span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2 border-0">
-                <div>
-                  <span class="bi bi-truck text-info me-2"></span>
-                  <span>Compra registrada a Proveedor ABC</span>
-                </div>
-                <span class="small text-gray-500">Ayer, 16:20</span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2 border-0">
-                <div>
-                  <span class="bi bi-file-earmark-pdf text-danger me-2"></span>
-                  <span>Factura #F-001-000122 enviada</span>
-                </div>
-                <span class="small text-gray-500">Ayer, 14:15</span>
-              </li>
+            <ul class="list-group list-group-flush" id="activityContainer">
+              ${renderRecentActivity(recentInvoices)}
             </ul>
           </div>
         </div>
@@ -359,31 +463,31 @@
       <!-- Actions -->
       <div class="row g-3 mb-4">
         <div class="col-sm-6 col-md-3">
-          <button class="w-100 card p-4 text-center hover:bg-gray-50 border-0 shadow-sm rounded card-hover" id="newInvoiceBtn">
+          <button class="w-100 card p-4 text-center hover:bg-gray-50 border-0 shadow-sm rounded card-hover dark:bg-dark-primary dark:border-dark-accent dark:hover:bg-dark-accent" onclick="window.location.href='busquedaFactura.html'">
             <span class="bi bi-receipt-cutoff text-2xl d-block mb-2 text-primary"></span>
-            <p class="font-semibold mb-0">Nueva Factura</p>
-            <small class="text-gray-500">Crear Factura</small>
+            <p class="font-semibold mb-0 dark:text-dark-text">Nueva Factura</p>
+            <small class="text-gray-500 dark:text-gray-400">Crear Factura</small>
           </button>
         </div>
         <div class="col-sm-6 col-md-3">
-          <button class="w-100 card p-4 text-center hover:bg-gray-50 border-0 shadow-sm rounded card-hover" id="searchStockBtn">
+          <button class="w-100 card p-4 text-center hover:bg-gray-50 border-0 shadow-sm rounded card-hover dark:bg-dark-primary dark:border-dark-accent dark:hover:bg-dark-accent" onclick="window.location.href='busquedaInventario.html'">
             <span class="bi bi-search text-2xl d-block mb-2 text-success"></span>
-            <p class="font-semibold mb-0">Consultar Stock</p>
-            <small class="text-gray-500">Ver Inventario</small>
+            <p class="font-semibold mb-0 dark:text-dark-text">Consultar Stock</p>
+            <small class="text-gray-500 dark:text-gray-400">Ver Inventario</small>
           </button>
         </div>
         <div class="col-sm-6 col-md-3">
-          <button class="w-100 card p-4 text-center hover:bg-gray-50 border-0 shadow-sm rounded card-hover" id="viewReportsBtn">
+          <button class="w-100 card p-4 text-center hover:bg-gray-50 border-0 shadow-sm rounded card-hover dark:bg-dark-primary dark:border-dark-accent dark:hover:bg-dark-accent" onclick="window.location.href='busquedaFactura.html?view=reports'">
             <span class="bi bi-graph-up text-2xl d-block mb-2 text-info"></span>
-            <p class="font-semibold mb-0">Ver Reporte</p>
-            <small class="text-gray-500">Análisis Ventas</small>
+            <p class="font-semibold mb-0 dark:text-dark-text">Ver Reporte</p>
+            <small class="text-gray-500 dark:text-gray-400">Análisis Ventas</small>
           </button>
         </div>
         <div class="col-sm-6 col-md-3">
-          <button class="w-100 card p-4 text-center hover:bg-gray-50 border-0 shadow-sm rounded card-hover" id="addProductBtn">
+          <button class="w-100 card p-4 text-center hover:bg-gray-50 border-0 shadow-sm rounded card-hover dark:bg-dark-primary dark:border-dark-accent dark:hover:bg-dark-accent" onclick="window.location.href='busquedaInventario.html?action=add'">
             <span class="bi bi-plus-circle text-2xl d-block mb-2 text-warning"></span>
-            <p class="font-semibold mb-0">Agregar Producto</p>
-            <small class="text-gray-500">Nuevo Producto</small>
+            <p class="font-semibold mb-0 dark:text-dark-text">Agregar Producto</p>
+            <small class="text-gray-500 dark:text-gray-400">Nuevo Producto</small>
           </button>
         </div>
       </div>
@@ -391,219 +495,156 @@
       <!-- Data Sections -->
       <div class="row g-4">
         <div class="col-lg-6">
-          <div class="card bg-white shadow-sm p-4">
+          <div class="card bg-white shadow-sm p-4 dark:bg-dark-primary dark:border-dark-accent">
             <div class="d-flex justify-content-between align-items-center mb-3">
-              <h5 class="font-semibold mb-0">Productos más vendidos</h5>
-              <a href="#" class="small">Ver reporte completo</a>
+              <h5 class="font-semibold mb-0 dark:text-dark-text">Productos con stock bajo</h5>
+              <a href="busquedaInventario.html?sort=stock" class="text-sm dark:text-blue-400">Ver todo</a>
             </div>
             <ul class="list-group list-group-flush">
-              <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-0">
-                <div>
-                  <span>Producto A</span>
-                  <span class="badge bg-primary ms-2">SKU: PRD-001</span>
-                </div>
-                <div>
-                  <span class="font-semibold">125 unidades</span>
-                  <span class="badge bg-success ms-2">+12%</span>
-                </div>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-0">
-                <div>
-                  <span>Producto B</span>
-                  <span class="badge bg-primary ms-2">SKU: PRD-045</span>
-                </div>
-                <div>
-                  <span class="font-semibold">110 unidades</span>
-                  <span class="badge bg-success ms-2">+8%</span>
-                </div>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-0">
-                <div>
-                  <span>Producto C</span>
-                  <span class="badge bg-primary ms-2">SKU: PRD-023</span>
-                </div>
-                <div>
-                  <span class="font-semibold">95 unidades</span>
-                  <span class="badge bg-danger ms-2">-3%</span>
-                </div>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-0">
-                <div>
-                  <span>Producto D</span>
-                  <span class="badge bg-primary ms-2">SKU: PRD-087</span>
-                </div>
-                <div>
-                  <span class="font-semibold">80 unidades</span>
-                  <span class="badge bg-success ms-2">+15%</span>
-                </div>
-              </li>
+              ${renderLowStockProducts(lowStockProducts)}
             </ul>
           </div>
         </div>
         
         <div class="col-lg-6">
-          <div class="card bg-white shadow-sm p-4">
+          <div class="card bg-white shadow-sm p-4 dark:bg-dark-primary dark:border-dark-accent">
             <div class="d-flex justify-content-between align-items-center mb-3">
-              <h5 class="font-semibold mb-0">Stock más bajo</h5>
-              <a href="#" class="small">Ver todo</a>
+              <h5 class="font-semibold mb-0 dark:text-dark-text">Últimas Facturas</h5>
+              <a href="busquedaFactura.html" class="text-sm dark:text-blue-400">Ver todas</a>
             </div>
             <ul class="list-group list-group-flush">
-              <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-0">
-                <div>
-                  <span class="bi bi-exclamation-triangle-fill text-red-500 me-2"></span>
-                  <span>Producto X</span>
-                </div>
-                <div>
-                  <span class="font-semibold text-danger">2 unidades</span>
-                  <span class="ms-2 small text-gray-500">Mín: 10</span>
-                </div>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-0">
-                <div>
-                  <span class="bi bi-exclamation-triangle-fill text-red-500 me-2"></span>
-                  <span>Producto Y</span>
-                </div>
-                <div>
-                  <span class="font-semibold text-danger">1 unidad</span>
-                  <span class="ms-2 small text-gray-500">Mín: 5</span>
-                </div>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-0">
-                <div>
-                  <span class="bi bi-exclamation-circle-fill text-yellow-500 me-2"></span>
-                  <span>Producto Z</span>
-                </div>
-                <div>
-                  <span class="font-semibold text-warning">8 unidades</span>
-                  <span class="ms-2 small text-gray-500">Mín: 15</span>
-                </div>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-0">
-                <div>
-                  <span class="bi bi-exclamation-circle-fill text-yellow-500 me-2"></span>
-                  <span>Producto W</span>
-                </div>
-                <div>
-                  <span class="font-semibold text-warning">12 unidades</span>
-                  <span class="ms-2 small text-gray-500">Mín: 20</span>
-                </div>
-              </li>
+              ${renderRecentInvoices(recentInvoices)}
             </ul>
           </div>
         </div>
       </div>
-    </main>
-  </div>
+    `;
+  }
 
-  <!-- Footer fijo abajo -->
-  <footer class="bg-white text-center py-3 text-sm text-gray-500 mt-auto shadow-t">
-    © 2025 Sistema de Inventario y Facturación. Cumple con normativas tributarias Ecuador. 
-    <a href="#" class="text-blue-500">Política de Privacidad</a> | 
-    <a href="#" class="text-blue-500">Términos de Uso</a> | 
-    <a href="#" class="text-blue-500">Ayuda</a>
-  </footer>
+  // Funciones de renderizado auxiliares
+  function renderAlerts(lowStockProducts) {
+    const criticalProducts = lowStockProducts.filter(p => p.stock < (p.minStock * 0.5));
+    const warningProducts = lowStockProducts.filter(p => p.stock >= (p.minStock * 0.5) && p.stock < p.minStock);
+    
+    let html = '';
+    
+    if (criticalProducts.length > 0) {
+      html += `
+        <li class="d-flex align-items-start gap-3 urgent-alert">
+          <span class="bi bi-exclamation-triangle-fill text-red-500 fs-4"></span>
+          <div>
+            <p class="font-semibold mb-1 dark:text-dark-text">Stock Crítico</p>
+            <p class="text-gray-500 small dark:text-gray-400">${criticalProducts.length} productos requieren reposición inmediata</p>
+            <div class="mt-1">
+              ${criticalProducts.slice(0, 3).map(p => 
+                `<span class="badge bg-danger me-1 mb-1">${p.name}: ${p.stock} unidades</span>`
+              ).join('')}
+            </div>
+          </div>
+        </li>
+      `;
+    }
+    
+    if (warningProducts.length > 0) {
+      html += `
+        <li class="d-flex align-items-start gap-3">
+          <span class="bi bi-exclamation-circle-fill text-yellow-500 fs-4"></span>
+          <div>
+            <p class="font-semibold mb-1 dark:text-dark-text">Stock Bajo</p>
+            <p class="text-gray-500 small dark:text-gray-400">${warningProducts.length} productos cerca del límite mínimo</p>
+            <div class="mt-1">
+              ${warningProducts.slice(0, 3).map(p => 
+                `<span class="badge bg-warning text-dark me-1 mb-1">${p.name}: ${p.stock}/${p.minStock}</span>`
+              ).join('')}
+            </div>
+          </div>
+        </li>
+      `;
+    }
+    
+    return html || '<li class="text-gray-500 dark:text-gray-400">No hay alertas importantes</li>';
+  }
 
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  function renderRecentActivity(invoices) {
+    if (invoices.length === 0) {
+      return '<li class="text-gray-500 dark:text-gray-400">No hay actividad reciente</li>';
+    }
+    
+    return invoices.slice(0, 4).map(invoice => `
+      <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2 border-0 dark:bg-dark-primary dark:border-dark-accent">
+        <div class="dark:text-dark-text">
+          <span class="bi bi-file-earmark-plus text-success me-2"></span>
+          <span>Factura ${invoice.invoiceNumber}</span>
+        </div>
+        <span class="small text-gray-500 dark:text-gray-400">${formatDate(invoice.issueDate)}</span>
+      </li>
+    `).join('');
+  }
 
-  <script>
-    // Control de tema oscuro/claro
-    const themeToggle = document.getElementById('themeToggle');
-    const themeIcon = document.getElementById('themeIcon');
-    const htmlElement = document.documentElement;
-    
-    // Comprobar si hay preferencia guardada
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-      enableDarkMode();
+  function renderLowStockProducts(products) {
+    if (products.length === 0) {
+      return '<li class="text-gray-500 dark:text-gray-400">No hay productos con stock bajo</li>';
     }
     
-    // Manejar el clic en el botón de tema
-    themeToggle.addEventListener('click', () => {
-      if (htmlElement.classList.contains('dark')) {
-        disableDarkMode();
-      } else {
-        enableDarkMode();
-      }
-    });
-    
-    function enableDarkMode() {
-      htmlElement.classList.add('dark');
-      themeIcon.classList.remove('bi-moon');
-      themeIcon.classList.add('bi-sun');
-      localStorage.setItem('theme', 'dark');
+    return products.slice(0, 4).map(product => `
+      <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-0 dark:bg-dark-primary dark:border-dark-accent">
+        <div>
+          <span class="bi ${product.stock < (product.minStock * 0.5) ? 
+            'bi-exclamation-triangle-fill text-red-500' : 
+            'bi-exclamation-circle-fill text-yellow-500'} me-2"></span>
+          <span class="dark:text-dark-text">${product.name}</span>
+        </div>
+        <div>
+          <span class="font-semibold ${product.stock < (product.minStock * 0.5) ? 
+            'text-danger' : 'text-warning'}">${product.stock} unidades</span>
+          <span class="ms-2 small text-gray-500 dark:text-gray-400">Mín: ${product.minStock}</span>
+        </div>
+      </li>
+    `).join('');
+  }
+
+  function renderRecentInvoices(invoices) {
+    if (invoices.length === 0) {
+      return '<li class="text-gray-500 dark:text-gray-400">No hay facturas recientes</li>';
     }
     
-    function disableDarkMode() {
-      htmlElement.classList.remove('dark');
-      themeIcon.classList.remove('bi-sun');
-      themeIcon.classList.add('bi-moon');
-      localStorage.setItem('theme', 'light');
+    return invoices.slice(0, 4).map(invoice => `
+      <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-0 dark:bg-dark-primary dark:border-dark-accent">
+        <div>
+          <span class="dark:text-dark-text">${invoice.invoiceNumber}</span>
+          <span class="badge bg-primary ms-2">${formatMoney(invoice.total)}</span>
+        </div>
+        <div>
+          <span class="small text-gray-500 dark:text-gray-400">${formatDate(invoice.issueDate)}</span>
+        </div>
+      </li>
+    `).join('');
+  }
+
+  // Inicialización
+  document.addEventListener('DOMContentLoaded', () => {
+    // Configurar menú móvil
+    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+    if (mobileMenuToggle) {
+      mobileMenuToggle.addEventListener('click', () => {
+        document.querySelector('.sidebar').classList.toggle('show');
+      });
     }
     
-    // Animación al cambiar el tema
-    themeToggle.addEventListener('click', function() {
-      this.classList.add('animate-pulse');
-      setTimeout(() => {
-        this.classList.remove('animate-pulse');
-      }, 300);
+    // Configurar botones de logout
+    document.querySelectorAll('[id^="logoutButton"]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        localStorage.removeItem('authToken');
+        window.location.href = 'inicioSesion.html';
+      });
     });
     
-    // Botones de acción
-    document.getElementById('newInvoiceBtn').addEventListener('click', function() {
-      alert('Redirigiendo a creación de nueva factura...');
-      // window.location.href = 'nueva-factura.html';
-    });
+    // Cargar datos iniciales
+    loadDashboardData();
     
-    document.getElementById('searchStockBtn').addEventListener('click', function() {
-      alert('Redirigiendo a búsqueda de inventario...');
-      // window.location.href = 'busquedaInventario.html';
-    });
-    
-    document.getElementById('viewReportsBtn').addEventListener('click', function() {
-      alert('Redirigiendo a reportes...');
-      // window.location.href = 'reportes.html';
-    });
-    
-    document.getElementById('addProductBtn').addEventListener('click', function() {
-      alert('Redirigiendo a agregar producto...');
-      // window.location.href = 'agregar-producto.html';
-    });
-    
-    // Botones de logout
-    document.getElementById('logoutButton').addEventListener('click', function() {
-      alert('Sesión cerrada. Redirigiendo a login...');
-      window.location.href = 'inicioSesion.html';
-    });
-    
-    document.getElementById('logoutButtonMobile').addEventListener('click', function() {
-      alert('Sesión cerrada. Redirigiendo a login...');
-      window.location.href = 'inicioSesion.html';
-    });
-    
-    // Menú móvil
-    document.getElementById('mobileMenuToggle').addEventListener('click', function() {
-      const mobileMenu = new bootstrap.Offcanvas(document.getElementById('mobileMenu'));
-      mobileMenu.show();
-    });
-    
-    // Simular datos dinámicos
-    function updateClock() {
-      const now = new Date();
-      const options = { 
-        weekday: 'long', 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-      };
-      document.getElementById('currentDateTime').textContent = now.toLocaleDateString('es-ES', options);
-    }
-    
-    setInterval(updateClock, 1000);
-    updateClock();
-  </script>
+    // Actualizar cada 5 minutos
+    setInterval(loadDashboardData, 5 * 60 * 1000);
+  });
+</script>
 </body>
 </html>

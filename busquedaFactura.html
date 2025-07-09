@@ -303,87 +303,110 @@
             </a>
           </div>
 
-          <!-- Filtros avanzados -->
-          <section class="bg-gray-100 p-4 rounded mb-4 mt-4 dark:bg-dark-secondary">
-            <h3 class="font-semibold mb-3 dark:text-dark-text">Filtros de Búsqueda Avanzada</h3>
-            <div class="row g-3">
-              <div class="col-md-4">
-                <label for="busqueda" class="form-label dark:text-gray-300">Búsqueda por nombre, código o RUC</label>
-                <input id="busqueda" type="text" class="form-control" placeholder="Buscar...">
+          <!-- Bloque de Búsqueda -->
+          <div class="card mb-4 dark:bg-dark-secondary dark:border-gray-700">
+            <div class="card-body">
+              <div class="row g-3">
+                <!-- Búsqueda general -->
+                <div class="col-md-4">
+                  <label for="searchInput" class="form-label dark:text-gray-300">Buscar</label>
+                  <div class="input-group">
+                    <input type="text" class="form-control dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
+                           id="searchInput" placeholder="N° factura, cliente...">
+                    <button class="btn btn-outline-secondary dark:border-gray-600 dark:text-gray-300" 
+                            type="button" id="searchBtn">
+                      <i class="bi bi-search"></i>
+                    </button>
+                  </div>
+                </div>
+                
+                <!-- Filtro por estado -->
+                <div class="col-md-3">
+                  <label for="statusFilter" class="form-label dark:text-gray-300">Estado</label>
+                  <select class="form-select dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
+                          id="statusFilter">
+                    <option value="">Todos</option>
+                    <option value="paid">Pagadas</option>
+                    <option value="pending">Pendientes</option>
+                    <option value="cancelled">Anuladas</option>
+                  </select>
+                </div>
+                
+                <!-- Filtro por fecha -->
+                <div class="col-md-3">
+                  <label for="dateFilter" class="form-label dark:text-gray-300">Fecha</label>
+                  <input type="date" class="form-control dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
+                         id="dateFilter">
+                </div>
+                
+                <!-- Botón de limpiar -->
+                <div class="col-md-2 d-flex align-items-end">
+                  <button class="btn btn-outline-danger w-100 dark:border-gray-600 dark:text-gray-300" 
+                          id="clearFiltersBtn">
+                    <i class="bi bi-arrow-counterclockwise me-1"></i> Limpiar
+                  </button>
+                </div>
               </div>
-              <div class="col-md-3">
-                <label for="estado" class="form-label dark:text-gray-300">Estado</label>
-                <select id="estado" class="form-control">
-                  <option value="">Todos</option>
-                  <option>Pagado</option>
-                  <option>Pendiente</option>
-                  <option>Anulado</option>
-                </select>
+              
+              <!-- Filtros avanzados (ocultos inicialmente) -->
+              <div class="row g-3 mt-2" id="advancedFilters" style="display: none;">
+                <div class="col-md-4">
+                  <label for="minAmount" class="form-label dark:text-gray-300">Monto mínimo</label>
+                  <input type="number" class="form-control dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
+                         id="minAmount" placeholder="0.00" step="0.01">
+                </div>
+                
+                <div class="col-md-4">
+                  <label for="maxAmount" class="form-label dark:text-gray-300">Monto máximo</label>
+                  <input type="number" class="form-control dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
+                         id="maxAmount" placeholder="0.00" step="0.01">
+                </div>
+                
+                <div class="col-md-4">
+                  <label for="paymentMethod" class="form-label dark:text-gray-300">Método de pago</label>
+                  <select class="form-select dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
+                          id="paymentMethod">
+                    <option value="">Todos</option>
+                    <option value="cash">Efectivo</option>
+                    <option value="credit_card">Tarjeta de Crédito</option>
+                    <option value="transfer">Transferencia</option>
+                    <option value="check">Cheque</option>
+                  </select>
+                </div>
               </div>
-              <div class="col-md-3">
-                <label for="fechaEmision" class="form-label dark:text-gray-300">Fecha de Emisión</label>
-                <input id="fechaEmision" type="date" class="form-control">
-              </div>
-              <div class="col-md-2 d-flex align-items-end">
-                <button class="btn btn-dark w-100" id="applyFilters">
-                  <i class="bi bi-funnel me-1"></i> Filtrar
+              
+              <!-- Botón para mostrar/ocultar filtros avanzados -->
+              <div class="text-end mt-2">
+                <button class="btn btn-link btn-sm p-0 text-decoration-none" id="toggleAdvancedFilters">
+                  <i class="bi bi-chevron-down me-1"></i> Filtros avanzados
                 </button>
               </div>
             </div>
-            
-            <div class="row g-3 mt-2">
-              <div class="col-md-3">
-                <label for="minAmount" class="form-label dark:text-gray-300">Monto Mínimo</label>
-                <input id="minAmount" type="number" class="form-control" placeholder="$0.00">
-              </div>
-              <div class="col-md-3">
-                <label for="maxAmount" class="form-label dark:text-gray-300">Monto Máximo</label>
-                <input id="maxAmount" type="number" class="form-control" placeholder="$10,000.00">
-              </div>
-              <div class="col-md-3">
-                <label for="paymentMethod" class="form-label dark:text-gray-300">Forma de Pago</label>
-                <select id="paymentMethod" class="form-control">
-                  <option value="">Todas</option>
-                  <option>Efectivo</option>
-                  <option>Tarjeta</option>
-                  <option>Transferencia</option>
-                </select>
-              </div>
-              <div class="col-md-3">
-                <label for="invoiceType" class="form-label dark:text-gray-300">Tipo de Factura</label>
-                <select id="invoiceType" class="form-control">
-                  <option value="">Todos</option>
-                  <option>Electrónica</option>
-                  <option>Física</option>
-                  <option>Exportación</option>
-                </select>
-              </div>
-            </div>
-          </section>
+          </div>
 
           <!-- Resumen estadístico -->
           <section class="row text-center mb-4">
             <div class="col-md-3 mb-2">
               <div class="bg-white p-3 rounded shadow border border-gray-200 dark:bg-dark-secondary dark:border-gray-700">
-                <p class="fw-bold fs-4 dark:text-gray-300">49</p>
+                <p class="fw-bold fs-4 dark:text-gray-300" id="totalInvoices">0</p>
                 <p class="text-gray-500 dark:text-gray-400">Total Facturas</p>
               </div>
             </div>
             <div class="col-md-3 mb-2">
               <div class="bg-white p-3 rounded shadow border border-gray-200 dark:bg-dark-secondary dark:border-gray-700">
-                <p class="fw-bold fs-4 text-green-600 dark:text-green-400">45</p>
+                <p class="fw-bold fs-4 text-green-600 dark:text-green-400" id="paidInvoices">0</p>
                 <p class="text-gray-500 dark:text-gray-400">Facturas Pagadas</p>
               </div>
             </div>
             <div class="col-md-3 mb-2">
               <div class="bg-white p-3 rounded shadow border border-gray-200 dark:bg-dark-secondary dark:border-gray-700">
-                <p class="fw-bold fs-4 text-yellow-600 dark:text-yellow-400">1</p>
+                <p class="fw-bold fs-4 text-yellow-600 dark:text-yellow-400" id="pendingInvoices">0</p>
                 <p class="text-gray-500 dark:text-gray-400">Facturas Pendientes</p>
               </div>
             </div>
             <div class="col-md-3 mb-2">
               <div class="bg-white p-3 rounded shadow border border-gray-200 dark:bg-dark-secondary dark:border-gray-700">
-                <p class="fw-bold fs-4 text-red-600 dark:text-red-400">3</p>
+                <p class="fw-bold fs-4 text-red-600 dark:text-red-400" id="cancelledInvoices">0</p>
                 <p class="text-gray-500 dark:text-gray-400">Facturas Anuladas</p>
               </div>
             </div>
@@ -402,175 +425,27 @@
                   <th class="dark:text-dark-text">OPCIONES</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td>FAC-001-000123</td>
-                  <td>15/10/2023</td>
-                  <td>Alexander Rodríguez (1712345678)</td>
-                  <td>$1,245.00</td>
-                  <td><span class="badge bg-success">Pagado</span></td>
-                  <td>
-                    <div class="d-flex gap-2">
-                      <button class="btn btn-outline-secondary btn-sm preview-btn" title="Vista previa" data-id="1">
-                        <i class="bi bi-eye"></i>
-                      </button>
-                      <button class="btn btn-outline-success btn-sm send-btn" title="Enviar" data-id="1">
-                        <i class="bi bi-send"></i>
-                      </button>
-                      <button class="btn btn-outline-primary btn-sm download-btn" title="Descargar">
-                        <i class="bi bi-download"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>FAC-001-000124</td>
-                  <td>18/10/2023</td>
-                  <td>María González (1712345679)</td>
-                  <td>$890.50</td>
-                  <td><span class="badge bg-success">Pagado</span></td>
-                  <td>
-                    <div class="d-flex gap-2">
-                      <button class="btn btn-outline-secondary btn-sm preview-btn" title="Vista previa" data-id="2">
-                        <i class="bi bi-eye"></i>
-                      </button>
-                      <button class="btn btn-outline-success btn-sm send-btn" title="Enviar" data-id="2">
-                        <i class="bi bi-send"></i>
-                      </button>
-                      <button class="btn btn-outline-primary btn-sm download-btn" title="Descargar">
-                        <i class="bi bi-download"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>FAC-001-000125</td>
-                  <td>20/10/2023</td>
-                  <td>Carlos Martínez (1712345680)</td>
-                  <td>$2,150.00</td>
-                  <td><span class="badge bg-warning">Pendiente</span></td>
-                  <td>
-                    <div class="d-flex gap-2">
-                      <button class="btn btn-outline-secondary btn-sm preview-btn" title="Vista previa" data-id="3">
-                        <i class="bi bi-eye"></i>
-                      </button>
-                      <button class="btn btn-outline-success btn-sm send-btn" title="Enviar" data-id="3">
-                        <i class="bi bi-send"></i>
-                      </button>
-                      <button class="btn btn-outline-primary btn-sm download-btn" title="Descargar">
-                        <i class="bi bi-download"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>FAC-001-000126</td>
-                  <td>22/10/2023</td>
-                  <td>Laura Fernández (1712345681)</td>
-                  <td>$560.75</td>
-                  <td><span class="badge bg-success">Pagado</span></td>
-                  <td>
-                    <div class="d-flex gap-2">
-                      <button class="btn btn-outline-secondary btn-sm preview-btn" title="Vista previa" data-id="4">
-                        <i class="bi bi-eye"></i>
-                      </button>
-                      <button class="btn btn-outline-success btn-sm send-btn" title="Enviar" data-id="4">
-                        <i class="bi bi-send"></i>
-                      </button>
-                      <button class="btn btn-outline-primary btn-sm download-btn" title="Descargar">
-                        <i class="bi bi-download"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>FAC-001-000127</td>
-                  <td>25/10/2023</td>
-                  <td>Jorge López (1712345682)</td>
-                  <td>$3,420.00</td>
-                  <td><span class="badge bg-danger">Anulado</span></td>
-                  <td>
-                    <div class="d-flex gap-2">
-                      <button class="btn btn-outline-secondary btn-sm preview-btn" title="Vista previa" data-id="5">
-                        <i class="bi bi-eye"></i>
-                      </button>
-                      <button class="btn btn-outline-success btn-sm send-btn" title="Enviar" data-id="5">
-                        <i class="bi bi-send"></i>
-                      </button>
-                      <button class="btn btn-outline-primary btn-sm download-btn" title="Descargar">
-                        <i class="bi bi-download"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
+              <tbody id="invoicesTableBody">
+                <!-- Las facturas se cargarán dinámicamente aquí -->
               </tbody>
             </table>
             
             <!-- Paginación -->
             <nav class="d-flex justify-content-between mt-4">
-              <div class="text-gray-500 dark:text-gray-400">
-                Mostrando 1-5 de 49 facturas
+              <div class="text-gray-500 dark:text-gray-400" id="invoiceCount">
+                Mostrando 0 de 0 facturas
               </div>
-              <ul class="pagination">
-                <li class="page-item disabled"><a class="page-link" href="#">Anterior</a></li>
-                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
+              <ul class="pagination" id="pagination">
+                <li class="page-item disabled"><a class="page-link" href="#" id="prevPage">Anterior</a></li>
+                <li class="page-item active"><a class="page-link" href="#" data-page="1">1</a></li>
+                <li class="page-item"><a class="page-link" href="#" data-page="2">2</a></li>
+                <li class="page-item"><a class="page-link" href="#" data-page="3">3</a></li>
                 <li class="page-item"><a class="page-link" href="#">...</a></li>
-                <li class="page-item"><a class="page-link" href="#">10</a></li>
-                <li class="page-item"><a class="page-link" href="#">Siguiente</a></li>
+                <li class="page-item"><a class="page-link" href="#" data-page="10">10</a></li>
+                <li class="page-item"><a class="page-link" href="#" id="nextPage">Siguiente</a></li>
               </ul>
             </nav>
           </section>
-
-          <!-- Registro de actividades -->
-          <div class="card bg-white shadow rounded dark:bg-dark-primary mt-4">
-            <div class="card-header dark:bg-dark-secondary">
-              <h5 class="card-title mb-0 dark:text-dark-text">Registro de Actividades</h5>
-            </div>
-            <div class="card-body action-log">
-              <div class="d-flex mb-3">
-                <div class="flex-shrink-0 me-3">
-                  <i class="bi bi-eye-fill text-info"></i>
-                </div>
-                <div>
-                  <div class="fw-bold dark:text-gray-300">Vista previa de factura</div>
-                  <div class="text-muted small dark:text-gray-400">FAC-001-000123 - Visualizada por María Andrade</div>
-                  <div class="text-muted small dark:text-gray-400">Hoy, 10:23 AM</div>
-                </div>
-              </div>
-              <div class="d-flex mb-3">
-                <div class="flex-shrink-0 me-3">
-                  <i class="bi bi-send-fill text-success"></i>
-                </div>
-                <div>
-                  <div class="fw-bold dark:text-gray-300">Factura enviada</div>
-                  <div class="text-muted small dark:text-gray-400">FAC-001-000124 - Enviada a María González</div>
-                  <div class="text-muted small dark:text-gray-400">Hoy, 9:45 AM</div>
-                </div>
-              </div>
-              <div class="d-flex mb-3">
-                <div class="flex-shrink-0 me-3">
-                  <i class="bi bi-file-earmark-pdf text-danger"></i>
-                </div>
-                <div>
-                  <div class="fw-bold dark:text-gray-300">Factura descargada</div>
-                  <div class="text-muted small dark:text-gray-400">FAC-001-000125 - Descargada por Carlos Martínez</div>
-                  <div class="text-muted small dark:text-gray-400">Ayer, 4:45 PM</div>
-                </div>
-              </div>
-              <div class="d-flex">
-                <div class="flex-shrink-0 me-3">
-                  <i class="bi bi-receipt text-primary"></i>
-                </div>
-                <div>
-                  <div class="fw-bold dark:text-gray-300">Nueva factura creada</div>
-                  <div class="text-muted small dark:text-gray-400">FAC-001-000128 - Creada por María Andrade</div>
-                  <div class="text-muted small dark:text-gray-400">Ayer, 11:30 AM</div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </main>
     </div>
@@ -606,8 +481,8 @@
                 <p><strong class="dark:text-dark-text">Fecha Emisión:</strong> <span id="previewDate" class="dark:text-gray-300">01/07/2025</span></p>
               </div>
               <div>
-                <p><strong class="dark:text-dark-text">Cliente:</strong> <span class="dark:text-gray-300">Alexander Rodríguez</span></p>
-                <p><strong class="dark:text-dark-text">Identificación:</strong> <span class="dark:text-gray-300">1712345678</span></p>
+                <p><strong class="dark:text-dark-text">Cliente:</strong> <span id="previewClientName" class="dark:text-gray-300">Alexander Rodríguez</span></p>
+                <p><strong class="dark:text-dark-text">Identificación:</strong> <span id="previewClientId" class="dark:text-gray-300">1712345678</span></p>
               </div>
             </div>
             
@@ -622,35 +497,20 @@
                   <th class="border p-2 dark:border-gray-700 dark:text-dark-text">Total</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td class="border p-2 dark:border-gray-700 dark:text-gray-300">PRD001</td>
-                  <td class="border p-2 dark:border-gray-700 dark:text-gray-300">Laptop HP EliteBook</td>
-                  <td class="border p-2 text-center dark:border-gray-700 dark:text-gray-300">1</td>
-                  <td class="border p-2 text-right dark:border-gray-700 dark:text-gray-300">$850.00</td>
-                  <td class="border p-2 text-right dark:border-gray-700 dark:text-gray-300">12%</td>
-                  <td class="border p-2 text-right dark:border-gray-700 dark:text-gray-300">$952.00</td>
-                </tr>
-                <tr>
-                  <td class="border p-2 dark:border-gray-700 dark:text-gray-300">PRD002</td>
-                  <td class="border p-2 dark:border-gray-700 dark:text-gray-300">Mouse Inalámbrico</td>
-                  <td class="border p-2 text-center dark:border-gray-700 dark:text-gray-300">2</td>
-                  <td class="border p-2 text-right dark:border-gray-700 dark:text-gray-300">$19.99</td>
-                  <td class="border p-2 text-right dark:border-gray-700 dark:text-gray-300">12%</td>
-                  <td class="border p-2 text-right dark:border-gray-700 dark:text-gray-300">$44.78</td>
-                </tr>
+              <tbody id="previewItems">
+                <!-- Los items de la factura se cargarán aquí -->
               </tbody>
             </table>
             
             <div class="bg-gray-100 p-3 rounded w-1/2 ml-auto dark:bg-dark-primary">
               <div class="flex justify-between dark:text-gray-300">
-                <span>Subtotal:</span><span>$889.98</span>
+                <span>Subtotal:</span><span id="previewSubtotal">$0.00</span>
               </div>
               <div class="flex justify-between dark:text-gray-300">
-                <span>IVA (12%):</span><span>$106.80</span>
+                <span>IVA (12%):</span><span id="previewTax">$0.00</span>
               </div>
               <div class="flex justify-between font-bold mt-2 border-t pt-2 dark:border-gray-700 dark:text-gray-300">
-                <span>Total:</span><span>$996.78</span>
+                <span>Total:</span><span id="previewTotal">$0.00</span>
               </div>
             </div>
             
@@ -665,9 +525,6 @@
           <button type="button" class="btn btn-primary" id="generatePdfBtn">
             <i class="bi bi-file-earmark-pdf me-1"></i> Generar PDF
           </button>
-          <button type="button" class="btn btn-success" id="sendInvoiceBtn">
-            <i class="bi bi-send me-1"></i> Enviar al Cliente
-          </button>
         </div>
       </div>
     </div>
@@ -676,127 +533,423 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   
   <script>
-    // Control de tema oscuro/claro
-    const themeToggle = document.getElementById('themeToggle');
-    const themeIcon = document.getElementById('themeIcon');
-    const htmlElement = document.documentElement;
-    
-    // Comprobar si hay preferencia guardada
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-      enableDarkMode();
-    }
-    
-    // Manejar el clic en el botón de tema
-    themeToggle.addEventListener('click', () => {
-      if (htmlElement.classList.contains('dark')) {
-        disableDarkMode();
-      } else {
-        enableDarkMode();
-      }
-    });
-    
-    function enableDarkMode() {
-      htmlElement.classList.add('dark');
-      themeIcon.classList.remove('bi-moon');
-      themeIcon.classList.add('bi-sun');
-      localStorage.setItem('theme', 'dark');
-    }
-    
-    function disableDarkMode() {
-      htmlElement.classList.remove('dark');
-      themeIcon.classList.remove('bi-sun');
-      themeIcon.classList.add('bi-moon');
-      localStorage.setItem('theme', 'light');
-    }
-    
-    // Animación al cambiar el tema
-    themeToggle.addEventListener('click', function() {
-      this.classList.add('animate-pulse');
-      setTimeout(() => {
-        this.classList.remove('animate-pulse');
-      }, 300);
-    });
-    
-    // Funcionalidad de búsqueda
-    const searchInput = document.getElementById('busqueda');
-    const rows = document.querySelectorAll('tbody tr');
-    
-    searchInput.addEventListener('keyup', function() {
-      const searchTerm = this.value.toLowerCase();
-      
-      rows.forEach(row => {
-        const text = row.textContent.toLowerCase();
-        if (text.includes(searchTerm)) {
-          row.style.display = '';
-        } else {
-          row.style.display = 'none';
-        }
-      });
-    });
-    
-    // Vista previa de facturas
-    document.querySelectorAll('.preview-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        const invoiceId = this.getAttribute('data-id');
-        // Aquí normalmente cargaríamos los datos reales de la factura
-        document.getElementById('previewInvoiceNumber').textContent = `FAC-001-00012${invoiceId}`;
-        
-        const previewModal = new bootstrap.Modal(document.getElementById('previewModal'));
-        previewModal.show();
-      });
-    });
-    
-    // Generar PDF
-    document.getElementById('generatePdfBtn').addEventListener('click', function() {
-      alert('Generando factura en formato PDF...');
-      // Aquí iría la lógica real para generar el PDF
-    });
-    
-    // Enviar factura
-    document.getElementById('sendInvoiceBtn').addEventListener('click', function() {
-      alert('Factura enviada al cliente con éxito');
-      // Aquí iría la lógica para enviar la factura
-    });
-    
-    // Enviar desde la tabla
-    document.querySelectorAll('.send-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        const invoiceId = this.getAttribute('data-id');
-        alert(`Enviando factura FAC-001-00012${invoiceId} al cliente...`);
-        // Aquí iría la lógica para enviar la factura
-      });
-    });
-    
-    // Descargar factura
-    document.querySelectorAll('.download-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        alert('Descargando factura en formato PDF...');
-        // Aquí iría la lógica para descargar la factura
-      });
-    });
-    
-    // Aplicar filtros
-    document.getElementById('applyFilters').addEventListener('click', function() {
-      alert('Aplicando filtros...');
-      // Aquí iría la lógica para aplicar los filtros
-    });
-    
-    // Menú móvil
-    document.getElementById('mobileMenuToggle').addEventListener('click', function() {
-      const mobileMenu = new bootstrap.Offcanvas(document.getElementById('mobileMenu'));
-      mobileMenu.show();
-    });
-    
-    // Logout
-    document.getElementById('logoutButton').addEventListener('click', function() {
-      window.location.href = 'inicioSesion.html';
-    });
-    
-    document.getElementById('logoutButtonMobile').addEventListener('click', function() {
-      window.location.href = 'inicioSesion.html';
-    });
-  </script>
+    // Configuración inicial
+const API_BASE_URL = 'http://localhost:5000'; // Ajusta según tu endpoint
+let allInvoices = []; // Almacena todas las facturas
+let filteredInvoices = []; // Almacena facturas filtradas
+const invoicesPerPage = 10; // Facturas por página
+let currentPage = 1; // Página actual
+let isDarkMode = false; // Estado del tema
 
+// Inicialización al cargar la página
+document.addEventListener('DOMContentLoaded', function() {
+    initializeTheme();
+    setupEventListeners();
+    loadAllInvoices();
+});
+
+// ========== FUNCIONES PRINCIPALES ========== //
+
+// Carga todas las facturas desde la API
+async function loadAllInvoices() {
+    showLoading(true);
+    
+    try {
+        const response = await fetch(`${API_BASE_URL}/facturas`);
+        if (!response.ok) throw new Error(`Error HTTP: ${response.paymentStatus}`);
+        
+        const data = await response.json();
+        if (!Array.isArray(data)) throw new Error('Formato de datos inválido');
+        
+        allInvoices = data;
+        filteredInvoices = [...allInvoices];
+        
+        applyFilters();
+        updateStatistics();
+        
+    } catch (error) {
+        console.error('Error al cargar facturas:', error);
+        showError(error.message);
+    } finally {
+        showLoading(false);
+    }
+}
+
+// Aplica todos los filtros seleccionados
+function applyFilters() {
+    currentPage = 1; // Resetear a primera página
+    
+    // Obtener valores de los filtros
+    const searchText = document.getElementById('searchInput').value.toLowerCase();
+    const statusFilter = document.getElementById('statusFilter').value;
+    const dateFilter = document.getElementById('dateFilter').value;
+    const minAmount = parseFloat(document.getElementById('minAmount').value) || 0;
+    const maxAmount = parseFloat(document.getElementById('maxAmount').value) || Infinity;
+    const paymentMethod = document.getElementById('paymentMethod').value;
+
+    // Filtrar facturas
+    filteredInvoices = allInvoices.filter(invoice => {
+        // Filtro de búsqueda general
+        const matchesSearch = searchText === '' || 
+            (invoice.invoiceNumber?.toLowerCase().includes(searchText)) ||
+            (invoice.clientDetails?.name?.toLowerCase().includes(searchText)) ||
+            (invoice.client?.name?.toLowerCase().includes(searchText)) ||
+            (invoice.clientDetails?.identificationNumber?.includes(searchText)) ||
+            (invoice.client?.identificationNumber?.includes(searchText));
+        
+        // Filtro por estado
+        const matchesStatus = 
+            !statusFilter || 
+            (statusFilter === 'paid' && invoice.paymentStatus === 'paid') ||
+            (statusFilter === 'pending' && invoice.paymentStatus === 'pending') ||
+            (statusFilter === 'cancelled' && invoice.paymentStatus === 'cancelled');
+        
+        // Filtro por fecha
+        const invoiceDate = invoice.issueDate ? new Date(invoice.issueDate).toISOString().split('T')[0] : '';
+        const matchesDate = !dateFilter || invoiceDate === dateFilter;
+        
+        // Filtro por monto
+        const invoiceTotal = parseFloat(invoice.total) || 0;
+        const matchesAmount = invoiceTotal >= minAmount && invoiceTotal <= maxAmount;
+        
+        // Filtro por método de pago
+        const matchesPaymentMethod = 
+            !paymentMethod || 
+            (invoice.paymentMethod?.toLowerCase() === paymentMethod.toLowerCase());
+        
+        return matchesSearch && matchesStatus && matchesDate && matchesAmount && matchesPaymentMethod;
+    });
+
+    renderInvoices();
+    updateStatistics();
+}
+
+// Renderiza las facturas en la tabla
+function renderInvoices() {
+    const tbody = document.getElementById('invoicesTableBody');
+    const startIndex = (currentPage - 1) * invoicesPerPage;
+    const paginatedInvoices = filteredInvoices.slice(startIndex, startIndex + invoicesPerPage);
+    
+    if (paginatedInvoices.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4">No se encontraron facturas con los filtros actuales</td></tr>';
+        return;
+    }
+    
+    tbody.innerHTML = paginatedInvoices.map(invoice => {
+        const client = invoice.clientDetails || invoice.client || {};
+        const invoiceDate = invoice.issueDate ? new Date(invoice.issueDate) : new Date();
+        
+        return `
+            <tr>
+                <td>${invoice.invoiceNumber || 'N/A'}</td>
+                <td>${invoiceDate.toLocaleDateString('es-ES')}</td>
+                <td>${client.name || 'Cliente no especificado'} (${client.identificationNumber || 'N/A'})</td>
+                <td>$${(invoice.total || 0).toFixed(2)}</td>
+                <td>${getStatusBadge(invoice)}</td>
+                <td>${getActionButtons(invoice)}</td>
+            </tr>
+        `;
+    }).join('');
+    
+    updateInvoiceCount();
+    updatePagination();
+    setupActionButtons();
+}
+
+// ========== FUNCIONES DE UTILIDAD ========== //
+
+// Muestra/oculta el indicador de carga
+function showLoading(show) {
+    const loader = document.getElementById('loadingIndicator');
+    if (loader) loader.style.display = show ? 'block' : 'none';
+}
+
+// Muestra mensaje de error
+function showError(message) {
+    const tbody = document.getElementById('invoicesTableBody');
+    tbody.innerHTML = `<tr><td colspan="6" class="text-center text-danger py-4">${message}</td></tr>`;
+}
+
+// Devuelve el badge de estado HTML
+function getStatusBadge(invoice) {
+    if (invoice.paymentStatus === 'cancelled') {
+        return '<span class="badge bg-danger">Anulado</span>';
+    }
+    return invoice.paymentStatus === 'pending' 
+        ? '<span class="badge bg-warning">Pendiente</span>' 
+        : '<span class="badge bg-success">Pagado</span>';
+}
+
+// Devuelve los botones de acción HTML
+function getActionButtons(invoice) {
+    const buttons = [
+        `<button class="btn btn-outline-secondary btn-sm preview-btn" data-id="${invoice._id}" title="Vista previa">
+            <i class="bi bi-eye"></i>
+        </button>`,
+        `<button class="btn btn-outline-primary btn-sm download-btn" data-id="${invoice._id}" title="Descargar">
+            <i class="bi bi-download"></i>
+        </button>`
+    ];
+    
+    if (invoice.paymentStatus !== 'cancelled') {
+        buttons.push(
+            `<button class="btn btn-outline-danger btn-sm cancel-btn" data-id="${invoice._id}" title="Cancelar">
+                <i class="bi bi-x-circle"></i>
+            </button>`
+        );
+    }
+    
+    return `<div class="d-flex gap-2">${buttons.join('')}</div>`;
+}
+
+// Actualiza las estadísticas
+function updateStatistics() {
+    document.getElementById('totalInvoices').textContent = filteredInvoices.length;
+    document.getElementById('paidInvoices').textContent = 
+        filteredInvoices.filter(i => i.paymentStatus === 'void').length;
+    document.getElementById('pendingInvoices').textContent = 
+        filteredInvoices.filter(i => i.paymentStatus === 'pending').length;
+    document.getElementById('cancelledInvoices').textContent = 
+        filteredInvoices.filter(i => i.paymentStatus === 'cancelled').length;
+}
+
+// Actualiza el contador de facturas
+function updateInvoiceCount() {
+    const start = (currentPage - 1) * invoicesPerPage + 1;
+    const end = Math.min(currentPage * invoicesPerPage, filteredInvoices.length);
+    document.getElementById('invoiceCount').textContent = 
+        `Mostrando ${start}-${end} de ${filteredInvoices.length} facturas`;
+}
+
+// Actualiza la paginación
+function updatePagination() {
+    const totalPages = Math.ceil(filteredInvoices.length / invoicesPerPage);
+    const prevBtn = document.getElementById('prevPage');
+    const nextBtn = document.getElementById('nextPage');
+    
+    if (prevBtn) prevBtn.parentElement.classList.toggle('disabled', currentPage === 1);
+    if (nextBtn) nextBtn.parentElement.classList.toggle('disabled', currentPage >= totalPages);
+}
+
+// ========== MANEJO DE EVENTOS ========== //
+
+// Configura todos los event listeners
+function setupEventListeners() {
+    // Filtros
+    document.getElementById('searchInput').addEventListener('input', debounce(applyFilters, 300));
+    document.getElementById('statusFilter').addEventListener('change', applyFilters);
+    document.getElementById('dateFilter').addEventListener('change', applyFilters);
+    document.getElementById('minAmount').addEventListener('input', debounce(applyFilters, 300));
+    document.getElementById('maxAmount').addEventListener('input', debounce(applyFilters, 300));
+    document.getElementById('paymentMethod').addEventListener('change', applyFilters);
+    
+    // Botones
+    document.getElementById('clearFiltersBtn').addEventListener('click', clearFilters);
+    document.getElementById('toggleAdvancedFilters').addEventListener('click', toggleAdvancedFilters);
+    document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+    
+    // Paginación
+    document.getElementById('prevPage')?.addEventListener('click', goToPrevPage);
+    document.getElementById('nextPage')?.addEventListener('click', goToNextPage);
+}
+
+// Configura los botones de acción
+function setupActionButtons() {
+    document.querySelectorAll('.preview-btn').forEach(btn => {
+        btn.addEventListener('click', showInvoicePreview);
+    });
+    
+    document.querySelectorAll('.download-btn').forEach(btn => {
+        btn.addEventListener('click', downloadInvoice);
+    });
+    
+    document.querySelectorAll('.cancel-btn').forEach(btn => {
+        btn.addEventListener('click', cancelInvoice);
+    });
+}
+
+// ========== FUNCIONES DE ACCIÓN ========== //
+
+// Limpia todos los filtros
+function clearFilters() {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('statusFilter').value = '';
+    document.getElementById('dateFilter').value = '';
+    document.getElementById('minAmount').value = '';
+    document.getElementById('maxAmount').value = '';
+    document.getElementById('paymentMethod').value = '';
+    
+    applyFilters();
+}
+
+// Muestra/oculta filtros avanzados
+function toggleAdvancedFilters() {
+    const filters = document.getElementById('advancedFilters');
+    const icon = document.querySelector('#toggleAdvancedFilters i');
+    
+    if (filters.style.display === 'none') {
+        filters.style.display = 'block';
+        icon.classList.replace('bi-chevron-down', 'bi-chevron-up');
+    } else {
+        filters.style.display = 'none';
+        icon.classList.replace('bi-chevron-up', 'bi-chevron-down');
+    }
+}
+
+// Navegación entre páginas
+function goToPrevPage() {
+    if (currentPage > 1) {
+        currentPage--;
+        renderInvoices();
+    }
+}
+
+function goToNextPage() {
+    const totalPages = Math.ceil(filteredInvoices.length / invoicesPerPage);
+    if (currentPage < totalPages) {
+        currentPage++;
+        renderInvoices();
+    }
+}
+
+// ========== FUNCIONALIDADES DE FACTURAS ========== //
+
+// Muestra la vista previa de una factura
+async function showInvoicePreview(event) {
+    const invoiceId = event.currentTarget.getAttribute('data-id');
+    const invoice = allInvoices.find(i => i._id === invoiceId);
+    
+    if (!invoice) {
+        alert('Factura no encontrada');
+        return;
+    }
+    
+    // Configurar datos en el modal
+    document.getElementById('previewInvoiceNumber').textContent = invoice.invoiceNumber || 'N/A';
+    document.getElementById('previewDate').textContent = invoice.issueDate 
+        ? new Date(invoice.issueDate).toLocaleDateString('es-ES') 
+        : 'N/A';
+    
+    const client = invoice.clientDetails || invoice.client || {};
+    document.getElementById('previewClientName').textContent = client.name || 'Cliente no especificado';
+    document.getElementById('previewClientId').textContent = client.identificationNumber || 'N/A';
+    
+    // Configurar items
+    const itemsHtml = (invoice.items || []).map(item => `
+        <tr>
+            <td class="border p-2 dark:border-gray-700 dark:text-gray-300">${item.code || 'N/A'}</td>
+            <td class="border p-2 dark:border-gray-700 dark:text-gray-300">${item.name || 'Producto no especificado'}</td>
+            <td class="border p-2 text-center dark:border-gray-700 dark:text-gray-300">${item.quantity || 0}</td>
+            <td class="border p-2 text-right dark:border-gray-700 dark:text-gray-300">${(item.unitPrice || 0).toFixed(2)}</td>
+            <td class="border p-2 text-right dark:border-gray-700 dark:text-gray-300">12%</td>
+            <td class="border p-2 text-right dark:border-gray-700 dark:text-gray-300">${(item.subtotal || 0).toFixed(2)}</td>
+        </tr>
+    `).join('');
+    
+    document.getElementById('previewItems').innerHTML = itemsHtml;
+    
+    // Configurar totales
+    document.getElementById('previewSubtotal').textContent = `$${(invoice.subtotal || 0).toFixed(2)}`;
+    document.getElementById('previewTax').textContent = `$${(invoice.tax || 0).toFixed(2)}`;
+    document.getElementById('previewTotal').textContent = `$${(invoice.total || 0).toFixed(2)}`;
+    
+    // Mostrar modal
+    new bootstrap.Modal(document.getElementById('previewModal')).show();
+}
+
+// Descarga una factura como PDF
+async function downloadInvoice(event) {
+    const invoiceId = event.currentTarget.getAttribute('data-id');
+    
+    try {
+        const response = await fetch(`${API_BASE_URL}/facturas/${invoiceId}/pdf`);
+        if (!response.ok) throw new Error('Error al generar PDF');
+        
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `factura_${invoiceId}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        
+    } catch (error) {
+        console.error('Error al descargar factura:', error);
+        alert(`Error al descargar factura: ${error.message}`);
+    }
+}
+
+// Cancela una factura
+async function cancelInvoice(event) {
+    const invoiceId = event.currentTarget.getAttribute('data-id');
+    
+    if (!confirm('¿Está seguro que desea cancelar esta factura? Esta acción no se puede deshacer.')) {
+        return;
+    }
+    
+    try {
+        const response = await fetch(`${API_BASE_URL}/facturas/${invoiceId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                paymentStatus: 'cancelled'
+            })
+        });
+        
+        if (!response.ok) throw new Error('Error al cancelar factura');
+        
+        // Actualizar la factura localmente
+        const invoiceIndex = allInvoices.findIndex(i => i._id === invoiceId);
+        if (invoiceIndex !== -1) {
+            allInvoices[invoiceIndex].paymentStatus = 'cancelled';
+            applyFilters();
+        }
+        
+        alert('Factura cancelada exitosamente');
+        
+    } catch (error) {
+        console.error('Error al cancelar factura:', error);
+        alert(`Error al cancelar factura: ${error.message}`);
+    }
+}
+
+// ========== FUNCIONES ADICIONALES ========== //
+
+// Debounce para mejorar rendimiento en inputs
+function debounce(func, wait) {
+    let timeout;
+    return function() {
+        const context = this, args = arguments;
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(context, args), wait);
+    };
+}
+
+// Manejo del tema oscuro/claro
+function initializeTheme() {
+    isDarkMode = localStorage.getItem('theme') === 'dark';
+    updateTheme();
+}
+
+function toggleTheme() {
+    isDarkMode = !isDarkMode;
+    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+    updateTheme();
+}
+
+function updateTheme() {
+    if (isDarkMode) {
+        document.documentElement.classList.add('dark');
+        document.getElementById('themeIcon').classList.replace('bi-moon', 'bi-sun');
+    } else {
+        document.documentElement.classList.remove('dark');
+        document.getElementById('themeIcon').classList.replace('bi-sun', 'bi-moon');
+    }
+}
+  </script>
 </body>
 </html>

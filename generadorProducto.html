@@ -26,243 +26,125 @@
     }
   </script>
   <style>
-    html, body {
-      height: 100%;
-      margin: 0;
+    .sidebar {
+      transition: all 0.3s ease;
     }
-    
-    /* Estilos para modo oscuro */
-    .dark body {
-      background-color: #111827;
-      color: #e5e7eb;
-    }
-    
-    .dark .bg-white {
-      background-color: #1f2937 !important;
-    }
-    
-    .dark .bg-gray-100 {
-      background-color: #1f2937;
-    }
-    
-    .dark nav {
-      background-color: #1f2937;
-      border-right: 1px solid #374151;
-    }
-    
-    .dark input,
-    .dark select,
-    .dark textarea {
-      background-color: #374151;
-      border-color: #4b5563;
-      color: #f3f4f6;
-    }
-    
-    .dark input::placeholder {
-      color: #9ca3af;
-    }
-    
-    .dark table {
-      border-color: #4b5563;
-    }
-    
-    .dark th,
-    .dark td {
-      border-color: #4b5563;
-      background-color: #1f2937;
-    }
-    
-    .dark thead {
-      background-color: #111827 !important;
-    }
-    
-    .dark footer {
-      background-color: #1f2937;
-      border-top: 1px solid #374151;
-    }
-    
-    .dark .hover\:bg-gray-200:hover {
-      background-color: #374151 !important;
-    }
-    
-    .dark .text-gray-500 {
-      color: #9ca3af !important;
-    }
-    
-    .dark .text-gray-600 {
-      color: #d1d5db !important;
-    }
-    
-    .dark .form-control {
-      background-color: #374151;
-      border-color: #4b5563;
-      color: #f3f4f6;
-    }
-    
-    .dark .form-control::placeholder {
-      color: #9ca3af;
-    }
-    
-    .dark .btn-dark {
-      background-color: #4b5563;
-      border-color: #4b5563;
-      color: #f3f4f6;
-    }
-    
-    .dark .btn-dark:hover {
-      background-color: #374151;
-      border-color: #374151;
-    }
-    
-    .dark .card {
-      background-color: #1f2937;
-      border-color: #4b5563;
-    }
-    
-    .dark .bg-gray-100 {
-      background-color: #111827 !important;
-    }
-    
-    /* Botón de tema */
     .theme-switch {
-      position: absolute;
+      position: fixed;
       top: 20px;
       right: 20px;
-      z-index: 100;
-      background: rgba(255, 255, 255, 0.2);
+      z-index: 1000;
+      cursor: pointer;
+      background-color: #f8f9fa;
       border-radius: 50%;
       width: 40px;
       height: 40px;
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
-    
-    .dark .theme-switch {
-      background: rgba(31, 41, 55, 0.5);
-    }
-    
-    .theme-icon {
-      font-size: 1.2rem;
-      color: #333;
-      transition: all 0.3s ease;
-    }
-    
-    .dark .theme-icon {
-      color: #fbbf24;
-    }
-    
     .theme-switch:hover {
       transform: scale(1.1);
-      background: rgba(255, 255, 255, 0.3);
     }
-    
-    .dark .theme-switch:hover {
-      background: rgba(31, 41, 55, 0.7);
+    .dark .theme-switch {
+      background-color: #334155;
     }
-    
-    .animate-pulse {
-      animation: pulse 0.3s ease;
-    }
-    
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-      100% { transform: scale(1); }
-    }
-    
-    .role-badge {
-      font-size: 0.65rem;
-      padding: 0.15rem 0.4rem;
-      border-radius: 0.75rem;
-    }
-    
-    .mobile-menu {
-      display: none;
-    }
-    
-    @media (max-width: 768px) {
-      .sidebar {
-        display: none;
-      }
-      
-      .mobile-menu {
-        display: flex;
-      }
-      
-      .main-content {
-        padding: 1rem;
-        margin-left: 0;
-      }
-      
-      .responsive-table {
-        overflow-x: auto;
-      }
-    }
-    
-    .user-avatar {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: #3b82f6;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-    }
-    
-    .stock-low {
-      background-color: #fef3c7;
-      color: #92400e;
-    }
-    
-    .dark .stock-low {
-      background-color: #451a03;
-      color: #fbbf24;
-    }
-    
     .stock-critical {
-      background-color: #fee2e2;
-      color: #b91c1c;
+      background-color: #dc3545;
+      color: white;
     }
-    
-    .dark .stock-critical {
-      background-color: #7f1d1d;
-      color: #f87171;
+    .stock-low {
+      background-color: #ffc107;
+      color: black;
     }
-    
     .stock-ok {
-      background-color: #dcfce7;
-      color: #166534;
+      background-color: #28a745;
+      color: white;
     }
-    
-    .dark .stock-ok {
-      background-color: #14532d;
-      color: #4ade80;
-    }
-    
     .urgent-alert {
       animation: pulse 2s infinite;
     }
-    
     @keyframes pulse {
       0% { opacity: 1; }
       50% { opacity: 0.7; }
       100% { opacity: 1; }
     }
-    
-    .action-log {
-      max-height: 200px;
-      overflow-y: auto;
+    .user-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: #0d6efd;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    .dark .card {
+      background-color: #1e293b;
+      border-color: #334155;
+    }
+    .dark .card-header {
+      background-color: #334155;
+      border-color: #475569;
+    }
+    .dark .table {
+      color: #e2e8f0;
+    }
+    .dark .table-hover tbody tr:hover {
+      color: #e2e8f0;
+      background-color: #334155;
+    }
+    .dark .bg-white {
+      background-color: #1e293b !important;
+    }
+    .dark .bg-gray-100 {
+      background-color: #334155 !important;
+    }
+    .dark .form-control {
+      background-color: #334155;
+      border-color: #475569;
+      color: #e2e8f0;
+    }
+    .dark .form-control:focus {
+      background-color: #334155;
+      border-color: #6366f1;
+      color: #e2e8f0;
+      box-shadow: 0 0 0 0.25rem rgba(99, 102, 241, 0.25);
+    }
+    .dark .form-select {
+      background-color: #334155;
+      border-color: #475569;
+      color: #e2e8f0;
+    }
+    .dark .form-select:focus {
+      background-color: #334155;
+      border-color: #6366f1;
+      box-shadow: 0 0 0 0.25rem rgba(99, 102, 241, 0.25);
+    }
+    .dark .input-group-text {
+      background-color: #334155;
+      border-color: #475569;
+      color: #e2e8f0;
+    }
+    .dark .modal-content {
+      background-color: #1e293b;
+    }
+    .dark .modal-header {
+      border-bottom-color: #334155;
+    }
+    .dark .modal-footer {
+      border-top-color: #334155;
+    }
+    .dark .btn-close {
+      filter: invert(1);
     }
   </style>
 </head>
 
 <body class="bg-gray-100 flex flex-col min-h-screen dark:bg-gray-900">
-
   <!-- Botón de cambio de tema -->
   <div class="theme-switch" id="themeToggle" aria-label="Cambiar tema">
     <i class="bi bi-moon theme-icon" id="themeIcon"></i>
@@ -273,11 +155,11 @@
     <button class="btn btn-sm btn-outline-secondary" id="mobileMenuToggle">
       <i class="bi bi-list"></i>
     </button>
-    <h1 class="text-lg font-bold mb-0">Inventario</h1>
+    <h1 class="text-lg font-bold mb-0 dark:text-dark-text">Inventario</h1>
     <div class="d-flex align-items-center">
       <div class="user-avatar me-2">MA</div>
       <button class="btn btn-sm btn-outline-danger" id="logoutButtonMobile">
-       <a href="inicioSesion.html"> <i class="bi bi-box-arrow-right"></i></a>
+       <a href="inicioSesion.html" class="text-decoration-none"> <i class="bi bi-box-arrow-right"></i></a>
       </button>
     </div>
   </div>
@@ -290,10 +172,9 @@
     </div>
     <div class="offcanvas-body dark:bg-dark-secondary">
       <nav class="flex flex-col space-y-2" aria-label="Menú móvil">
-        <a href="index.html" class="text-left px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-dark-accent">Panel Principal</a>
-        <a href="busquedaFactura.html" class="text-left px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-dark-accent">Facturación</a>
-        <a href="busquedaInventario.html" class="text-left px-2 py-1 rounded bg-gray-100 font-semibold dark:bg-dark-accent">Inventario</a>
-
+        <a href="index.html" class="text-left px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-dark-accent dark:text-dark-text">Panel Principal</a>
+        <a href="busquedaFactura.html" class="text-left px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-dark-accent dark:text-dark-text">Facturación</a>
+        <a href="busquedaInventario.html" class="text-left px-2 py-1 rounded bg-gray-100 font-semibold dark:bg-dark-accent dark:text-dark-text">Inventario</a>
       </nav>
     </div>
   </div>
@@ -306,14 +187,14 @@
         <div class="d-flex align-items-center">
           <div class="user-avatar me-2">MA</div>
           <button class="btn btn-sm btn-outline-danger" id="logoutButton">
-            <a href="inicioSesion.html"><i class="bi bi-box-arrow-right"></i></a>
+            <a href="inicioSesion.html" class="text-decoration-none"><i class="bi bi-box-arrow-right"></i></a>
           </button>
         </div>
       </div>
       <nav class="flex flex-col space-y-2" aria-label="Menú principal">
-        <a href="index.html" class="text-left px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-dark-accent">Panel Principal</a>
-        <a href="busquedaFactura.html" class="text-left px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-dark-accent">Facturación</a>
-        <a href="busquedaInventario.html" class="text-left px-2 py-1 rounded bg-gray-100 font-semibold dark:bg-dark-accent">Inventario</a>
+        <a href="index.html" class="text-left px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-dark-accent dark:text-dark-text">Panel Principal</a>
+        <a href="busquedaFactura.html" class="text-left px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-dark-accent dark:text-dark-text">Facturación</a>
+        <a href="busquedaInventario.html" class="text-left px-2 py-1 rounded bg-gray-100 font-semibold dark:bg-dark-accent dark:text-dark-text">Inventario</a>
       </nav>
     </nav>
 
@@ -329,25 +210,18 @@
         </button>
       </div>
 
-      <!-- Alertas -->
+      <!-- Alertas (dinámicas desde la API) -->
       <div class="card bg-white shadow rounded mb-4 dark:bg-dark-primary">
         <div class="card-body p-3">
           <div class="d-flex justify-content-between align-items-center">
             <h5 class="card-title mb-0 dark:text-dark-text">Alertas Importantes</h5>
-            <span class="badge bg-danger">3 Urgentes</span>
+            <span class="badge bg-danger" id="urgentAlertsCount">0 Urgentes</span>
           </div>
-          <div class="mt-3">
-            <div class="d-flex align-items-center mb-2 urgent-alert">
-              <i class="bi bi-exclamation-triangle-fill text-danger me-2"></i>
-              <span class="dark:text-gray-300">Impresora Multifuncional: Stock crítico (2 unidades)</span>
-            </div>
-            <div class="d-flex align-items-center mb-2">
-              <i class="bi bi-exclamation-circle-fill text-warning me-2"></i>
-              <span class="dark:text-gray-300">Monitor 24": Stock bajo (5 unidades)</span>
-            </div>
-            <div class="d-flex align-items-center">
-              <i class="bi bi-clock-fill text-info me-2"></i>
-              <span class="dark:text-gray-300">Teclado Mecánico: Próximo a vencer (15 días)</span>
+          <div class="mt-3" id="alertsContainer">
+            <div class="text-center py-3">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Cargando alertas...</span>
+              </div>
             </div>
           </div>
         </div>
@@ -362,6 +236,7 @@
             </div>
             <div class="card-body">
               <form id="productForm" autocomplete="off">
+                <input type="hidden" id="productId">
                 <div class="mb-3">
                   <label for="productoNombre" class="form-label dark:text-gray-300">Nombre del producto</label>
                   <input type="text" id="productoNombre" class="form-control" placeholder="Nombre" required />
@@ -395,6 +270,11 @@
                     <label for="productoCodigo" class="form-label dark:text-gray-300">Código</label>
                     <input type="text" id="productoCodigo" class="form-control" placeholder="Código" required />
                   </div>
+                </div>
+                
+                <div class="mb-3">
+                  <label for="minStock" class="form-label dark:text-gray-300">Stock Mínimo</label>
+                  <input type="number" id="minStock" class="form-control" placeholder="Stock mínimo" min="0" required />
                 </div>
                 
                 <div class="mb-3">
@@ -436,151 +316,34 @@
               <h5 class="card-title mb-0 dark:text-dark-text">Productos en Inventario</h5>
               <div class="input-group" style="width: 250px;">
                 <input type="text" class="form-control" placeholder="Buscar producto..." id="searchProduct">
-                <button class="btn btn-outline-secondary" type="button">
+                <button class="btn btn-outline-secondary" type="button" id="searchButton">
                   <i class="bi bi-search"></i>
                 </button>
               </div>
             </div>
             <div class="card-body p-0">
-              <div class="table-responsive responsive-table">
+              <div class="table-responsive">
                 <table class="table table-hover mb-0">
                   <thead class="bg-gray-100 dark:bg-dark-secondary">
                     <tr>
-                      <th>Código</th>
-                      <th>Producto</th>
-                      <th>Categoría</th>
-                      <th>Stock</th>
-                      <th>Precio</th>
-                      <th>Acciones</th>
+                      <th class="dark:text-dark-text">Código</th>
+                      <th class="dark:text-dark-text">Producto</th>
+                      <th class="dark:text-dark-text">Categoría</th>
+                      <th class="dark:text-dark-text">Stock</th>
+                      <th class="dark:text-dark-text">Precio</th>
+                      <th class="dark:text-dark-text">Acciones</th>
                     </tr>
                   </thead>
                   <tbody id="inventoryTable">
                     <tr>
-                      <td>PRD001</td>
-                      <td>Laptop HP EliteBook</td>
-                      <td>Electrónicos</td>
-                      <td><span class="badge stock-ok">45</span></td>
-                      <td>$850.00</td>
-                      <td>
-                        <button class="btn btn-sm btn-outline-primary me-1 edit-btn" data-id="1">
-                          <i class="bi bi-pencil"></i>
-                        </button>
-                        <button class="btn btn-sm btn-outline-danger delete-btn" data-id="1">
-                          <i class="bi bi-trash"></i>
-                        </button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>PRD002</td>
-                      <td>Mouse Inalámbrico</td>
-                      <td>Electrónicos</td>
-                      <td><span class="badge stock-ok">120</span></td>
-                      <td>$19.99</td>
-                      <td>
-                        <button class="btn btn-sm btn-outline-primary me-1 edit-btn" data-id="2">
-                          <i class="bi bi-pencil"></i>
-                        </button>
-                        <button class="btn btn-sm btn-outline-danger delete-btn" data-id="2">
-                          <i class="bi bi-trash"></i>
-                        </button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>PRD003</td>
-                      <td>Teclado Mecánico</td>
-                      <td>Electrónicos</td>
-                      <td><span class="badge stock-low">32</span></td>
-                      <td>$59.99</td>
-                      <td>
-                        <button class="btn btn-sm btn-outline-primary me-1 edit-btn" data-id="3">
-                          <i class="bi bi-pencil"></i>
-                        </button>
-                        <button class="btn btn-sm btn-outline-danger delete-btn" data-id="3">
-                          <i class="bi bi-trash"></i>
-                        </button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>PRD004</td>
-                      <td>Monitor 24" Full HD</td>
-                      <td>Electrónicos</td>
-                      <td><span class="badge stock-critical">5</span></td>
-                      <td>$189.99</td>
-                      <td>
-                        <button class="btn btn-sm btn-outline-primary me-1 edit-btn" data-id="4">
-                          <i class="bi bi-pencil"></i>
-                        </button>
-                        <button class="btn btn-sm btn-outline-danger delete-btn" data-id="4">
-                          <i class="bi bi-trash"></i>
-                        </button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>PRD005</td>
-                      <td>Impresora Multifuncional</td>
-                      <td>Electrónicos</td>
-                      <td><span class="badge stock-critical urgent-alert">2</span></td>
-                      <td>$249.99</td>
-                      <td>
-                        <button class="btn btn-sm btn-outline-primary me-1 edit-btn" data-id="5">
-                          <i class="bi bi-pencil"></i>
-                        </button>
-                        <button class="btn btn-sm btn-outline-danger delete-btn" data-id="5">
-                          <i class="bi bi-trash"></i>
-                        </button>
+                      <td colspan="6" class="text-center py-4">
+                        <div class="spinner-border text-primary" role="status">
+                          <span class="visually-hidden">Cargando productos...</span>
+                        </div>
                       </td>
                     </tr>
                   </tbody>
                 </table>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Registro de actividades -->
-          <div class="card bg-white shadow rounded dark:bg-dark-primary">
-            <div class="card-header dark:bg-dark-secondary">
-              <h5 class="card-title mb-0 dark:text-dark-text">Registro de Actividades</h5>
-            </div>
-            <div class="card-body action-log">
-              <div class="d-flex mb-3">
-                <div class="flex-shrink-0 me-3">
-                  <i class="bi bi-plus-circle-fill text-success"></i>
-                </div>
-                <div>
-                  <div class="fw-bold">Nuevo producto agregado</div>
-                  <div class="text-muted small">Monitor 27" 4K - Agregado por María Andrade</div>
-                  <div class="text-muted small">Hoy, 10:23 AM</div>
-                </div>
-              </div>
-              <div class="d-flex mb-3">
-                <div class="flex-shrink-0 me-3">
-                  <i class="bi bi-pencil-fill text-primary"></i>
-                </div>
-                <div>
-                  <div class="fw-bold">Producto actualizado</div>
-                  <div class="text-muted small">Teclado Mecánico - Stock actualizado de 25 a 32 unidades</div>
-                  <div class="text-muted small">Ayer, 4:45 PM</div>
-                </div>
-              </div>
-              <div class="d-flex mb-3">
-                <div class="flex-shrink-0 me-3">
-                  <i class="bi bi-trash-fill text-danger"></i>
-                </div>
-                <div>
-                  <div class="fw-bold">Producto eliminado</div>
-                  <div class="text-muted small">Cable HDMI 2.1 - Eliminado por María Andrade</div>
-                  <div class="text-muted small">Ayer, 11:30 AM</div>
-                </div>
-              </div>
-              <div class="d-flex">
-                <div class="flex-shrink-0 me-3">
-                  <i class="bi bi-box-seam text-info"></i>
-                </div>
-                <div>
-                  <div class="fw-bold">Ingreso de inventario</div>
-                  <div class="text-muted small">15 Mouse Inalámbrico agregados al inventario</div>
-                  <div class="text-muted small">2 días atrás</div>
-                </div>
               </div>
             </div>
           </div>
@@ -596,182 +359,494 @@
     <a href="#" class="text-blue-500 dark:text-blue-400">Ayuda</a>
   </footer>
 
+  <!-- Modal de confirmación -->
+  <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content dark:bg-dark-primary">
+        <div class="modal-header dark:bg-dark-secondary">
+          <h5 class="modal-title dark:text-dark-text" id="confirmModalTitle">Confirmar acción</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body dark:text-gray-300" id="confirmModalBody">
+          ¿Está seguro que desea realizar esta acción?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-danger" id="confirmActionBtn">Confirmar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   
   <script>
-    // Control de tema oscuro/claro
-    const themeToggle = document.getElementById('themeToggle');
-    const themeIcon = document.getElementById('themeIcon');
-    const htmlElement = document.documentElement;
+    // URL base de la API conectada a MongoDB
+    const API_BASE_URL = 'http://localhost:5000';
     
-    // Comprobar si hay preferencia guardada
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-      enableDarkMode();
-    }
+    // Variables globales
+    let currentProductId = null;
+    let confirmActionCallback = null;
     
-    // Manejar el clic en el botón de tema
-    themeToggle.addEventListener('click', () => {
-      if (htmlElement.classList.contains('dark')) {
-        disableDarkMode();
-      } else {
-        enableDarkMode();
-      }
+    // Inicializar la aplicación cuando el DOM esté listo
+    document.addEventListener('DOMContentLoaded', function() {
+      initTheme();
+      loadProducts();
+      loadAlerts();
+      setupEventListeners();
     });
     
+    // ---------------------- Funciones de Tema ----------------------
+    
+    function initTheme() {
+      const themeToggle = document.getElementById('themeToggle');
+      const themeIcon = document.getElementById('themeIcon');
+      const htmlElement = document.documentElement;
+      
+      // Comprobar si hay preferencia guardada
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'dark') {
+        enableDarkMode();
+      }
+      
+      // Manejar el clic en el botón de tema
+      themeToggle.addEventListener('click', () => {
+        if (htmlElement.classList.contains('dark')) {
+          disableDarkMode();
+        } else {
+          enableDarkMode();
+        }
+        
+        // Animación
+        themeToggle.classList.add('animate-pulse');
+        setTimeout(() => {
+          themeToggle.classList.remove('animate-pulse');
+        }, 300);
+      });
+    }
+    
     function enableDarkMode() {
-      htmlElement.classList.add('dark');
-      themeIcon.classList.remove('bi-moon');
-      themeIcon.classList.add('bi-sun');
+      document.documentElement.classList.add('dark');
+      document.getElementById('themeIcon').classList.remove('bi-moon');
+      document.getElementById('themeIcon').classList.add('bi-sun');
       localStorage.setItem('theme', 'dark');
     }
     
     function disableDarkMode() {
-      htmlElement.classList.remove('dark');
-      themeIcon.classList.remove('bi-sun');
-      themeIcon.classList.add('bi-moon');
+      document.documentElement.classList.remove('dark');
+      document.getElementById('themeIcon').classList.remove('bi-sun');
+      document.getElementById('themeIcon').classList.add('bi-moon');
       localStorage.setItem('theme', 'light');
     }
     
-    // Animación al cambiar el tema
-    themeToggle.addEventListener('click', function() {
-      this.classList.add('animate-pulse');
-      setTimeout(() => {
-        this.classList.remove('animate-pulse');
-      }, 300);
-    });
+    // ---------------------- Funciones de Productos ----------------------
     
-    // Variables para el estado del formulario
-    let editingProductId = null;
+    function loadProducts(searchTerm = '') {
+      const url = searchTerm ? 
+        `${API_BASE_URL}/productos/buscar?q=${encodeURIComponent(searchTerm)}` : 
+        `${API_BASE_URL}/productos`;
+      
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          const tableBody = document.getElementById('inventoryTable');
+          tableBody.innerHTML = '';
+          
+          if (data.length === 0) {
+            tableBody.innerHTML = `
+              <tr>
+                <td colspan="6" class="text-center py-4 dark:text-gray-300">
+                  No se encontraron productos en la base de datos
+                </td>
+              </tr>
+            `;
+            return;
+          }
+          
+          data.forEach(product => {
+            const stockBadgeClass = getStockBadgeClass(product.stock, product.minStock);
+            
+            const row = document.createElement('tr');
+            row.className = 'dark:hover:bg-dark-accent';
+            row.innerHTML = `
+              <td class="dark:text-gray-300">${product.code}</td>
+              <td class="dark:text-gray-300">${product.name}</td>
+              <td class="dark:text-gray-300">${product.category || 'N/A'}</td>
+              <td><span class="badge ${stockBadgeClass}">${product.stock}</span></td>
+              <td class="dark:text-gray-300">$${product.price.toFixed(2)}</td>
+              <td>
+                <button class="btn btn-sm btn-outline-primary me-1 edit-btn" data-id="${product._id}">
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger delete-btn" data-id="${product._id}">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </td>
+            `;
+            
+            tableBody.appendChild(row);
+          });
+          
+          // Agregar event listeners a los botones de editar y eliminar
+          document.querySelectorAll('.edit-btn').forEach(btn => {
+            btn.addEventListener('click', () => editProduct(btn.getAttribute('data-id')));
+          });
+          
+          document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', () => confirmDeleteProduct(btn.getAttribute('data-id')));
+          });
+        })
+        .catch(error => {
+          console.error('Error al cargar productos desde MongoDB:', error);
+          showAlert('Error al conectar con la base de datos', 'danger');
+        });
+    }
     
-    // Manejar el envío del formulario
-    const form = document.getElementById('productForm');
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
+    function getStockBadgeClass(stock, minStock) {
+      if (stock <= minStock * 0.3) {
+        return 'stock-critical urgent-alert';
+      } else if (stock <= minStock) {
+        return 'stock-low';
+      } else {
+        return 'stock-ok';
+      }
+    }
+    
+    function editProduct(productId) {
+      fetch(`${API_BASE_URL}/productos/${productId}`)
+        .then(response => response.json())
+        .then(product => {
+          currentProductId = product._id;
+          
+          // Llenar el formulario con los datos del producto desde MongoDB
+          document.getElementById('productId').value = product._id;
+          document.getElementById('productoNombre').value = product.name;
+          document.getElementById('productoPrecio').value = product.price;
+          document.getElementById('productoStock').value = product.stock;
+          document.getElementById('productoCategoria').value = product.category || '';
+          document.getElementById('productoCodigo').value = product.code;
+          document.getElementById('minStock').value = product.minStock;
+          document.getElementById('proveedor').value = product.supplier || '';
+          document.getElementById('productoDescripcion').value = product.description || '';
+          
+          if (product.expirationDate) {
+            const date = new Date(product.expirationDate);
+            document.getElementById('fechaVencimiento').value = date.toISOString().split('T')[0];
+          }
+          
+          // Actualizar UI del formulario
+          document.getElementById('formTitle').textContent = 'Editar Producto';
+          document.getElementById('submitBtn').innerHTML = '<i class="bi bi-check-circle me-1"></i> Actualizar Producto';
+          
+          // Desplazar a formulario
+          document.getElementById('productoNombre').focus();
+        })
+        .catch(error => {
+          console.error('Error al cargar producto desde MongoDB:', error);
+          showAlert('Error al obtener datos del producto', 'danger');
+        });
+    }
+    
+    function confirmDeleteProduct(productId) {
+      currentProductId = productId;
       
-      // Obtener valores del formulario
-      const nombre = document.getElementById('productoNombre').value;
-      const precio = document.getElementById('productoPrecio').value;
-      const stock = document.getElementById('productoStock').value;
-      const categoria = document.getElementById('productoCategoria').value;
-      const codigo = document.getElementById('productoCodigo').value;
-      const proveedor = document.getElementById('proveedor').value;
-      const descripcion = document.getElementById('productoDescripcion').value;
+      // Mostrar modal de confirmación
+      const modal = new bootstrap.Modal(document.getElementById('confirmModal'));
+      document.getElementById('confirmModalTitle').textContent = 'Eliminar Producto';
+      document.getElementById('confirmModalBody').textContent = '¿Está seguro que desea eliminar este producto de la base de datos? Esta acción no se puede deshacer.';
       
-      // Validar que todos los campos estén completos
-      if (!nombre || !precio || !stock || !codigo || !categoria || !proveedor) {
-        alert('Por favor complete todos los campos obligatorios');
+      confirmActionCallback = deleteProduct;
+      modal.show();
+    }
+    
+    function deleteProduct() {
+      if (!currentProductId) return;
+      
+      fetch(`${API_BASE_URL}/productos/${currentProductId}`, {
+        method: 'DELETE'
+      })
+      .then(response => {
+        if (!response.ok) {
+          return response.json().then(err => { throw err; });
+        }
+        return response.json();
+      })
+      .then(data => {
+        showAlert('Producto eliminado correctamente de MongoDB', 'success');
+        loadProducts();
+      })
+      .catch(error => {
+        console.error('Error al eliminar producto de MongoDB:', error);
+        showAlert(error.error || 'Error al eliminar producto', 'danger');
+      })
+      .finally(() => {
+        currentProductId = null;
+      });
+    }
+    
+    function saveProduct(productData, isEditing = false) {
+      const url = isEditing ? 
+        `${API_BASE_URL}/productos/${productData._id}` : 
+        `${API_BASE_URL}/productos`;
+      
+      const method = isEditing ? 'PUT' : 'POST';
+      
+      // Agregar fecha de vencimiento si existe
+      const fechaVencimiento = document.getElementById('fechaVencimiento').value;
+      if (fechaVencimiento) {
+        productData.expirationDate = new Date(fechaVencimiento).toISOString();
+      }
+      
+      fetch(url, {
+        method: method,
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(productData)
+      })
+      .then(response => {
+        if (!response.ok) {
+          return response.json().then(err => { throw err; });
+        }
+        return response.json();
+      })
+      .then(data => {
+        const message = isEditing ? 
+          'Producto actualizado correctamente en MongoDB' : 
+          'Producto creado correctamente en MongoDB';
+        
+        showAlert(message, 'success');
+        resetForm();
+        loadProducts();
+        loadAlerts();
+      })
+      .catch(error => {
+        console.error('Error al guardar producto en MongoDB:', error);
+        showAlert(error.error || 'Error al guardar producto', 'danger');
+      });
+    }
+    
+    // ---------------------- Funciones de Alertas ----------------------
+    
+    function loadAlerts() {
+      fetch(`${API_BASE_URL}/reportes/productos-stock-bajo`)
+        .then(response => response.json())
+        .then(products => {
+          const alertsContainer = document.getElementById('alertsContainer');
+          const urgentAlertsCount = document.getElementById('urgentAlertsCount');
+          
+          // Contar alertas urgentes (stock < 30% del mínimo)
+          const urgentAlerts = products.filter(p => p.stock <= p.minStock * 0.3);
+          urgentAlertsCount.textContent = `${urgentAlerts.length} Urgentes`;
+          
+          if (products.length === 0) {
+            alertsContainer.innerHTML = '<div class="text-center py-2 dark:text-gray-300">No hay alertas en este momento</div>';
+            return;
+          }
+          
+          alertsContainer.innerHTML = '';
+          
+          products.forEach(product => {
+            const isUrgent = product.stock <= product.minStock * 0.3;
+            const isLow = product.stock <= product.minStock;
+            
+            const alertElement = document.createElement('div');
+            alertElement.className = `d-flex align-items-center mb-2 ${isUrgent ? 'urgent-alert' : ''}`;
+            
+            alertElement.innerHTML = `
+              <i class="bi ${isUrgent ? 'bi-exclamation-triangle-fill text-danger' : 
+                isLow ? 'bi-exclamation-circle-fill text-warning' : 'bi-clock-fill text-info'} me-2"></i>
+              <span class="dark:text-gray-300">
+                ${product.name}: Stock ${isUrgent ? 'crítico' : isLow ? 'bajo' : 'próximo al mínimo'} 
+                (${product.stock} unidades, mínimo ${product.minStock})
+              </span>
+            `;
+            
+            alertsContainer.appendChild(alertElement);
+          });
+        })
+        .catch(error => {
+          console.error('Error al cargar alertas desde MongoDB:', error);
+          document.getElementById('alertsContainer').innerHTML = `
+            <div class="text-danger">Error al conectar con la base de datos</div>
+          `;
+        });
+    }
+    
+    // ---------------------- Funciones de UI ----------------------
+    
+    function setupEventListeners() {
+      // Formulario de producto
+      document.getElementById('productForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        handleFormSubmit();
+      });
+      
+      // Botón cancelar edición
+      document.getElementById('cancelEditBtn').addEventListener('click', resetForm);
+      
+      // Búsqueda de productos
+      document.getElementById('searchButton').addEventListener('click', function() {
+        const searchTerm = document.getElementById('searchProduct').value;
+        loadProducts(searchTerm);
+      });
+      
+      // Input de búsqueda (tiempo real)
+      document.getElementById('searchProduct').addEventListener('input', function() {
+        const searchTerm = this.value;
+        if (searchTerm.length === 0 || searchTerm.length > 2) {
+          loadProducts(searchTerm);
+        }
+      });
+      
+      // Generar reporte
+      document.getElementById('generateReportBtn').addEventListener('click', generateReport);
+      
+      // Menú móvil
+      document.getElementById('mobileMenuToggle').addEventListener('click', function() {
+        const mobileMenu = new bootstrap.Offcanvas(document.getElementById('mobileMenu'));
+        mobileMenu.show();
+      });
+      
+      // Logout
+      document.getElementById('logoutButton').addEventListener('click', function() {
+        window.location.href = 'inicioSesion.html';
+      });
+      
+      document.getElementById('logoutButtonMobile').addEventListener('click', function() {
+        window.location.href = 'inicioSesion.html';
+      });
+      
+      // Confirmación de acciones
+      document.getElementById('confirmActionBtn').addEventListener('click', function() {
+        if (confirmActionCallback) {
+          confirmActionCallback();
+          confirmActionCallback = null;
+        }
+        bootstrap.Modal.getInstance(document.getElementById('confirmModal')).hide();
+      });
+    }
+    
+    function handleFormSubmit() {
+      const productId = document.getElementById('productId').value;
+      const isEditing = !!productId;
+      
+      const productData = {
+        code: document.getElementById('productoCodigo').value,
+        name: document.getElementById('productoNombre').value,
+        description: document.getElementById('productoDescripcion').value,
+        category: document.getElementById('productoCategoria').value,
+        price: parseFloat(document.getElementById('productoPrecio').value),
+        stock: parseInt(document.getElementById('productoStock').value),
+        minStock: parseInt(document.getElementById('minStock').value),
+        supplier: document.getElementById('proveedor').value,
+        status: 'active'
+      };
+      
+      if (isEditing) {
+        productData._id = productId;
+      }
+      
+      // Validación básica
+      if (!productData.code || !productData.name || isNaN(productData.price) || 
+          isNaN(productData.stock) || isNaN(productData.minStock)) {
+        showAlert('Por favor complete todos los campos requeridos', 'warning');
         return;
       }
       
-      if (editingProductId) {
-        // Actualizar producto existente
-        alert(`Producto "${nombre}" actualizado correctamente`);
-      } else {
-        // Agregar nuevo producto
-        alert(`Producto "${nombre}" agregado correctamente`);
-      }
-      
-      // Limpiar el formulario
-      form.reset();
-      editingProductId = null;
+      saveProduct(productData, isEditing);
+    }
+    
+    function resetForm() {
+      document.getElementById('productForm').reset();
+      document.getElementById('productId').value = '';
+      currentProductId = null;
       document.getElementById('formTitle').textContent = 'Agregar Nuevo Producto';
       document.getElementById('submitBtn').innerHTML = '<i class="bi bi-plus-circle me-1"></i> Agregar Producto';
-    });
+    }
     
-    // Botón cancelar edición
-    document.getElementById('cancelEditBtn').addEventListener('click', function() {
-      form.reset();
-      editingProductId = null;
-      document.getElementById('formTitle').textContent = 'Agregar Nuevo Producto';
-      document.getElementById('submitBtn').innerHTML = '<i class="bi bi-plus-circle me-1"></i> Agregar Producto';
-    });
+    function generateReport() {
+      fetch(`${API_BASE_URL}/reportes/productos-stock-bajo`)
+        .then(response => response.json())
+        .then(products => {
+          // En una implementación real, esto generaría un PDF con ReportLab
+          // Aquí simulamos la generación del reporte
+          const reportWindow = window.open('', '_blank');
+          reportWindow.document.write(`
+            <html>
+              <head>
+                <title>Reporte de Inventario - MongoDB</title>
+                <style>
+                  body { font-family: Arial, sans-serif; margin: 20px; }
+                  h1 { color: #333; }
+                  table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                  th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                  th { background-color: #f2f2f2; }
+                  .critical { background-color: #ffdddd; }
+                  .low { background-color: #fff3cd; }
+                </style>
+              </head>
+              <body>
+                <h1>Reporte de Inventario - ${new Date().toLocaleDateString()}</h1>
+                <h2>Productos con stock bajo (MongoDB)</h2>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Código</th>
+                      <th>Producto</th>
+                      <th>Categoría</th>
+                      <th>Stock</th>
+                      <th>Mínimo</th>
+                      <th>Precio</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${products.map(p => `
+                      <tr class="${p.stock <= p.minStock * 0.3 ? 'critical' : p.stock <= p.minStock ? 'low' : ''}">
+                        <td>${p.code}</td>
+                        <td>${p.name}</td>
+                        <td>${p.category || 'N/A'}</td>
+                        <td>${p.stock}</td>
+                        <td>${p.minStock}</td>
+                        <td>$${p.price.toFixed(2)}</td>
+                      </tr>
+                    `).join('')}
+                  </tbody>
+                </table>
+                <p style="margin-top: 20px;">
+                  <strong>Total de productos con stock bajo:</strong> ${products.length}
+                </p>
+                <p><em>Generado desde la base de datos MongoDB</em></p>
+              </body>
+            </html>
+          `);
+          reportWindow.document.close();
+          
+          showAlert('Reporte generado correctamente desde MongoDB', 'success');
+        })
+        .catch(error => {
+          console.error('Error al generar reporte desde MongoDB:', error);
+          showAlert('Error al generar reporte', 'danger');
+        });
+    }
     
-    // Funcionalidad de editar
-    document.querySelectorAll('.edit-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        const productId = this.getAttribute('data-id');
-        const row = this.closest('tr');
-        const cells = row.querySelectorAll('td');
-        
-        // Obtener datos del producto
-        const codigo = cells[0].textContent;
-        const nombre = cells[1].textContent;
-        const categoria = cells[2].textContent;
-        const stock = cells[3].querySelector('.badge').textContent;
-        const precio = cells[4].textContent.replace('$', '');
-        
-        // Llenar formulario
-        document.getElementById('productoNombre').value = nombre;
-        document.getElementById('productoPrecio').value = precio;
-        document.getElementById('productoStock').value = stock;
-        document.getElementById('productoCategoria').value = categoria;
-        document.getElementById('productoCodigo').value = codigo;
-        document.getElementById('proveedor').value = "TecnoImport S.A.";
-        document.getElementById('productoDescripcion').value = "Producto de alta calidad para uso profesional";
-        
-        // Actualizar estado
-        editingProductId = productId;
-        document.getElementById('formTitle').textContent = 'Editar Producto';
-        document.getElementById('submitBtn').innerHTML = '<i class="bi bi-check-circle me-1"></i> Actualizar Producto';
-        
-        // Desplazar a formulario
-        document.getElementById('productoNombre').focus();
-      });
-    });
-    
-    // Funcionalidad de eliminar
-    document.querySelectorAll('.delete-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        const productId = this.getAttribute('data-id');
-        const row = this.closest('tr');
-        const productName = row.querySelector('td:nth-child(2)').textContent;
-        
-        if (confirm(`¿Está seguro que desea eliminar el producto "${productName}"?`)) {
-          row.remove();
-          alert(`Producto "${productName}" eliminado correctamente`);
-        }
-      });
-    });
-    
-    // Generar reporte
-    document.getElementById('generateReportBtn').addEventListener('click', function() {
-      alert('Generando reporte de inventario en formato PDF...');
-      // Aquí iría la lógica para generar el reporte
-    });
-    
-    // Menú móvil
-    document.getElementById('mobileMenuToggle').addEventListener('click', function() {
-      const mobileMenu = new bootstrap.Offcanvas(document.getElementById('mobileMenu'));
-      mobileMenu.show();
-    });
-    
-    // Logout
-    document.getElementById('logoutButton').addEventListener('click', function() {
-       window.location.href = 'inicioSesion.html';
-    });
-    
-    document.getElementById('logoutButtonMobile').addEventListener('click', function() {
-       window.location.href = 'inicioSesion.html';
-    });
-    
-    // Búsqueda en tiempo real
-    document.getElementById('searchProduct').addEventListener('input', function() {
-      const searchText = this.value.toLowerCase();
-      const rows = document.querySelectorAll('#inventoryTable tr');
+    function showAlert(message, type) {
+      const alert = document.createElement('div');
+      alert.className = `alert alert-${type} alert-dismissible fade show position-fixed top-0 end-0 m-3`;
+      alert.style.zIndex = '1100';
+      alert.role = 'alert';
+      alert.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      `;
       
-      rows.forEach(row => {
-        const productName = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
-        const productCode = row.querySelector('td:nth-child(1)').textContent.toLowerCase();
-        
-        if (productName.includes(searchText) || productCode.includes(searchText)) {
-          row.style.display = '';
-        } else {
-          row.style.display = 'none';
-        }
-      });
-    });
+      document.body.appendChild(alert);
+      
+      setTimeout(() => {
+        alert.classList.add('fade');
+        setTimeout(() => alert.remove(), 150);
+      }, 5000);
+    }
   </script>
-
 </body>
 </html>

@@ -376,20 +376,20 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <div>
               <label class="block text-sm mb-1 dark:text-gray-400">Nombre/Razón Social</label>
-              <input type="text" placeholder="Nombre completo" class="border p-2 rounded w-full dark:bg-dark-secondary" />
+              <input type="text" placeholder="Nombre completo" class="border p-2 rounded w-full dark:bg-dark-secondary" id="clientName" />
             </div>
             <div>
               <label class="block text-sm mb-1 dark:text-gray-400">Identificación</label>
-              <input type="text" placeholder="Cédula/RUC" id="cedula" class="border p-2 rounded w-full dark:bg-dark-secondary" />
-              <p id="error-cedula" class="text-red-600 text-sm mt-1 hidden">❌ Cédula inválida (solo números, 8-10 dígitos).</p>
+              <input type="text" placeholder="Cédula/RUC" id="clientId" class="border p-2 rounded w-full dark:bg-dark-secondary" />
+              <p id="error-clientId" class="text-red-600 text-sm mt-1 hidden">❌ Cédula inválida (solo números, 8-10 dígitos).</p>
             </div>
             <div>
               <label class="block text-sm mb-1 dark:text-gray-400">Teléfono</label>
-              <input type="text" placeholder="Teléfono" class="border p-2 rounded w-full dark:bg-dark-secondary" />
+              <input type="text" placeholder="Teléfono" id="clientPhone" class="border p-2 rounded w-full dark:bg-dark-secondary" />
             </div>
             <div>
               <label class="block text-sm mb-1 dark:text-gray-400">Email</label>
-              <input type="email" placeholder="correo@ejemplo.com" class="border p-2 rounded w-full dark:bg-dark-secondary" />
+              <input type="email" placeholder="correo@ejemplo.com" id="clientEmail" class="border p-2 rounded w-full dark:bg-dark-secondary" />
             </div>
             <div>
               <label class="block text-sm mb-1 dark:text-gray-400">Fecha Emisión</label>
@@ -407,17 +407,17 @@
           <h3 class="font-semibold mb-2 dark:text-dark-text">Detalles de Factura</h3>
           <div class="mb-3">
             <label class="block text-sm mb-1 dark:text-gray-400">Forma de Pago</label>
-            <select class="border p-2 rounded w-full dark:bg-dark-secondary">
-              <option>Efectivo</option>
-              <option>Tarjeta Crédito</option>
-              <option>Tarjeta Débito</option>
-              <option>Transferencia</option>
-              <option>Cheque</option>
+            <select class="border p-2 rounded w-full dark:bg-dark-secondary" id="paymentMethod">
+              <option value="Efectivo">Efectivo</option>
+              <option value="Tarjeta Crédito">Tarjeta Crédito</option>
+              <option value="Tarjeta Débito">Tarjeta Débito</option>
+              <option value="Transferencia">Transferencia</option>
+              <option value="Cheque">Cheque</option>
             </select>
           </div>
           <div>
             <label class="block text-sm mb-1 dark:text-gray-400">Observaciones</label>
-            <textarea placeholder="Detalles adicionales..." class="border p-2 rounded w-full h-24 dark:bg-dark-secondary"></textarea>
+            <textarea placeholder="Detalles adicionales..." class="border p-2 rounded w-full h-24 dark:bg-dark-secondary" id="notes"></textarea>
           </div>
         </div>
       </div>
@@ -436,31 +436,8 @@
         </div>
         
         <!-- Productos sugeridos -->
-        <div class="product-grid">
-          <div class="product-card bg-white dark:bg-dark-secondary p-3 rounded shadow cursor-pointer" data-id="1" data-name="Laptop HP EliteBook" data-price="899.99" data-stock="12">
-            <div class="font-semibold dark:text-dark-text">Laptop HP EliteBook</div>
-            <div class="text-sm text-gray-500 dark:text-gray-400">SKU: LT-HP-001</div>
-            <div class="text-sm mt-1">Stock: <span class="font-semibold">12</span></div>
-            <div class="font-semibold text-blue-600 mt-1">$899.99</div>
-          </div>
-          <div class="product-card bg-white dark:bg-dark-secondary p-3 rounded shadow cursor-pointer" data-id="2" data-name="Teclado Mecánico" data-price="59.99" data-stock="24">
-            <div class="font-semibold dark:text-dark-text">Teclado Mecánico</div>
-            <div class="text-sm text-gray-500 dark:text-gray-400">SKU: TC-MEC-002</div>
-            <div class="text-sm mt-1">Stock: <span class="font-semibold">24</span></div>
-            <div class="font-semibold text-blue-600 mt-1">$59.99</div>
-          </div>
-          <div class="product-card bg-white dark:bg-dark-secondary p-3 rounded shadow cursor-pointer" data-id="3" data-name="Monitor 24\" Samsung" data-price="189.99" data-stock="8">
-            <div class="font-semibold dark:text-dark-text">Monitor 24" Samsung</div>
-            <div class="text-sm text-gray-500 dark:text-gray-400">SKU: MON-SAM-003</div>
-            <div class="text-sm mt-1">Stock: <span class="font-semibold">8</span></div>
-            <div class="font-semibold text-blue-600 mt-1">$189.99</div>
-          </div>
-          <div class="product-card bg-white dark:bg-dark-secondary p-3 rounded shadow cursor-pointer" data-id="4" data-name="Mouse Inalámbrico" data-price="24.99" data-stock="35">
-            <div class="font-semibold dark:text-dark-text">Mouse Inalámbrico</div>
-            <div class="text-sm text-gray-500 dark:text-gray-400">SKU: MS-INAL-004</div>
-            <div class="text-sm mt-1">Stock: <span class="font-semibold">35</span></div>
-            <div class="font-semibold text-blue-600 mt-1">$24.99</div>
-          </div>
+        <div class="product-grid" id="productGrid">
+          <!-- Los productos se cargarán dinámicamente aquí -->
         </div>
       </div>
 
@@ -468,7 +445,7 @@
       <div class="mb-6">
         <h3 class="font-semibold mb-2 dark:text-dark-text">Productos en Factura</h3>
         <div class="scrollable-table">
-          <table class="w-full table-auto border mb-4 text-sm dark:border-gray-700" id="tabla-items">
+          <table class="w-full table-auto border mb-4 text-sm dark:border-gray-700" id="invoiceItemsTable">
             <thead class="bg-gray-100 dark:bg-dark-secondary">
               <tr>
                 <th class="border px-2 py-1 dark:border-gray-700">Código</th>
@@ -481,77 +458,42 @@
                 <th class="border px-2 py-1 dark:border-gray-700">Acciones</th>
               </tr>
             </thead>
-            <tbody>
-              <tr class="text-center">
-                <td class="border px-2 py-1 dark:border-gray-700">Prod001</td>
-                <td class="border px-2 py-1 dark:border-gray-700 text-left">Mouse óptico</td>
-                <td class="border px-2 py-1 dark:border-gray-700">25 unid</td>
-                <td class="border px-2 py-1 dark:border-gray-700">
-                  <input type="number" min="1" max="25" value="2" class="w-16 text-center border rounded py-1 quantity-input" data-stock="25">
-                </td>
-                <td class="border px-2 py-1 dark:border-gray-700">$8.00</td>
-                <td class="border px-2 py-1 dark:border-gray-700">
-                  <input type="number" min="0" max="100" value="0" class="w-16 text-center border rounded py-1 discount-input">
-                </td>
-                <td class="border px-2 py-1 dark:border-gray-700">$16.00</td>
-                <td class="border px-2 py-1 dark:border-gray-700">
-                  <button onclick="eliminarFila(this)" class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
-                    <i class="bi bi-trash"></i>
-                  </button>
-                </td>
-              </tr>
-              <tr class="text-center">
-                <td class="border px-2 py-1 dark:border-gray-700">Prod003</td>
-                <td class="border px-2 py-1 dark:border-gray-700 text-left">Teclado mecánico</td>
-                <td class="border px-2 py-1 dark:border-gray-700">18 unid</td>
-                <td class="border px-2 py-1 dark:border-gray-700">
-                  <input type="number" min="1" max="18" value="1" class="w-16 text-center border rounded py-1 quantity-input" data-stock="18">
-                </td>
-                <td class="border px-2 py-1 dark:border-gray-700">$59.99</td>
-                <td class="border px-2 py-1 dark:border-gray-700">
-                  <input type="number" min="0" max="100" value="0" class="w-16 text-center border rounded py-1 discount-input">
-                </td>
-                <td class="border px-2 py-1 dark:border-gray-700">$59.99</td>
-                <td class="border px-2 py-1 dark:border-gray-700">
-                  <button onclick="eliminarFila(this)" class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
-                    <i class="bi bi-trash"></i>
-                  </button>
-                </td>
-              </tr>
+            <tbody id="invoiceItemsBody">
+              <!-- Los items se agregarán dinámicamente aquí -->
             </tbody>
           </table>
         </div>
       </div>
 
       <!-- Alerta de stock -->
-      <div class="bg-yellow-100 dark:bg-yellow-900 dark:bg-opacity-30 text-yellow-700 dark:text-yellow-300 p-3 rounded flex items-center text-sm mb-4">
+      <div id="stockAlert" class="hidden bg-yellow-100 dark:bg-yellow-900 dark:bg-opacity-30 text-yellow-700 dark:text-yellow-300 p-3 rounded flex items-center text-sm mb-4">
         <i class="bi bi-exclamation-triangle me-2"></i>
-        <span>Mouse inalámbrico: Stock bajo (5 unidades)</span>
+        <span id="stockAlertText"></span>
       </div>
 
       <!-- Totales -->
       <div class="bg-gray-100 dark:bg-dark-secondary p-4 rounded w-full md:w-1/2 lg:w-1/3 ml-auto">
         <div class="flex justify-between mb-1">
           <span class="dark:text-gray-300">Subtotal:</span>
-          <span class="font-medium">$75.99</span>
+          <span class="font-medium" id="subtotalAmount">$0.00</span>
         </div>
         <div class="flex justify-between mb-1">
           <span class="dark:text-gray-300">Descuento:</span>
-          <span class="text-red-600">-$0.00</span>
+          <span class="text-red-600" id="discountAmount">-$0.00</span>
         </div>
         <div class="flex justify-between mb-1">
           <span class="dark:text-gray-300">IVA (12%):</span>
-          <span class="font-medium">$9.12</span>
+          <span class="font-medium" id="taxAmount">$0.00</span>
         </div>
         <div class="flex justify-between font-bold text-lg mt-3 pt-3 border-t dark:border-gray-700">
           <span class="dark:text-gray-300">Total:</span>
-          <span class="text-blue-600">$85.11</span>
+          <span class="text-blue-600" id="totalAmount">$0.00</span>
         </div>
       </div>
 
       <!-- Botones de acción -->
       <div class="flex justify-end mt-6 space-x-3">
-        <button class="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded transition dark:bg-gray-600 dark:hover:bg-gray-700 dark:text-white">
+        <button class="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded transition dark:bg-gray-600 dark:hover:bg-gray-700 dark:text-white" id="cancelBtn">
           <i class="bi bi-x-circle me-1"></i> Cancelar
         </button>
 
@@ -572,219 +514,657 @@
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Axios para peticiones HTTP -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-  <script>
-    // Control de tema oscuro/claro
-    const themeToggle = document.getElementById('themeToggle');
-    const themeIcon = document.getElementById('themeIcon');
-    const htmlElement = document.documentElement;
-    
-    // Comprobar si hay preferencia guardada
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
+<script>
+  // URL base de tu API Flask
+  const API_BASE_URL = 'http://localhost:5000'; // Cambia esto por tu URL de producción
+  
+  // Variables globales
+  let currentClient = null;
+  let currentInvoice = {
+    items: [],
+    subtotal: 0,
+    discount: 0,
+    tax: 0,
+    total: 0,
+    paymentStatus: 'pending',
+    status: 'draft'
+  };
+  let allProducts = [];
+
+  // Control de tema oscuro/claro
+  const themeToggle = document.getElementById('themeToggle');
+  const themeIcon = document.getElementById('themeIcon');
+  const htmlElement = document.documentElement;
+  
+  // Comprobar si hay preferencia guardada
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'dark') {
+    enableDarkMode();
+  }
+  
+  // Manejar el clic en el botón de tema
+  themeToggle.addEventListener('click', () => {
+    if (htmlElement.classList.contains('dark')) {
+      disableDarkMode();
+    } else {
       enableDarkMode();
     }
-    
-    // Manejar el clic en el botón de tema
-    themeToggle.addEventListener('click', () => {
-      if (htmlElement.classList.contains('dark')) {
-        disableDarkMode();
-      } else {
-        enableDarkMode();
-      }
+  });
+  
+  function enableDarkMode() {
+    htmlElement.classList.add('dark');
+    themeIcon.classList.remove('bi-moon');
+    themeIcon.classList.add('bi-sun');
+    localStorage.setItem('theme', 'dark');
+  }
+  
+  function disableDarkMode() {
+    htmlElement.classList.remove('dark');
+    themeIcon.classList.remove('bi-sun');
+    themeIcon.classList.add('bi-moon');
+    localStorage.setItem('theme', 'light');
+  }
+  
+  // Animación al cambiar el tema
+  themeToggle.addEventListener('click', function() {
+    this.classList.add('animate-pulse');
+    setTimeout(() => {
+      this.classList.remove('animate-pulse');
+    }, 300);
+  });
+
+  // Función para formatear números como dinero
+  function formatMoney(amount) {
+    return new Intl.NumberFormat('es-EC', {
+      style: 'currency',
+      currency: 'USD'
+    }).format(amount);
+  }
+
+  // Función para formatear fechas
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('es-EC', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
     });
-    
-    function enableDarkMode() {
-      htmlElement.classList.add('dark');
-      themeIcon.classList.remove('bi-moon');
-      themeIcon.classList.add('bi-sun');
-      localStorage.setItem('theme', 'dark');
-    }
-    
-    function disableDarkMode() {
-      htmlElement.classList.remove('dark');
-      themeIcon.classList.remove('bi-sun');
-      themeIcon.classList.add('bi-moon');
-      localStorage.setItem('theme', 'light');
-    }
-    
-    // Animación al cambiar el tema
-    themeToggle.addEventListener('click', function() {
-      this.classList.add('animate-pulse');
-      setTimeout(() => {
-        this.classList.remove('animate-pulse');
-      }, 300);
-    });
-    
-    // Funcionalidad para eliminar filas
-    function eliminarFila(boton) {
-      const fila = boton.closest("tr");
-      fila.remove();
-      calcularTotales();
-    }
-    
-    // Validación de cédula
-    const cedulaInput = document.getElementById("cedula");
-    const errorCedula = document.getElementById("error-cedula");
-    
-    cedulaInput.addEventListener("blur", () => {
-      const cedula = cedulaInput.value.trim();
-      if (!/^\d{8,10}$/.test(cedula)) {
-        errorCedula.classList.remove("hidden");
-        cedulaInput.classList.add("border-red-500");
-      } else {
-        errorCedula.classList.add("hidden");
-        cedulaInput.classList.remove("border-red-500");
-      }
-    });
-    
-    // Generar número de factura y fecha
-    function generarNumeroFactura() {
-      const numero = Math.floor(100000 + Math.random() * 900000);
-      return `F-001-${numero}`;
-    }
-    
-    function establecerFechaActual() {
-      const hoy = new Date();
-      const fechaFormateada = hoy.toISOString().split('T')[0];
-      document.getElementById('emissionDate').value = fechaFormateada;
-      document.getElementById('previewDate').textContent = hoy.toLocaleDateString('es-EC');
-    }
-    
-    // Actualizar reloj
-    function updateClock() {
-      const now = new Date();
-      const options = { 
-        weekday: 'long', 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-      };
-      document.getElementById('currentDateTime').textContent = now.toLocaleDateString('es-EC', options);
-    }
-    
-    // Calcular totales
-    function calcularTotales() {
-      let subtotal = 0;
+  }
+
+  // Función para buscar clientes por identificación
+  async function searchClient(identification) {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/clientes/buscar?identificationNumber=${identification}`);
       
-      // Recorrer todas las filas de la tabla
-      const filas = document.querySelectorAll('#tabla-items tbody tr');
-      filas.forEach(fila => {
-        const cantidad = parseFloat(fila.querySelector('.quantity-input').value);
-        const precio = parseFloat(fila.querySelector('td:nth-child(5)').textContent.replace('$', ''));
-        const descuento = parseFloat(fila.querySelector('.discount-input').value);
-        
-        let subtotalFila = cantidad * precio;
-        subtotalFila -= subtotalFila * (descuento / 100);
-        
-        fila.querySelector('td:nth-child(7)').textContent = '$' + subtotalFila.toFixed(2);
-        subtotal += subtotalFila;
+      if (response.data.length > 0) {
+        currentClient = response.data[0];
+        fillClientData(currentClient);
+        return true;
+      }
+      return false;
+      
+    } catch (error) {
+      console.error('Error al buscar cliente:', error);
+      showAlert('Error al buscar cliente', 'error');
+      return false;
+    }
+  }
+
+  // Función para llenar datos del cliente
+  function fillClientData(client) {
+    document.getElementById('clientName').value = client.name;
+    document.getElementById('clientPhone').value = client.phone || '';
+    document.getElementById('clientEmail').value = client.email || '';
+  }
+
+  // Función para cargar productos desde la API
+  async function loadProducts() {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/productos`);
+      
+      allProducts = response.data;
+      renderProductCards(allProducts);
+      
+    } catch (error) {
+      console.error('Error al cargar productos:', error);
+      showAlert('Error al cargar productos', 'error');
+    }
+  }
+
+  // Función para renderizar tarjetas de productos
+  function renderProductCards(products) {
+    const productGrid = document.getElementById('productGrid');
+    productGrid.innerHTML = '';
+    
+    // Ordenar productos por stock (los que tienen menos stock primero)
+    const sortedProducts = [...products].sort((a, b) => a.stock - b.stock);
+    
+    sortedProducts.slice(0, 4).forEach(product => {
+      const card = document.createElement('div');
+      card.className = 'product-card bg-white dark:bg-dark-secondary p-3 rounded shadow cursor-pointer';
+      card.setAttribute('data-id', product._id);
+      card.setAttribute('data-name', product.name);
+      card.setAttribute('data-price', product.price);
+      card.setAttribute('data-stock', product.stock);
+      card.setAttribute('data-code', product.code);
+      
+      card.innerHTML = `
+        <div class="font-semibold dark:text-dark-text">${product.name}</div>
+        <div class="text-sm text-gray-500 dark:text-gray-400">SKU: ${product.code}</div>
+        <div class="text-sm mt-1">Stock: <span class="font-semibold">${product.stock}</span></div>
+        <div class="font-semibold text-blue-600 mt-1">$${product.price.toFixed(2)}</div>
+        ${product.stock < product.minStock ? '<div class="text-xs text-red-500 mt-1">Stock bajo</div>' : ''}
+      `;
+      
+      card.addEventListener('click', () => addProductToInvoice(product));
+      productGrid.appendChild(card);
+    });
+  }
+
+  // Función para buscar productos
+  async function searchProducts(query) {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/productos/buscar?q=${query}`);
+      showSearchResults(response.data);
+      
+    } catch (error) {
+      console.error('Error al buscar productos:', error);
+    }
+  }
+
+  // Función para mostrar resultados de búsqueda
+  function showSearchResults(products) {
+    const resultsContainer = document.getElementById('searchResults');
+    resultsContainer.innerHTML = '';
+    
+    if (products.length === 0) {
+      resultsContainer.innerHTML = '<div class="p-2 text-gray-500">No se encontraron productos</div>';
+      resultsContainer.classList.remove('hidden');
+      return;
+    }
+    
+    products.forEach(product => {
+      const item = document.createElement('div');
+      item.className = 'p-2 hover:bg-gray-100 dark:hover:bg-dark-accent cursor-pointer';
+      item.innerHTML = `
+        <div class="font-medium dark:text-dark-text">${product.name}</div>
+        <div class="text-sm text-gray-500 dark:text-gray-400">${product.code} - Stock: ${product.stock} - $${product.price.toFixed(2)}</div>
+      `;
+      
+      item.addEventListener('click', () => {
+        addProductToInvoice(product);
+        resultsContainer.classList.add('hidden');
+        document.getElementById('productSearch').value = '';
       });
       
-      const iva = subtotal * 0.12;
-      const total = subtotal + iva;
-      
-      // Actualizar resumen
-      document.querySelector('.bg-gray-100 .flex:nth-child(1) span:last-child').textContent = '$' + subtotal.toFixed(2);
-      document.querySelector('.bg-gray-100 .flex:nth-child(3) span:last-child').textContent = '$' + iva.toFixed(2);
-      document.querySelector('.bg-gray-100 .flex:last-child span:last-child').textContent = '$' + total.toFixed(2);
+      resultsContainer.appendChild(item);
+    });
+    
+    resultsContainer.classList.remove('hidden');
+  }
+
+  // Función para agregar producto a la factura
+  function addProductToInvoice(product) {
+    // Verificar si el producto ya está en la factura
+    const existingItem = currentInvoice.items.find(item => item.product === product._id);
+    
+    if (existingItem) {
+      // Incrementar cantidad si no supera el stock
+      if (existingItem.quantity < product.stock) {
+        existingItem.quantity += 1;
+        existingItem.subtotal = existingItem.quantity * existingItem.unitPrice * (1 - existingItem.discount/100);
+      } else {
+        showAlert(`No hay suficiente stock de ${product.name}. Stock disponible: ${product.stock}`, 'warning');
+        return;
+      }
+    } else {
+      // Agregar nuevo item
+      currentInvoice.items.push({
+        product: product._id,
+        name: product.name,
+        code: product.code,
+        quantity: 1,
+        unitPrice: product.price,
+        discount: 0,
+        subtotal: product.price,
+        stock: product.stock,
+        minStock: product.minStock
+      });
     }
     
-    // Agregar producto desde tarjetas
-    document.querySelectorAll('.product-card').forEach(card => {
-      card.addEventListener('click', function() {
-        const id = this.getAttribute('data-id');
-        const nombre = this.getAttribute('data-name');
-        const precio = this.getAttribute('data-price');
-        const stock = this.getAttribute('data-stock');
+    renderInvoiceItems();
+    calculateTotals();
+    checkStockAlerts();
+  }
+
+  // Función para renderizar items en la tabla
+  function renderInvoiceItems() {
+    const tbody = document.getElementById('invoiceItemsBody');
+    tbody.innerHTML = '';
+    
+    currentInvoice.items.forEach((item, index) => {
+      const row = document.createElement('tr');
+      row.className = 'text-center';
+      row.innerHTML = `
+        <td class="border px-2 py-1 dark:border-gray-700">${item.code}</td>
+        <td class="border px-2 py-1 dark:border-gray-700 text-left">${item.name}</td>
+        <td class="border px-2 py-1 dark:border-gray-700">${item.stock} unid</td>
+        <td class="border px-2 py-1 dark:border-gray-700">
+          <input type="number" min="1" max="${item.stock}" value="${item.quantity}" 
+                 class="w-16 text-center border rounded py-1 quantity-input" 
+                 data-index="${index}" data-stock="${item.stock}">
+        </td>
+        <td class="border px-2 py-1 dark:border-gray-700">$${item.unitPrice.toFixed(2)}</td>
+        <td class="border px-2 py-1 dark:border-gray-700">
+          <input type="number" min="0" max="100" value="${item.discount}" 
+                 class="w-16 text-center border rounded py-1 discount-input" 
+                 data-index="${index}">
+        </td>
+        <td class="border px-2 py-1 dark:border-gray-700">$${item.subtotal.toFixed(2)}</td>
+        <td class="border px-2 py-1 dark:border-gray-700">
+          <button class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 remove-item-btn">
+            <i class="bi bi-trash"></i>
+          </button>
+        </td>
+      `;
+      
+      tbody.appendChild(row);
+    });
+    
+    // Asignar eventos a los nuevos inputs
+    document.querySelectorAll('.quantity-input').forEach(input => {
+      input.addEventListener('change', (e) => {
+        const index = e.target.getAttribute('data-index');
+        const newQuantity = parseInt(e.target.value);
+        const maxStock = parseInt(e.target.getAttribute('data-stock'));
         
-        // Verificar si el producto ya está en la factura
-        let existe = false;
-        document.querySelectorAll('#tabla-items tbody tr').forEach(row => {
-          if (row.querySelector('td:nth-child(2)').textContent === nombre) {
-            existe = true;
-            // Incrementar cantidad
-            const input = row.querySelector('.quantity-input');
-            input.value = parseInt(input.value) + 1;
-            calcularTotales();
-          }
-        });
-        
-        if (!existe) {
-          // Agregar nueva fila
-          const newRow = document.createElement('tr');
-          newRow.className = 'text-center';
-          newRow.innerHTML = `
-            <td class="border px-2 py-1 dark:border-gray-700">Prod${id}</td>
-            <td class="border px-2 py-1 dark:border-gray-700 text-left">${nombre}</td>
-            <td class="border px-2 py-1 dark:border-gray-700">${stock} unid</td>
-            <td class="border px-2 py-1 dark:border-gray-700">
-              <input type="number" min="1" max="${stock}" value="1" class="w-16 text-center border rounded py-1 quantity-input" data-stock="${stock}">
-            </td>
-            <td class="border px-2 py-1 dark:border-gray-700">$${precio}</td>
-            <td class="border px-2 py-1 dark:border-gray-700">
-              <input type="number" min="0" max="100" value="0" class="w-16 text-center border rounded py-1 discount-input">
-            </td>
-            <td class="border px-2 py-1 dark:border-gray-700">$${precio}</td>
-            <td class="border px-2 py-1 dark:border-gray-700">
-              <button onclick="eliminarFila(this)" class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
-                <i class="bi bi-trash"></i>
-              </button>
-            </td>
-          `;
-          
-          document.querySelector('#tabla-items tbody').appendChild(newRow);
-          
-          // Agregar eventos a los nuevos inputs
-          newRow.querySelector('.quantity-input').addEventListener('change', calcularTotales);
-          newRow.querySelector('.discount-input').addEventListener('change', calcularTotales);
-          
-          calcularTotales();
+        if (newQuantity > maxStock) {
+          showAlert(`No hay suficiente stock. Máximo disponible: ${maxStock}`, 'warning');
+          e.target.value = maxStock;
+          return;
         }
+        
+        if (newQuantity < 1) {
+          e.target.value = 1;
+          return;
+        }
+        
+        currentInvoice.items[index].quantity = newQuantity;
+        updateItemSubtotal(index);
       });
     });
     
-    // Eventos para inputs de cantidad y descuento
-    document.querySelectorAll('.quantity-input, .discount-input').forEach(input => {
-      input.addEventListener('change', calcularTotales);
+    document.querySelectorAll('.discount-input').forEach(input => {
+      input.addEventListener('change', (e) => {
+        const index = e.target.getAttribute('data-index');
+        const discountValue = parseFloat(e.target.value);
+        
+        if (discountValue < 0) {
+          e.target.value = 0;
+          currentInvoice.items[index].discount = 0;
+        } else if (discountValue > 100) {
+          e.target.value = 100;
+          currentInvoice.items[index].discount = 100;
+        } else {
+          currentInvoice.items[index].discount = discountValue;
+        }
+        
+        updateItemSubtotal(index);
+      });
     });
     
-    // Emitir factura
-    document.getElementById('issueBtn').addEventListener('click', function() {
-      alert('Factura emitida con éxito y enviada al cliente. Inventario actualizado.');
-      // Aquí iría la lógica para actualizar inventario y enviar factura
+    document.querySelectorAll('.remove-item-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const index = e.target.closest('tr').querySelector('.quantity-input').getAttribute('data-index');
+        currentInvoice.items.splice(index, 1);
+        renderInvoiceItems();
+        calculateTotals();
+        checkStockAlerts();
+      });
+    });
+  }
+
+  // Función para actualizar subtotal de un item
+  function updateItemSubtotal(index) {
+    const item = currentInvoice.items[index];
+    item.subtotal = item.quantity * item.unitPrice * (1 - item.discount/100);
+    renderInvoiceItems();
+    calculateTotals();
+    checkStockAlerts();
+  }
+
+  // Función para calcular totales
+  function calculateTotals() {
+    currentInvoice.subtotal = currentInvoice.items.reduce((sum, item) => sum + item.subtotal, 0);
+    
+    // Calcular descuento total
+    const totalWithoutDiscount = currentInvoice.items.reduce((sum, item) => sum + (item.quantity * item.unitPrice), 0);
+    currentInvoice.discount = totalWithoutDiscount - currentInvoice.subtotal;
+    
+    currentInvoice.tax = currentInvoice.subtotal * 0.12; // IVA 12%
+    currentInvoice.total = currentInvoice.subtotal + currentInvoice.tax;
+    
+    // Actualizar UI
+    document.getElementById('subtotalAmount').textContent = formatMoney(currentInvoice.subtotal);
+    document.getElementById('discountAmount').textContent = formatMoney(currentInvoice.discount);
+    document.getElementById('taxAmount').textContent = formatMoney(currentInvoice.tax);
+    document.getElementById('totalAmount').textContent = formatMoney(currentInvoice.total);
+  }
+
+  // Función para verificar alertas de stock
+  function checkStockAlerts() {
+    const stockAlert = document.getElementById('stockAlert');
+    const stockAlertText = document.getElementById('stockAlertText');
+    
+    // Buscar productos con stock crítico (menos del 30% del stock mínimo)
+    const criticalItems = currentInvoice.items.filter(item => {
+      const remainingStock = item.stock - item.quantity;
+      return remainingStock < (item.minStock * 0.3);
     });
     
-    // Guardar borrador
-    document.getElementById('saveDraftBtn').addEventListener('click', function() {
-      alert('Factura guardada como borrador.');
+    if (criticalItems.length > 0) {
+      stockAlertText.textContent = `${criticalItems[0].name}: Stock crítico después de esta venta (${criticalItems[0].stock - criticalItems[0].quantity} unidades)`;
+      stockAlert.classList.remove('hidden');
+      stockAlert.classList.add('urgent-alert');
+    } else {
+      stockAlert.classList.add('hidden');
+    }
+  }
+
+  // Función para guardar borrador
+  async function saveDraft() {
+    if (!validateForm()) return;
+    
+    try {
+      const invoiceData = prepareInvoiceData();
+      invoiceData.status = 'draft';
+      
+      const response = await axios.post(`${API_BASE_URL}/facturas`, invoiceData);
+      
+      showAlert('Borrador guardado con éxito', 'success');
+      console.log('Borrador guardado:', response.data);
+      
+    } catch (error) {
+      console.error('Error al guardar borrador:', error);
+      showAlert('Error al guardar borrador: ' + error.message, 'error');
+    }
+  }
+
+  // Función para emitir factura
+async function issueInvoice() {
+    if (!validateForm()) return;
+    
+    if (currentInvoice.items.length === 0) {
+        showAlert('Debe agregar al menos un producto a la factura', 'warning');
+        return;
+    }
+    
+    try {
+        const invoiceData = prepareInvoiceData();
+        console.log("Datos a enviar:", JSON.stringify(invoiceData, null, 2)); // <-- Añade esta línea
+        invoiceData.status = 'issued';
+        invoiceData.paymentStatus = document.getElementById('paymentMethod').value === 'Efectivo' ? 'paid' : 'pending';
+        
+        const response = await axios.post(`${API_BASE_URL}/facturas`, invoiceData);
+        
+        showAlert(`Factura ${response.data.invoiceNumber} emitida con éxito`, 'success');
+        resetForm();
+        
+    } catch (error) {
+        console.error('Detalles del error:', error.response?.data); // <-- Muestra más detalles del error
+        showAlert(`Error al emitir factura: ${error.response?.data?.error || error.message}`, 'error');
+    }
+}
+  // Función para preparar datos de la factura
+  function prepareInvoiceData() {
+    const paymentMethod = document.getElementById('paymentMethod').value;
+    const notes = document.getElementById('notes').value;
+    const issueDate = document.getElementById('emissionDate').value;
+    
+    // Validar fecha de emisión
+    if (!issueDate) {
+        throw new Error('La fecha de emisión es requerida');
+    }
+    
+    // Preparar datos del cliente
+    let clientData;
+    if (currentClient && currentClient._id) {
+        // Cliente existente
+        clientData = currentClient._id;
+    } else {
+        // Nuevo cliente - validar datos mínimos
+        const clientName = document.getElementById('clientName').value;
+        const clientId = document.getElementById('clientId').value;
+        
+        if (!clientName || !clientId) {
+            throw new Error('Datos del cliente incompletos');
+        }
+        
+        clientData = {
+            name: clientName,
+            identificationType: clientId.length === 10 ? 'cedula' : 'ruc',
+            identificationNumber: clientId,
+            phone: document.getElementById('clientPhone').value || '',
+            email: document.getElementById('clientEmail').value || '',
+            status: 'active'
+        };
+    }
+    
+    // Preparar items
+    const items = currentInvoice.items.map(item => ({
+        product: item.product,
+        quantity: item.quantity,
+        unitPrice: item.unitPrice,
+        discount: item.discount
+    }));
+    
+    return {
+        client: clientData,
+        issueDate: issueDate,
+        paymentMethod: paymentMethod,
+        items: items,
+        subtotal: currentInvoice.subtotal,
+        tax: currentInvoice.tax,
+        total: currentInvoice.total,
+        notes: notes
+    };
+}
+  // Función para validar el formulario
+  function validateForm() {
+    const clientName = document.getElementById('clientName').value;
+    const clientId = document.getElementById('clientId').value;
+    const errorClientId = document.getElementById('error-clientId');
+    
+    // Validar nombre del cliente
+    if (!clientName || clientName.trim().length < 3) {
+      showAlert('Debe ingresar un nombre válido para el cliente', 'warning');
+      return false;
+    }
+    
+    // Validar identificación del cliente
+    if (!clientId || !/^\d{8,10}$/.test(clientId)) {
+      errorClientId.classList.remove('hidden');
+      return false;
+    }
+    errorClientId.classList.add('hidden');
+    
+    return true;
+  }
+
+  // Función para resetear el formulario
+  function resetForm() {
+    document.getElementById('clientName').value = '';
+    document.getElementById('clientId').value = '';
+    document.getElementById('clientPhone').value = '';
+    document.getElementById('clientEmail').value = '';
+    document.getElementById('notes').value = '';
+    
+    currentClient = null;
+    currentInvoice = {
+      items: [],
+      subtotal: 0,
+      discount: 0,
+      tax: 0,
+      total: 0,
+      paymentStatus: 'pending',
+      status: 'draft'
+    };
+    
+    renderInvoiceItems();
+    calculateTotals();
+    document.getElementById('invoiceNumber').value = generateInvoiceNumber();
+    document.getElementById('stockAlert').classList.add('hidden');
+  }
+
+  // Función para generar número de factura
+  function generateInvoiceNumber() {
+    const now = new Date();
+    const year = now.getFullYear().toString().slice(-2);
+    const month = (now.getMonth() + 1).toString().padStart(2, '0');
+    const randomNum = Math.floor(1000 + Math.random() * 9000);
+    return `FAC-${year}${month}-${randomNum}`;
+  }
+
+  // Función para mostrar alertas
+  function showAlert(message, type = 'info') {
+    const alertTypes = {
+      success: { icon: 'bi-check-circle', color: 'green' },
+      error: { icon: 'bi-x-circle', color: 'red' },
+      warning: { icon: 'bi-exclamation-triangle', color: 'yellow' },
+      info: { icon: 'bi-info-circle', color: 'blue' }
+    };
+    
+    const alertType = alertTypes[type] || alertTypes.info;
+    
+    // Crear toast de alerta
+    const toast = document.createElement('div');
+    toast.className = `fixed top-4 right-4 p-4 rounded shadow-lg bg-${alertType.color}-100 dark:bg-${alertType.color}-900 dark:text-white flex items-start max-w-xs z-50`;
+    toast.innerHTML = `
+      <i class="bi ${alertType.icon} text-${alertType.color}-500 text-xl mr-2"></i>
+      <div>${message}</div>
+      <button class="ml-2 text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100">
+        <i class="bi bi-x"></i>
+      </button>
+    `;
+    
+    // Botón para cerrar
+    const closeBtn = toast.querySelector('button');
+    closeBtn.addEventListener('click', () => {
+      toast.remove();
+    });
+    
+    // Auto-eliminar después de 5 segundos
+    setTimeout(() => {
+      toast.remove();
+    }, 5000);
+    
+    document.body.appendChild(toast);
+  }
+
+  // Función para setear la fecha actual
+  function setCurrentDate() {
+    const today = new Date();
+    document.getElementById('emissionDate').value = today.toISOString().split('T')[0];
+  }
+
+  // Función para actualizar el reloj
+  function updateClock() {
+    const now = new Date();
+    const options = { 
+      weekday: 'long', 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    };
+    document.getElementById('currentDateTime').textContent = now.toLocaleDateString('es-EC', options);
+  }
+
+  // Inicialización
+  document.addEventListener('DOMContentLoaded', () => {
+    // Configuración inicial
+    document.getElementById('invoiceNumber').value = generateInvoiceNumber();
+    setCurrentDate();
+    updateClock();
+    setInterval(updateClock, 1000);
+    
+    // Cargar productos
+    loadProducts();
+    
+    // Buscar cliente al perder foco de la cédula
+    document.getElementById('clientId').addEventListener('blur', async (e) => {
+      const cedula = e.target.value.trim();
+      if (cedula.length >= 8 && cedula.length <= 10 && /^\d+$/.test(cedula)) {
+        const found = await searchClient(cedula);
+        if (!found) {
+          // Cliente no encontrado, permitir crear uno nuevo
+          currentClient = {
+            identificationNumber: cedula,
+            name: '',
+            phone: '',
+            email: ''
+          };
+        }
+      } else {
+        document.getElementById('error-clientId').classList.remove('hidden');
+      }
+    });
+    
+    // Validar cédula al escribir
+    document.getElementById('clientId').addEventListener('input', (e) => {
+      if (/^\d{8,10}$/.test(e.target.value)) {
+        document.getElementById('error-clientId').classList.add('hidden');
+      }
+    });
+    
+    // Buscar productos al escribir
+    document.getElementById('productSearch').addEventListener('input', (e) => {
+      if (e.target.value.length > 2) {
+        searchProducts(e.target.value);
+      } else {
+        document.getElementById('searchResults').classList.add('hidden');
+      }
+    });
+    
+    // Ocultar resultados al hacer clic fuera
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('#productSearch') && !e.target.closest('#searchResults')) {
+        document.getElementById('searchResults').classList.add('hidden');
+      }
+    });
+    
+    // Botones
+    document.getElementById('saveDraftBtn').addEventListener('click', saveDraft);
+    document.getElementById('issueBtn').addEventListener('click', issueInvoice);
+    document.getElementById('cancelBtn').addEventListener('click', resetForm);
+    
+    // Botón de agregar producto manualmente
+    document.getElementById('addProductBtn').addEventListener('click', () => {
+      const searchInput = document.getElementById('productSearch');
+      if (searchInput.value.length > 0) {
+        searchProducts(searchInput.value);
+      } else {
+        showAlert('Ingrese un término de búsqueda para agregar productos', 'warning');
+      }
     });
     
     // Logout
-    document.getElementById('logoutButton').addEventListener('click', function() {
+    document.getElementById('logoutButton').addEventListener('click', () => {
+      localStorage.removeItem('authToken');
       window.location.href = 'inicioSesion.html';
     });
     
-    document.getElementById('logoutButtonMobile').addEventListener('click', function() {
+    document.getElementById('logoutButtonMobile').addEventListener('click', () => {
+      localStorage.removeItem('authToken');
       window.location.href = 'inicioSesion.html';
     });
-    
-    // Inicialización
-    document.addEventListener('DOMContentLoaded', function() {
-      // Establecer número de factura y fecha
-      document.getElementById('invoiceNumber').value = generarNumeroFactura();
-      establecerFechaActual();
-      
-      // Actualizar reloj
-      setInterval(updateClock, 1000);
-      updateClock();
-      
-      // Calcular totales iniciales
-      calcularTotales();
-    });
-  </script>
+  });
+</script>
 </body>
 </html>
