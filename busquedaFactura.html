@@ -326,7 +326,7 @@
                   <select class="form-select dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
                           id="statusFilter">
                     <option value="">Todos</option>
-                    <option value="paid">Pagadas</option>
+                    <option value="void">Pagadas</option>
                     <option value="pending">Pendientes</option>
                     <option value="cancelled">Anuladas</option>
                   </select>
@@ -600,7 +600,7 @@ function applyFilters() {
         // Filtro por estado
         const matchesStatus = 
             !statusFilter || 
-            (statusFilter === 'paid' && invoice.paymentStatus === 'paid') ||
+            (statusFilter === 'void' && invoice.paymentStatus === 'void') ||
             (statusFilter === 'pending' && invoice.paymentStatus === 'pending') ||
             (statusFilter === 'cancelled' && invoice.paymentStatus === 'cancelled');
         
